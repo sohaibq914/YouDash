@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "URL Extractor",
+  "version": "1.0",
+  "description": "A simple Chrome extension to grab the URL of the current tab.",
+  "permissions": ["tabs"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
