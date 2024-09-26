@@ -1,0 +1,73 @@
+.container {
+    display: flex; /* Flexbox to align children horizontally */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    background-color: #FFF; /* White background */
+  }
+  
+  .CategoryBlockTitle {
+    width: 288px;
+    color: #000;
+    font-family: Inter, sans-serif;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 48px;
+  }
+  
+  .CurrentlyBlockedTitle {
+    width: 216px;
+    color: #000;
+    font-family: Inter, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 48px;
+  }
+  
+  .CategoriesRectangleTitle {
+    display: flex;
+    width: 274px;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.80);
+    color: black;
+  }
+  
+  .CurrentlyBlockedCategoriesContainer {
+    width: 274px;
+    height: 466px;
+    background: rgba(0, 0, 0, 0.60);
+  }
+  
+  .AddCategoriesContainer {
+    width: 623px;
+    height: 455px;
+    background: rgba(0, 0, 0, 0.60);
+    margin-left: 20px; /* Add some space between containers */
+  }
+  
+  .AddCategoriesContainerHeader {
+    display: flex;
+    width: 623px;
+    height: 57px;
+    justify-content: flex-start;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.50);
+  }
+
+  .AddCategoriesContainer h2 {
+    padding-left: 100px;
+  }
+
+  .AddCategoriesContainer h1 {
+    padding-left: 60px;
+  }
+  
+
+  
+  
+  
