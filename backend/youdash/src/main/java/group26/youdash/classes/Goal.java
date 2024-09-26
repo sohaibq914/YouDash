@@ -47,4 +47,9 @@ public class Goal {
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
+    @Override
+    public String toString() {
+        return "Goal Name: " + goalName + ", Goal Description: " + goalDescription + ", Goal Progress: " + goalProgress + ", User ID: " + userID;
+    }
 }

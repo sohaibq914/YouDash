@@ -69,4 +69,13 @@ public class WatchTimeGoal extends Goal {
         //calculate from videos in database
         return 0.0f;
     }
+
+    @Override
+    public String toString() {
+        return "WatchTimeGoal: " + super.toString() +
+                ", category: " + category +
+                ", currentWatchTime: " + currentWatchTime +
+                ", goalWatchTime: " + goalWatchTime +
+                ", watchLessThanGoal: " + watchLessThanGoal;
+    }
 }
