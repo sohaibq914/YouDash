@@ -1,0 +1,64 @@
+.container {
+    width: 1440px;
+    height: 1024px;
+    background: #FFF;
+}
+
+
+
+.CategoryBlockTitle {    
+    width: 288px;
+    color: #000;
+    font-family: Inter;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 48px; /* 120% */
+}
+
+.CurrentlyBlockedTitle {
+    width: 216px;
+    color: #000;
+    font-family: Inter;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 48px; /* 200% */
+}
+
+.CategoriesRectangleTitle {
+    display: flex;
+    width: 274px;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.80);
+    color:black
+}
+
+.CurrentlyBlockedCategoriesContainer {
+    width: 274px;
+    height: 466px;
+    flex-shrink: 0;
+   background: rgba(0, 0, 0, 0.60);
+}
+
+.AddCategoriesContainerHeader {
+    display: flex;
+    width: 623px;
+    height: 57px;
+    padding: 12px 17px 12px 458px;
+    justify-content: flex-end;
+    align-items: center;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.50);
+    
+}
+
+.AddCategoriesContainer {
+    width: 623px;
+    height: 455px;
+    flex-shrink: 0; 
+    background: rgba(0, 0, 0, 0.60);
+}
