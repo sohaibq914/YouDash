@@ -1,6 +1,7 @@
 import React from "react";
 import "./BlockedPages.css";
 
+
 const BlockedPages = () => {
   return (
     //header for currently blocked and category block
