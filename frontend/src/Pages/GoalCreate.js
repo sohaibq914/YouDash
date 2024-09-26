@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import GoalComponent from "../Components/GoalComponent"
+import GoalComponent from "../Components/GoalComponent";
+import "./GoalCreate.css";
 
 function GoalCreate() {
     const [data, setData] = useState({ goalName: '', goalDescription: '', goalWatchTime: '', category: '', watchLessThanGoal: 'false'});
@@ -11,11 +12,26 @@ function GoalCreate() {
 
     const handleChange = (e) => {
         const value = e.target.value;
+        console.log(value + " " + e.target.name);
         setData({
             ...data,
             [e.target.name]: value
         });
     };
+
+    const handleAboveGoalBtn = (e) => {
+        handleChange(e);
+        document.getElementById("aimAboveGoal").classList.add("selectedAimAboveBelowButton");
+        document.getElementById("aimBelowGoal").classList.remove("selectedAimAboveBelowButton");
+
+    }
+
+    const handleBelowGoalBtn = (e) => {
+            handleChange(e);
+            document.getElementById("aimAboveGoal").classList.remove("selectedAimAboveBelowButton");
+            document.getElementById("aimBelowGoal").classList.add("selectedAimAboveBelowButton");
+
+        }
 
     const minuteRangeChange = (e) => {
         minutes = e.target.value;
@@ -45,11 +61,12 @@ function GoalCreate() {
         e.preventDefault();
         minutes = document.getElementById("minutesInput").value;
         hours = document.getElementById("hoursInput").value;
+        const category = document.getElementById("category").value;
         const userData = {
             goalName: data.goalName,
             goalDescription: data.goalDescription,
             goalWatchTime: (+minutes + (+hours * 60)),
-            category: data.category,
+            category: category,
             watchLessThanGoal: data.watchLessThanGoal
         };
         axios
@@ -59,66 +76,89 @@ function GoalCreate() {
     };
   return (
     <div className="GoalCreate">
-        <h2>Create A Goal</h2>
-        <p>Create a watchtime goal by inputting the fields below</p>
         <form onSubmit={handleSubmit}>
-            <table>
+            <h2>Create A Goal</h2>
+            <table className="tableGoal">
             <tbody>
                 <tr>
                     <td>
-                        Goal Name:
+                        <h3>Goal Name:</h3>
                     </td>
                     <td>
-                        <input id="goalName" name="goalName" autoCapitalize="words" required={true} placeholder="e.g. Watch Less Sports!" onChange={handleChange} value={data.goalName}/>
+                        <input type="text" id="goalName" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName}/>
                     </td>
                     </tr>
                 <tr>
                     <td>
-                        Goal Description:
+                        <h3>Goal Description:</h3>
                     </td>
                     <td>
-                        <input id="goalDescription" name="goalDescription" required={false} placeholder="..." onChange={handleChange} value={data.goalDescription}/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Watchtime Limit:
-                    </td>
-                    <td>
-                        Hours: <input type="range" min="0" max="40" id="hoursRange" name="hoursRange" step="1" onChange={hourRangeChange}/>
-                        <input type="number" id="hoursInput" name="hoursInput" required={true} placeholder="0" min="0" max="40" onChange={hourInputChange}/>
-                        Minutes: <input type="range" min="0" max="55" id="minutesRange" name="minutesRange" step="5" onChange={minuteRangeChange}/>
-                        <input type="number" id="minutesInput" name="minutesInput" required={true} placeholder="0" min="0" max="59" onChange={minuteInputChange}/>
+                        <input type="text" id="goalDescription" name="goalDescription" required={false} onChange={handleChange} value={data.goalDescription}/>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Aim Above or Below Limit:
+                        <h3>Watchtime Limit:</h3>
                     </td>
                     <td>
-                        <button type="button" id="aimAboveGoal" name="watchLessThanGoal" value={false} onClick={handleChange}>Above</button>
-                        <button type="button" id="aimBelowGoal" name="watchLessThanGoal" value={true} onClick={handleChange}>Below</button>
+                        <table className="tableTime">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Hours:
+                                    </td>
+                                    <td>
+                                        <input type="range" min="0" max="40" id="hoursRange" name="hoursRange" step="1" onChange={hourRangeChange}/>
+                                    </td>
+                                    <td>
+                                        <input type="number" id="hoursInput" name="hoursInput" required={true} min="0" max="40" onChange={hourInputChange}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Minutes:
+                                    </td>
+                                    <td>
+                                        <input type="range" min="0" max="55" id="minutesRange" name="minutesRange" step="5" onChange={minuteRangeChange}/>
+                                    </td>
+                                    <td>
+                                        <input type="number" id="minutesInput" name="minutesInput" required={true} min="0" max="59" onChange={minuteInputChange}/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Category:
+                        <h3>Aim Above or Below Limit:</h3>
                     </td>
                     <td>
-                        <select name="category" onChange={handleChange}>
+                        <button type="button" style={{width: "50%"}} className="selectedAimAboveBelowButton" id="aimAboveGoal" name="watchLessThanGoal" value={false} onClick={handleAboveGoalBtn}>Above</button>
+                        <button type="button" style={{width: "50%"}} id="aimBelowGoal" name="watchLessThanGoal" value={true} onClick={handleBelowGoalBtn}>Below</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h3>Category:</h3>
+                    </td>
+                    <td>
+                        <select id="category" defaultValue="ALL" name="category">
                             <option value="ALL">All Categories</option>
                             <option value="SPORTS">Sports</option>
                             <option value="BLOG">Blog</option>
                         </select>
                     </td>
                 </tr>
+                <tr>
+                <td colSpan="2">
+                    <button style={{width: "100%"}} type="submit">
+                        Create Goal
+                    </button>
+                </td>
+                </tr>
                 </tbody>
             </table>
-            <br/>
-            <button type="submit">
-                Create Goal
-            </button>
-
         </form>
     </div>
   );

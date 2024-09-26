@@ -26,6 +26,9 @@ public class GoalController {
         HttpHeaders header = new HttpHeaders();
         header.add("200", "uno");
         System.out.println("RECEIVED");
+        if (wtgoal.getGoalName().equals("DUP")) {
+
+        }
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
 
