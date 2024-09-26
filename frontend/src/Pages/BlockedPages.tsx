@@ -22,16 +22,33 @@ const BlockedPages = () => {
           <div className="AddCategoriesContainerHeader">
             <h1>Categories</h1>
             <h2>Search:</h2>
-            <input type="text" name="Categories" placeholder="Search a category" /> 
-
+            <div className="dropdown">
+              <button
+                className="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ width: "165px" }}
+                
+              >
+                Dropdown button
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <a className="dropdown-item">Action</a>
+                </li>
+                <li>
+                  <a className="dropdown-item">Another action</a>
+                </li>
+                <li>
+                  <a className="dropdown-item">Something else here</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-
-
       </div>
       {/* // end of main screen container */}
-
-
     </div> //end header for currently blocked and category block
   );
 };

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BlockedPage from "./Pages/BlockedPages.tsx";
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -18,11 +20,18 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <h1>Message from Spring Boot:</h1>
-      <BlockedPage></BlockedPage>
-      <p>{message}</p>
-    </div>
+    <Router>
+      <div className="App">
+        <h1>Message from Spring Boot:</h1>
+
+        {/* Routes holds each page */}
+        <Routes>
+          <Route path="/block-categories" element={<BlockedPage />} />
+        </Routes>
+
+        <p>{message}</p>
+      </div>
+    </Router>
   );
 }
 
