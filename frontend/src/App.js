@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import BlockedPage from "./Pages/BlockedPages.tsx";
+
 
 function App() {
   const [message, setMessage] = useState("");
@@ -18,6 +20,7 @@ function App() {
   return (
     <div className="App">
       <h1>Message from Spring Boot:</h1>
+      <BlockedPage></BlockedPage>
       <p>{message}</p>
     </div>
   );
