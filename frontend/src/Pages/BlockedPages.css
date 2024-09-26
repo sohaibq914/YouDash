@@ -1,74 +1,73 @@
 .container {
-    width: 1440px;
-    height: 1024px;
-    background: #FFF;
-}
-
-
-
-.CategoryBlockTitle {    
+    display: flex; /* Flexbox to align children horizontally */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    background-color: #FFF; /* White background */
+  }
+  
+  .CategoryBlockTitle {
     width: 288px;
     color: #000;
-    font-family: Inter;
+    font-family: Inter, sans-serif;
     font-size: 40px;
     font-style: normal;
     font-weight: 700;
-    line-height: 48px; /* 120% */
-}
-
-.CurrentlyBlockedTitle {
+    line-height: 48px;
+  }
+  
+  .CurrentlyBlockedTitle {
     width: 216px;
     color: #000;
-    font-family: Inter;
+    font-family: Inter, sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 700;
-    line-height: 48px; /* 200% */
-}
-
-.CategoriesRectangleTitle {
+    line-height: 48px;
+  }
+  
+  .CategoriesRectangleTitle {
     display: flex;
     width: 274px;
     height: 48px;
     justify-content: center;
     align-items: center;
-    flex-shrink: 0;
     background: rgba(255, 255, 255, 0.80);
-    color:black
-}
-
-.CurrentlyBlockedCategoriesContainer {
+    color: black;
+  }
+  
+  .CurrentlyBlockedCategoriesContainer {
     width: 274px;
     height: 466px;
-    flex-shrink: 0;
-   background: rgba(0, 0, 0, 0.60);
-}
-
-.AddCategoriesContainerHeader {
+    background: rgba(0, 0, 0, 0.60);
+  }
+  
+  .AddCategoriesContainer {
+    width: 623px;
+    height: 455px;
+    background: rgba(0, 0, 0, 0.60);
+    margin-left: 20px; /* Add some space between containers */
+  }
+  
+  .AddCategoriesContainerHeader {
     display: flex;
     width: 623px;
     height: 57px;
-    padding: 12px 17px 12px 458px;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center;
-    flex-shrink: 0;
     background: rgba(255, 255, 255, 0.50);
-    
-}
+  }
 
-.AddCategoriesContainer {
-    width: 623px;
-    height: 455px;
-    flex-shrink: 0; 
-    background: rgba(0, 0, 0, 0.60);
-}
+  .AddCategoriesContainer h2 {
+    padding-left: 175px;
+  }
 
-.AddCategoriesTitle {
-    width: 133px;
-    color: #000;
-    font-family: Inter;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 48px; /* 200% */
-}
+  .AddCategoriesContainer h1 {
+    padding-left: 60px;
+  }
+  
+
+  
+  
+  
