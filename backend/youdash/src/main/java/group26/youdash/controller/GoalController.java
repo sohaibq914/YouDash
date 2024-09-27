@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/goals")
@@ -25,7 +27,7 @@ public class GoalController {
 
         HttpHeaders header = new HttpHeaders();
         header.add("200", "uno");
-        System.out.println("RECEIVED");
+        System.out.println("Received New Goal");
         if (wtgoal.getGoalName().equals("DUP")) {
 
         }
@@ -33,10 +35,13 @@ public class GoalController {
     }
 
     @GetMapping("/{user}/view")
-    public String getName(@PathVariable("user") String user)
+    public Map<String, String> getName(@PathVariable("user") String user)
     {
-
-        return "Goals: " + user + "!";
+        Map<String, String> ret = new HashMap<>();
+        ret.put("User", user);
+        ret.put("GoalName", "This is a goal!");
+        System.out.println("Goal View Requested");
+        return ret;
     }
 
 }

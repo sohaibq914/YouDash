@@ -10,7 +10,7 @@ function GoalView() {
         axios
             .get("http://localhost:8080/goals/thename/view")
             .then(function (response) {
-                document.getElementById("Response").innerHTML = response;
+                document.getElementById("Response").innerHTML = "Name: " + response.data.User + " The Goal: " + response.data.GoalName;
             })
             .catch((error) => console.error(error));
     };
