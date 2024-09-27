@@ -22,8 +22,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <h1>Message from Spring Boot:</h1>
-
         {/* Routes holds each page */}
         <Routes>
           <Route path="/block-categories" element={<BlockedPage />} />

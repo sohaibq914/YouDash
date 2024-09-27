@@ -6,15 +6,53 @@ const BlockedPages = () => {
   return (
     //header for currently blocked and category block
     <div>
-      <h1 className="CategoryBlockTitle">Category Block</h1>
-      <h1 className="CurrentlyBlockedTitle">Currently Blocked</h1>
+
+      <div className="CategoryBlockTitle">
+        <h1>Category Block</h1>
+      </div>
+
+      <div className="CurrentlyBlockedTitle">
+            <h1>Currently Blocked</h1>
+      </div>
+     
       {/*// main screen container for Blocked Page */}
       <div className="container">
         {/* rectangle container for Currently Blocked */}
         <div className="CurrentlyBlockedCategoriesContainer">
+
+
           <div className="CategoriesRectangleTitle">
-            <h1>Categories</h1>
+            <h2>Categories</h2>
           </div>
+
+
+          <ul className="category-list">
+              <li className="category-item">
+                <span>Gaming</span>
+                <button className="delete-btn">Delete</button>
+              </li>
+
+              <li className="category-item">
+                <span>Sports</span>
+                <button className="delete-btn">Delete</button>
+              </li>
+
+              <li className="category-item">
+                <span>Entertainment</span>
+                <button className="delete-btn">Delete</button>
+              </li>
+
+              <li className="category-item">
+                <span>Comedy</span>
+                <button className="delete-btn">Delete</button>
+              </li>
+
+              <li className="category-item">
+                <span>Vlogs</span>
+                <button className="delete-btn">Delete</button>
+              </li>
+            </ul>
+
         </div>
 
         {/* a rectangle container for Blocking Categories */}
@@ -29,10 +67,10 @@ const BlockedPages = () => {
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                style={{ width: "165px" }}
+                style={{ width: "145px" }}
                 
               >
-                Dropdown button
+                Select Category
               </button>
               <ul className="dropdown-menu">
                 <li>
@@ -47,6 +85,33 @@ const BlockedPages = () => {
               </ul>
             </div>
           </div>
+
+          <ul className="category-list">
+              <li className="category-item">
+                <span>Gaming</span>
+                <button className="add-btn">Add</button>
+              </li>
+
+              <li className="category-item">
+                <span>Sports</span>
+                <button className="add-btn">Add</button>
+              </li>
+
+              <li className="category-item">
+                <span>Entertainment</span>
+                <button className="add-btn">Add</button>
+              </li>
+
+              <li className="category-item">
+                <span>Comedy</span>
+                <button className="add-btn">Add</button>
+              </li>
+
+              <li className="category-item">
+                <span>Vlogs</span>
+                <button className="add-btn">Add</button>
+              </li>
+            </ul>
         </div>
       </div>
       {/* // end of main screen container */}
