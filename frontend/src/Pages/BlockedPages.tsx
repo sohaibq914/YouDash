@@ -1,58 +1,37 @@
 import React from "react";
 import "./BlockedPages.css";
-
+import AddCategoriesButton from "../Components/AddCategoriesButton.tsx";
+import { DeleteCategoriesButton } from "../Components/DeleteCategoriesButton.tsx";
 
 const BlockedPages = () => {
+  const categories = ["Gaming", "Sports", "Entertainment", "Music", "Vlogs", "Comedy"];
   return (
     //header for currently blocked and category block
     <div>
-
       <div className="CategoryBlockTitle">
         <h1>Category Block</h1>
       </div>
 
       <div className="CurrentlyBlockedTitle">
-            <h1>Currently Blocked</h1>
+        <h1>Currently Blocked</h1>
       </div>
-     
+
       {/*// main screen container for Blocked Page */}
       <div className="container">
         {/* rectangle container for Currently Blocked */}
         <div className="CurrentlyBlockedCategoriesContainer">
-
-
           <div className="CategoriesRectangleTitle">
             <h2>Categories</h2>
           </div>
 
-
           <ul className="category-list">
-              <li className="category-item">
-                <span>Gaming</span>
-                <button className="delete-btn">Delete</button>
+          {categories.map((category, index) => (
+              <li className="category-item" key={index}>
+                <span>{category}</span>
+                <DeleteCategoriesButton categoryName={category} />
               </li>
-
-              <li className="category-item">
-                <span>Sports</span>
-                <button className="delete-btn">Delete</button>
-              </li>
-
-              <li className="category-item">
-                <span>Entertainment</span>
-                <button className="delete-btn">Delete</button>
-              </li>
-
-              <li className="category-item">
-                <span>Comedy</span>
-                <button className="delete-btn">Delete</button>
-              </li>
-
-              <li className="category-item">
-                <span>Vlogs</span>
-                <button className="delete-btn">Delete</button>
-              </li>
-            </ul>
-
+            ))}
+          </ul>
         </div>
 
         {/* a rectangle container for Blocking Categories */}
@@ -61,6 +40,8 @@ const BlockedPages = () => {
           <div className="AddCategoriesContainerHeader">
             <h1>Categories</h1>
             <h2>Search:</h2>
+
+            {/* Drop down for the categories in the adding section*/}
             <div className="dropdown">
               <button
                 className="btn btn-secondary dropdown-toggle"
@@ -68,7 +49,6 @@ const BlockedPages = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 style={{ width: "145px" }}
-                
               >
                 Select Category
               </button>
@@ -87,31 +67,13 @@ const BlockedPages = () => {
           </div>
 
           <ul className="category-list">
-              <li className="category-item">
-                <span>Gaming</span>
-                <button className="add-btn">Add</button>
+            {categories.map((category, index) => (
+              <li className="category-item" key={index}>
+                <span>{category}</span>
+                <AddCategoriesButton categoryName={category} />
               </li>
-
-              <li className="category-item">
-                <span>Sports</span>
-                <button className="add-btn">Add</button>
-              </li>
-
-              <li className="category-item">
-                <span>Entertainment</span>
-                <button className="add-btn">Add</button>
-              </li>
-
-              <li className="category-item">
-                <span>Comedy</span>
-                <button className="add-btn">Add</button>
-              </li>
-
-              <li className="category-item">
-                <span>Vlogs</span>
-                <button className="add-btn">Add</button>
-              </li>
-            </ul>
+            ))}
+          </ul>
         </div>
       </div>
       {/* // end of main screen container */}

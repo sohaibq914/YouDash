@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/message")
+      .get("http://localhost:3000/api/message")
       .then((response) => {
         setMessage(response.data);
       })

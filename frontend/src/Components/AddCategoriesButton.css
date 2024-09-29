@@ -1,0 +1,11 @@
+.add-btn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .add-btn:hover {
+    background-color: green;
+  }
