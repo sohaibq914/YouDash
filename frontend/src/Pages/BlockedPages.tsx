@@ -1,10 +1,46 @@
-import React from "react";
+import React, {useState} from "react";
 import "./BlockedPages.css";
 import AddCategoriesButton from "../Components/AddCategoriesButton.tsx";
 import { DeleteCategoriesButton } from "../Components/DeleteCategoriesButton.tsx";
 
 const BlockedPages = () => {
   const categories = ["Gaming", "Sports", "Entertainment", "Music", "Vlogs", "Comedy"];
+
+  // track available categories to block
+  const [availableCategories, setAvailableCategories] = useState([
+    "Gaming", "Sports", "Entertainment", "Music", "Vlogs", "Comedy"
+  ]);
+
+  // tracks blocked categories
+  const [blockedCategories, setBlockedCategories] = useState<string[]>([]);
+
+
+  const handleAddCategory = (categoryName: string) => {
+
+    //will remove from available categories
+    const updatedAvailableCategories = availableCategories.filter((category) => category != categoryName);
+
+    // creates new blocked categories array with what is already inside and adds categoryName into that array.
+    setBlockedCategories([...blockedCategories, categoryName]);
+
+    //update available categories 
+    setAvailableCategories(updatedAvailableCategories);
+  };
+
+
+
+  const handleDeleteCategory = (categoryName: string) => {
+    
+    // remove from blocked categories
+    const updatedDeletedCategories = blockedCategories.filter((blockedCategory) => blockedCategory != categoryName);
+
+    // add deleted category back into the available ones
+    setAvailableCategories([...availableCategories, categoryName]);
+
+    // update deleted categories
+    setBlockedCategories(updatedDeletedCategories);
+  };
+
   return (
     //header for currently blocked and category block
     <div>
@@ -25,10 +61,10 @@ const BlockedPages = () => {
           </div>
 
           <ul className="category-list">
-          {categories.map((category, index) => (
+          {blockedCategories.map((category, index) => (
               <li className="category-item" key={index}>
                 <span>{category}</span>
-                <DeleteCategoriesButton categoryName={category} />
+                <DeleteCategoriesButton categoryName={category} onDeleteCategory={handleDeleteCategory}/>
               </li>
             ))}
           </ul>
@@ -67,10 +103,10 @@ const BlockedPages = () => {
           </div>
 
           <ul className="category-list">
-            {categories.map((category, index) => (
+            {availableCategories.map((category, index) => (
               <li className="category-item" key={index}>
                 <span>{category}</span>
-                <AddCategoriesButton categoryName={category} />
+                <AddCategoriesButton categoryName={category} onAddCategory={handleAddCategory}/>
               </li>
             ))}
           </ul>

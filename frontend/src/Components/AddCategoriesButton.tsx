@@ -1,7 +1,15 @@
 import React from "react";
 import axios from "axios";
 
-const AddCategoriesButton: React.FC<{ categoryName: string }> = ({ categoryName }) => {
+interface AddCategoriesButtonProps {
+    categoryName: string;
+    onAddCategory: (categoryName: string) => void;
+}
+
+
+
+
+const AddCategoriesButton: React.FC<AddCategoriesButtonProps> = ({ categoryName, onAddCategory }) => {
 
     const user = "thename";
   //handle add button click
@@ -14,6 +22,8 @@ const AddCategoriesButton: React.FC<{ categoryName: string }> = ({ categoryName 
        
         console.log("Response from backend:", response.data);
         alert( categoryName + " added successfully!");
+
+        onAddCategory(categoryName);
 
     } catch(error) {
         console.error("Error adding category", error);

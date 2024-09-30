@@ -1,7 +1,14 @@
 import React from "react";
 import axios from "axios";
 
-export const DeleteCategoriesButton:React.FC<{ categoryName: string }> = ({ categoryName }) => {
+
+interface DeleteCategoriesButtonProps {
+  categoryName: string;
+  onDeleteCategory: (categoryName: string) => void;
+}
+
+
+export const DeleteCategoriesButton:React.FC<DeleteCategoriesButtonProps> = ({ categoryName, onDeleteCategory }) => {
 
     const user = "thename";
     //handle add button click
@@ -15,6 +22,8 @@ export const DeleteCategoriesButton:React.FC<{ categoryName: string }> = ({ cate
           console.log("Response from backend:", response.data);
           alert( categoryName + " deleted successfully!");
   
+          onDeleteCategory(categoryName);
+
       } catch(error) {
           console.error("Error deleting category", error);
           alert("Failed to delete category!");
