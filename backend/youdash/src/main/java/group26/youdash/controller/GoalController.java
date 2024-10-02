@@ -20,7 +20,7 @@ import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 @CrossOrigin(origins = "http://localhost:3000")  // Allow React app to access this API
 public class GoalController {
 
-    ArrayList<WatchTimeGoal> temp;
+    ArrayList<WatchTimeGoal> temp = new ArrayList<>();
 
     //mapping for "/goals/user/create" that creates a goal based on json
     @PostMapping(path = "/{user}/create", consumes = "application/json", produces = "application/json")

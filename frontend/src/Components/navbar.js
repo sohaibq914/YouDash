@@ -8,7 +8,7 @@ import GoalCreate from "../Pages/GoalCreate";
 function NavbarComponent() {
   return (
     <Navbar className="bg-body-tertiary fixed-top">
-      <div class="container-fluid">
+      <div className="container-fluid">
         <Navbar.Brand href="/home">YouDash</Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link href="/home">Home</Nav.Link>

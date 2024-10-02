@@ -1,23 +1,73 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import "./GoalComponent.css";
+
 function GoalComponent(props) {
     const goal = props.goal;
   return (
-    <div className="GoalCreate">
-      <h1>Goal #1</h1>
-      <p>Name: {goal?.goalName || "ERROR"}</p>
-      <p>Description: {goal?.goalDescription || "ERROR"}</p>
-      <p>Category: {goal?.category || "ERROR"}</p>
-      {(goal?.watchLessThanGoal || false) ? (
-      <p>Aiming for less than goal.</p>
-      ) : (
-      <p>Aiming for more than goal.</p>
-      )}
-      <p>Watch Less Than Goal: {goal?.watchLessThanGoal || "ERROR"}</p>
-      <p>Current Watch Time: {goal?.currentWatchTime || "ERROR"}</p>
-      <p>Goal Watch Time: {goal?.goalWatchTime || "ERROR"}</p>
-      <p>Goal Progress: {goal?.goalProgress || "ERROR"}</p>
+    <div className="GoalComponent">
+        <table className="tableGoalView">
+        <tbody>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Name: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalName || "ERROR"}</h3>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Description: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalDescription || "ERROR"}</h3>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Category: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.category || "ERROR"}</h3>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Current Watch Time: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.currentWatchTime || "0"}</h3>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Goal Watch Time: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalWatchTime || "0"}</h3>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Goal Progress: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress || "N/A"}</h3>
+        </td>
+        </tr>
+        <tr>
+        <td colSpan="2">
+        {(goal?.watchLessThanGoal || false) ? (
+              <h3 style={{textAlign: "center"}}>Aiming for less than goal.</h3>
+              ) : (
+              <h3 style={{textAlign: "center"}}>Aiming for more than goal.</h3>
+              )}
+        </td>
+        </tr>
+        </tbody>
+        </table>
     </div>
   );
 }

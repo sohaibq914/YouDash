@@ -6,40 +6,35 @@ import "./GoalView.css";
 function GoalView() {
     //const [data, setData] = useState({ goalName: '', goalDescription: '', goalWatchTime: '', category: '', watchLessThanGoal: 'false'});
     const [data, setData] = useState([]);
-    const addGoal = (newGoal) => {
-      setData(prevData => [...prevData, newGoal]);
+    const addGoals = (newGoals) => {
+        let dataTemp = [];
+        for (var i=0; i <newGoals.length; i++) {
+            dataTemp.push(newGoals[i]);
+        }
+        setData(dataTemp);
     };
     const clearData = () => {
         setData([]);
     };
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    useEffect (() => {
         axios
             .get("http://localhost:8080/goals/thename/view")
             .then(function (response) {
                 //setData(response.data);
                 clearData();
 
-                addGoal(response.data);
-                console.log(response.data)
+                addGoals(response.data);
             })
             .catch((error) => console.error(error));
-    };
+    }, []);
   return (
     <div className="GoalView">
-      <h1>In Progress </h1>
-      <button style={{ width: "100%" }} type="submit" onClick={handleSubmit}>
-        View Goals
-      </button>
-
-        <button style={{width: "100%"}} type="submit" onClick={handleSubmit}>
-            View Goals
-        </button>
-        {data.map((goal, index) => (
+        {data.map((igoal, index) => (
             <div key={index}>
-                <GoalComponent goal={data[index]} />
+                <h2>Goal #{index + 1}</h2>
+                <GoalComponent goal={igoal} />
             </div>
-            ))};
+            ))}
 
 
     </div>
