@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import GoalComponent from "../Components/GoalComponent";
+import GoalComponent from "../components/GoalComponent";
 import "./GoalView.css";
 
 function GoalView() {
@@ -27,6 +27,9 @@ function GoalView() {
     };
   return (
     <div className="GoalView">
+      <button style={{ width: "100%" }} type="submit" onClick={handleSubmit}>
+        View Goals
+      </button>
 
         <button style={{width: "100%"}} type="submit" onClick={handleSubmit}>
             View Goals
