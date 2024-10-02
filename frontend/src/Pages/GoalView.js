@@ -4,13 +4,24 @@ import GoalComponent from "../Components/GoalComponent";
 import "./GoalView.css";
 
 function GoalView() {
-
+    //const [data, setData] = useState({ goalName: '', goalDescription: '', goalWatchTime: '', category: '', watchLessThanGoal: 'false'});
+    const [data, setData] = useState([]);
+    const addGoal = (newGoal) => {
+      setData(prevData => [...prevData, newGoal]);
+    };
+    const clearData = () => {
+        setData([]);
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
         axios
             .get("http://localhost:8080/goals/thename/view")
             .then(function (response) {
-                document.getElementById("Response").innerHTML = "Name: " + response.data.User + " The Goal: " + response.data.GoalName;
+                //setData(response.data);
+                clearData();
+
+                addGoal(response.data);
+                console.log(response.data)
             })
             .catch((error) => console.error(error));
     };
@@ -20,8 +31,12 @@ function GoalView() {
         <button style={{width: "100%"}} type="submit" onClick={handleSubmit}>
             View Goals
         </button>
+        {data.map((goal, index) => (
+            <div key={index}>
+                <GoalComponent goal={data[index]} />
+            </div>
+            ))};
 
-        <p id="Response">NO RESPONSE</p>
 
     </div>
   );
