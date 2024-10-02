@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import GoalComponent from "../components/GoalComponent";
+import GoalComponent from "../Components/GoalComponent";
 import "./GoalCreate.css";
+import navbar from "../Components/navbar";
 
 function GoalCreate() {
   const [data, setData] = useState({ goalName: "", goalDescription: "", goalWatchTime: "", category: "", watchLessThanGoal: "false" });
