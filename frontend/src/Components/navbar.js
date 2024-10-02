@@ -1,25 +1,21 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 
-function BasicExample() {
+function NavbarComponent() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar className="bg-body-tertiary fixed-top">
       <Container>
         <Navbar.Brand href="#home">YouDash</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Leaderboards</Nav.Link>
-            <Nav.Link href="#link">Goals</Nav.Link>
-            <Nav.Link href="#link">Analytics</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
+        <Nav className="me-auto">
+          <Nav.Link href="#home">Home</Nav.Link>
+          <Nav.Link href="#leaderboards">Leaderboards</Nav.Link>
+          <Nav.Link href="#goals">Goals</Nav.Link>
+          <Nav.Link href="#analytics">Analytics</Nav.Link>
+        </Nav>
       </Container>
     </Navbar>
   );
 }
 
-export default BasicExample;
+export default NavbarComponent;
