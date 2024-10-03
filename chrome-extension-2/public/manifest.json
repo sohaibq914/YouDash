@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Blocked Categories Extension",
+    "version": "1.0",
+    "description": "A Chrome extension to manage blocked YouTube categories.",
+    "action": {
+      "default_popup": "index.html", 
+      "default_title": "Blocked Categories"
+    },
+    "permissions": [
+      "storage",        
+      "activeTab",     
+      "tabs"         
+    ]
+  }
+  
