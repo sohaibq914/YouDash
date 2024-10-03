@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BlockedPage from "./Pages/BlockedPages.tsx";
-import GoalCreate from "./Pages/GoalCreate"
+import GoalCreate from "./Pages/GoalCreate";
+import Navbar from "./Components/navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import RouterPages from "./RouterPages.js";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -21,17 +22,11 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="App">
-        {/* Routes holds each page */}
-        <Routes>
-          <Route path="/block-categories" element={<BlockedPage />} />
-          <Route path="/goals" element={<GoalCreate />} />
-        </Routes>
 
-        <p>{message}</p>
-      </div>
-    </Router>
+    <div className="App">
+        <Navbar/>
+        <RouterPages/>
+    </div>
   );
 }
 

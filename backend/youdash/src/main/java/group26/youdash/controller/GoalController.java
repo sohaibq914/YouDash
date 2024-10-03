@@ -13,11 +13,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
+
 @RestController
 @RequestMapping("/goals")
 @CrossOrigin(origins = "http://localhost:3000")  // Allow React app to access this API
 public class GoalController {
 
+    ArrayList<WatchTimeGoal> temp = new ArrayList<>();
 
     //mapping for "/goals/user/create" that creates a goal based on json
     @PostMapping(path = "/{user}/create", consumes = "application/json", produces = "application/json")
@@ -29,19 +32,48 @@ public class GoalController {
         header.add("200", "uno");
         System.out.println("Received New Goal");
         if (wtgoal.getGoalName().equals("DUP")) {
-
+            //can't have duplicate names
         }
+        temp.add(wtgoal);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
 
     @GetMapping("/{user}/view")
-    public Map<String, String> getName(@PathVariable("user") String user)
+    public ArrayList<WatchTimeGoal> getName(@PathVariable("user") String user)
     {
-        Map<String, String> ret = new HashMap<>();
-        ret.put("User", user);
-        ret.put("GoalName", "This is a goal!");
-        System.out.println("Goal View Requested");
-        return ret;
+        System.out.println(user + "Goal View Requested");
+        System.out.println(temp);
+        return temp;
+    }
+
+    private static class updateGoalPackage {
+        public String originalName;
+        public WatchTimeGoal wtg;
+
+        public updateGoalPackage(String originalName, WatchTimeGoal wtg) {
+            this.originalName = originalName;
+            this.wtg = wtg;
+        }
+    }
+
+    //mapping for "/goals/user/create" that creates a goal based on json
+    @PostMapping(path = "/{user}/edit", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> editGoal(@PathVariable("user") String user, @RequestBody updateGoalPackage wtgoalPkg) {
+        System.out.println(wtgoalPkg);
+        //Update goal based on name
+        for (int i = 0; i < temp.size(); i++) {
+            if (temp.get(i).getGoalName().equals(wtgoalPkg.originalName)) {
+                temp.set(i, wtgoalPkg.wtg);
+                //replace in database
+                break;
+            }
+        }
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("200", "uno");
+        System.out.println("Updated New Goal");
+        System.out.println(temp);
+        return new ResponseEntity<>(header, HttpStatus.OK);
     }
 
 }
