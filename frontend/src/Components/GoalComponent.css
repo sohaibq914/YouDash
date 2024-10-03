@@ -37,4 +37,8 @@ h3 {
     padding: 0.25em 0.5em;
     background-color: #BCBCBC;
     border: 0.5em solid #EFEFEF;
+    wrap: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
 }

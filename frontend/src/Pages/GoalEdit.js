@@ -29,7 +29,6 @@ const [data, setData] = useState([]);
 
   return (
     <div className="GoalEdit">
-      <h1>In Progress</h1>
         {data.map((igoal, index) => (
             <div key={index}>
                 <h2>Goal #{index + 1}</h2>

@@ -13,7 +13,7 @@ root.render(
     <GoalView />
 
     */
-        <App />
+        <App/>
     }
   </React.StrictMode>
 );
