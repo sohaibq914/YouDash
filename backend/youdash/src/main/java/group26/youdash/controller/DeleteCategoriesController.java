@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/block-categories")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"})
 
 public class DeleteCategoriesController {
 
