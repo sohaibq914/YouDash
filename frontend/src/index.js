@@ -4,6 +4,7 @@ import App from "./App";
 import GoalCreate from "./Pages/GoalCreate";
 import GoalView from "./Pages/GoalView";
 import Navbar from "./components/navbar";
+import Profile from "./components/Profile";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,7 +14,7 @@ root.render(
     <GoalView />
     
     */
-      <Navbar />
+      <App />
     }
   </React.StrictMode>
 );
