@@ -17,6 +17,7 @@ public class User {
     private boolean registered;
     private List<Goal> goals;
     private List<String> blocked;
+    private List<String> availableCategories;
 
     @DynamoDBHashKey
     public int getId() { return id; }
@@ -53,6 +54,10 @@ public class User {
     @DynamoDBAttribute
     public List<String> getBlocked() { return blocked; }
     public void setBlocked(List<String> blocked) { this.blocked = blocked; }
+
+    @DynamoDBAttribute
+    public List<String> getAvailableCategories() { return availableCategories;}
+    public void setAvailableCategories(List<String> availableCategories) {this.availableCategories = availableCategories;}
 }
 
 

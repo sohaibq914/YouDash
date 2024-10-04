@@ -10,9 +10,11 @@ interface DeleteCategoriesButtonProps {
 
 export const DeleteCategoriesButton:React.FC<DeleteCategoriesButtonProps> = ({ categoryName, onDeleteCategory }) => {
 
-    const user = "thename";
+    const user = "12345";
+    
     //handle add button click
-    const handleClick = async () => {
+    const handleDelete = async () => {
+      const confirmDelete = window.confirm('Are you sure you want to delete the category: ' + categoryName);
       try {
   
           const response = await axios.post(`http://localhost:8080/block-categories/${user}/DeleteCategory`, {
@@ -21,8 +23,11 @@ export const DeleteCategoriesButton:React.FC<DeleteCategoriesButtonProps> = ({ c
          
           console.log("Response from backend:", response.data);
           alert( categoryName + " deleted successfully!");
-  
-          onDeleteCategory(categoryName);
+
+          if (confirmDelete) {
+            onDeleteCategory(categoryName);
+          }
+          
 
       } catch(error) {
           console.error("Error deleting category", error);
@@ -32,7 +37,7 @@ export const DeleteCategoriesButton:React.FC<DeleteCategoriesButtonProps> = ({ c
   
   return (
     <div>
-          <button className="delete-btn"  onClick={handleClick}>Delete</button>
+          <button className="delete-btn"  onClick={handleDelete}>Delete</button>
     </div>
   )
 }
