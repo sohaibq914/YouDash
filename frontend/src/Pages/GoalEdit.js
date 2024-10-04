@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import GoalComponent from "../Components/GoalComponent";
-import "./GoalView.css";
+import "./GoalEdit.css";
+import GoalEditComponent from "../Components/GoalEditComponent"
 
-function GoalView() {
-    //const [data, setData] = useState({ goalName: '', goalDescription: '', goalWatchTime: '', category: '', watchLessThanGoal: 'false'});
-    const [data, setData] = useState([]);
+function GoalEdit() {
+
+const [data, setData] = useState([]);
     const addGoals = (newGoals) => {
         let dataTemp = [];
         for (var i=0; i <newGoals.length; i++) {
@@ -20,25 +20,27 @@ function GoalView() {
         axios
             .get("http://localhost:8080/goals/thename/view")
             .then(function (response) {
-                //setData(response.data);
                 clearData();
 
                 addGoals(response.data);
             })
             .catch((error) => console.error(error));
     }, []);
+
   return (
-    <div className="GoalView">
+    <div className="GoalEdit">
         {data.map((igoal, index) => (
             <div key={index}>
                 <h2>Goal #{index + 1}</h2>
-                <GoalComponent goal={igoal} />
+                <GoalEditComponent goal={igoal} />
             </div>
             ))}
+
+
 
 
     </div>
   );
 }
 
-export default GoalView;
+export default GoalEdit;

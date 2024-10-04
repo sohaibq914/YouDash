@@ -38,7 +38,4 @@ h3 {
     background-color: #BCBCBC;
     border: 0.5em solid #EFEFEF;
     wrap: break-word;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
 }

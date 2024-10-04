@@ -1,4 +1,4 @@
-.GoalCreate {
+.GoalEdit {
     margin-top: 90px;
 }
 
@@ -19,13 +19,10 @@ h2 {
 h3 {
 
     text-align:right;
-    font-size: 3vw;
 
 }
 
-
-
-.responsiveGoalButton {
+button {
 
     background-color: #02CCDD;
     transition-duration: 0.2s;
@@ -36,26 +33,14 @@ h3 {
     margin-right: auto;
 }
 
-@media (max-width:450px){
-    .responsiveGoalButton {
-        font-size: 110%;
-        text-align: center;
-        padding: 5% 5%;
-    }
-
-    .disappearWhenSmall {
-        display: none;
-    }
-}
-
-.responsiveGoalButton button:hover {
+button:hover {
 
     background-color: #12AABB;
     box-shadow: 0 0 0.5em 0 rgba(0,0,0,0.24);
 
 }
 
-.responsiveGoalButton button:active {
+button:active {
   background-color: #227799;
   transform: translateY(0.25em);
 }
@@ -67,7 +52,7 @@ h3 {
 }
 
 .tableGoal {
-    table-layout:fixed;
+
     margin-left: auto;
     margin-right: auto;
 
@@ -79,12 +64,10 @@ h3 {
 
 }
 
-.tableTime {
-    width: 100%;
-}
-
 .tableTime td {
+
     padding: 0.25em 0.25em;
+    wrap: break-word;
 
 }
 
