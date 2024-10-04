@@ -11,7 +11,7 @@ interface AddCategoriesButtonProps {
 
 const AddCategoriesButton: React.FC<AddCategoriesButtonProps> = ({ categoryName, onAddCategory }) => {
 
-    const user = "thename";
+    const user = 12345;
   //handle add button click
   const handleClick = async () => {
     try {
