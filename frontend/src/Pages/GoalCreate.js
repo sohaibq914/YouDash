@@ -70,7 +70,16 @@ function GoalCreate() {
     axios
       .post("http://localhost:8080/goals/thename/create", userData)
       .then((response) => console.log(response))
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        if (error.response.status == '409') {
+            alert("No duplicate goals!");
+        } else {
+            console.error(error);
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          }
+      });
   };
   return (
     <div className="GoalCreate">
@@ -150,7 +159,7 @@ function GoalCreate() {
             </tr>
             <tr>
               <td colSpan="2">
-                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit">
+                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmit">
                   Create Goal
                 </button>
               </td>

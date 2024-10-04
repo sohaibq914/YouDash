@@ -42,3 +42,7 @@ h3 {
     word-wrap: break-word;
     word-break: break-word;
 }
+
+.tableGoalView h3 {
+    font-size: 4vw;
+}

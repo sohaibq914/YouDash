@@ -28,12 +28,19 @@ public class GoalController {
         System.out.println(wtgoal);
         //Add goal to database
 
+
+        for (int i = 0; i < temp.size(); i++) {
+            if (wtgoal.getGoalName().equals(temp.get(i).getGoalName())) {
+                //can't have duplicate names
+                System.out.println("Error: Duplicate Goal Name");
+                HttpHeaders header = new HttpHeaders();
+                header.add("Duplicate", "Duplicate goal");
+                return new ResponseEntity<>(header, HttpStatus.CONFLICT);
+            }
+        }
         HttpHeaders header = new HttpHeaders();
         header.add("200", "uno");
         System.out.println("Received New Goal");
-        if (wtgoal.getGoalName().equals("DUP")) {
-            //can't have duplicate names
-        }
         temp.add(wtgoal);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
@@ -75,5 +82,25 @@ public class GoalController {
         System.out.println(temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
+
+    @PostMapping(path = "/{user}/delete", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> deleteGoal(@PathVariable("user") String user, @RequestBody Goal goalToDelete)
+    {
+        //Add goal to database
+
+        for (int i = 0; i < temp.size(); i++) {
+            if (temp.get(i).getGoalName().equals(goalToDelete.getGoalName())) {
+                temp.remove(i);
+                //removed
+                //replace in database
+                break;
+            }
+        }
+        HttpHeaders header = new HttpHeaders();
+        header.add("200", "Removed Goal");
+        System.out.println("Removed Goal" + goalToDelete.getGoalName());
+        return new ResponseEntity<>(header, HttpStatus.OK);
+    }
+
 
 }
