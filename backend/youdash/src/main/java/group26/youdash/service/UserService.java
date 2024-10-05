@@ -45,7 +45,21 @@ public class UserService implements UserRepository {
         }
     }
 
-    // Method to get user profile information (optional, for future use)
+    // Method to update user profile information in the database
+    public void updateUserProfile(int userID, String name, String email, String password, String bio) {
+        User user = dynamoDBMapper.load(User.class, userID);
+        if (user != null) {
+            if (name != null) user.setName(name);
+            if (email != null) user.setEmail(email);
+            if (password != null) user.setPassword(password);
+            if (bio != null) user.setBio(bio);
+            dynamoDBMapper.save(user);  // Save the updated user
+        } else {
+            throw new NoSuchElementException("User with ID " + userID + " not found");
+        }
+    }
+
+    // Method to get user profile information
     public User getUserProfile(int userID) {
         User user = dynamoDBMapper.load(User.class, userID);
         if (user != null) {

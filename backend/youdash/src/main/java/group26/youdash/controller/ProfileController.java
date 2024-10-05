@@ -18,19 +18,26 @@ public class ProfileController {
     @Autowired
     private UserService userService;
 
-    // Endpoint to update the user bio
-    @PutMapping("/{userID}/updateBio")
-    public ResponseEntity<String> updateBio(@PathVariable("userID") int userID, @RequestBody Map<String, String> payload) {
-        String newBio = payload.get("bio");
+    // Endpoint to update the user profile information
+    @PutMapping("/{userID}/updateProfile")
+    public ResponseEntity<String> updateProfile(
+            @PathVariable("userID") int userID, 
+            @RequestBody Map<String, String> payload) {
+        
+        String name = payload.get("name");
+        String email = payload.get("email");
+        String password = payload.get("password");
+        String bio = payload.get("bio");
+
         try {
-            userService.updateUserBio(userID, newBio);  // Call the service method to update bio
-            return new ResponseEntity<>("Bio updated successfully", HttpStatus.OK);
+            userService.updateUserProfile(userID, name, email, password, bio);
+            return new ResponseEntity<>("Profile updated successfully", HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
     }
 
-    // Endpoint to get user profile information (optional, for future use)
+    // Endpoint to get user profile information
     @GetMapping("/{userID}")
     public ResponseEntity<User> getUserProfile(@PathVariable("userID") int userID) {
         try {

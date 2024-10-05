@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 // import Navbar from "../Components/navbar";
-import axios from "axios"; // Import axios for API calls
+import axios from "axios";
 
 function Profile() {
   const [editField, setEditField] = useState(null);
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    bio: "", // Initialize bio as an empty string
-    email: "john.doe@example.com",
-    password: "********",
+    name: "",
+    bio: "",
+    email: "",
+    password: "********", // Default value for display purposes
   });
 
   // Fetch the user profile data from the backend when the component mounts
@@ -19,10 +19,10 @@ function Profile() {
         const response = await axios.get(`http://localhost:8080/profile/${userID}`);
         const userData = response.data;
         setProfile({
-          name: userData.name,
-          bio: userData.bio || "", // Populate the bio from the backend
-          email: userData.email,
-          password: "********",
+          name: userData.name || "",
+          bio: userData.bio || "",
+          email: userData.email || "",
+          password: "********", // Do not fetch actual password for security reasons
         });
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -43,15 +43,17 @@ function Profile() {
   const handleSave = async () => {
     setEditField(null);
 
-    if (editField === "bio") {
-      // Send updated bio to the backend
-      try {
-        const userID = 12345; // Replace with the actual userID
-        const response = await axios.put(`http://localhost:8080/profile/${userID}/updateBio`, { bio: profile.bio });
-        console.log(response.data); // Log success message
-      } catch (error) {
-        console.error("Error updating bio:", error);
-      }
+    try {
+      const userID = 12345; // Replace with the actual userID
+      const response = await axios.put(`http://localhost:8080/profile/${userID}/updateProfile`, {
+        name: profile.name,
+        bio: profile.bio,
+        email: profile.email,
+        password: profile.password === "********" ? null : profile.password, // Send password only if changed
+      });
+      console.log(response.data); // Log success message
+    } catch (error) {
+      console.error("Error updating profile:", error);
     }
   };
 
