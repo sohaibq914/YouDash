@@ -2,64 +2,54 @@ import React, { useState, useEffect } from "react";
 import "./BlockedPages.css";
 import AddCategoriesButton from "../Components/AddCategoriesButton.tsx";
 import { DeleteCategoriesButton } from "../Components/DeleteCategoriesButton.tsx";
+
 import axios from "axios";
 
 const BlockedPages = () => {
-
   // track available categories to block
   const [availableCategories, setAvailableCategories] = useState<string[]>([]);
 
   // tracks blocked categories
   const [blockedCategories, setBlockedCategories] = useState<string[]>([]);
-  
 
   // gets user input from the input field
   const [inputValue, setInputValue] = useState("");
   // will hold filtered options depending on what user inputs
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
 
-
   // fetch data from backend when the component mounts
   useEffect(() => {
-
     const userID = 12345;
 
     // Fetch available categories
     const fetchAvailableCategories = async () => {
-
       try {
-
-        const response = await axios.get(`http://localhost:8080/block-categories/${userID}/availableCategories`);
+        const response = await axios.get(
+          `http://localhost:8080/block-categories/${userID}/availableCategories`
+        );
         console.log("Available Categories Response:", response.data);
         setAvailableCategories(response.data.availableCategories);
-
-      } catch(error) {
+      } catch (error) {
         console.error("Error fetching available categories", error);
       }
-
     };
-
 
     // Fetch currently blocked categories
     const fetchBlockedCategories = async () => {
-
       try {
-
-        const response = await axios.get(`http://localhost:8080/block-categories/${userID}/blockedCategories`);
-        console.log("Blocked Categories Response:", response.data);  // Log response
+        const response = await axios.get(
+          `http://localhost:8080/block-categories/${userID}/blockedCategories`
+        );
+        console.log("Blocked Categories Response:", response.data); // Log response
         setBlockedCategories(response.data.blockedCategories);
-        
       } catch (error) {
         console.log("Error fetching blocked categories", error);
       }
     };
 
-
     fetchAvailableCategories();
     fetchBlockedCategories();
   }, []);
-
-
 
   const handleAddCategory = (categoryName: string) => {
     //will remove from available categories
@@ -99,7 +89,7 @@ const BlockedPages = () => {
     const filtered = availableCategories.filter((option) =>
       option.toLowerCase().startsWith(value.toLowerCase())
     );
-    
+
     //show all the options that match the input
     setFilteredOptions(filtered);
   };
@@ -107,14 +97,15 @@ const BlockedPages = () => {
   return (
     //header for currently blocked and category block
     <div>
-      <div className="CategoryBlockTitle">
-        <h1>Category Block</h1>
-      </div>
+      <div className="TitleContainer">
+        <div className="CategoryBlockTitle">
+          <h1>Currently Blocked</h1>
+        </div>
 
-      <div className="CurrentlyBlockedTitle">
-        <h1>Currently Blocked</h1>
+        <div className="CurrentlyBlockedTitle">
+          <h1>Available Categories</h1>
+        </div>
       </div>
-
       {/*// main screen container for Blocked Page */}
       <div className="container">
         {/* rectangle container for Currently Blocked */}
@@ -123,17 +114,19 @@ const BlockedPages = () => {
             <h2>Categories</h2>
           </div>
 
-          <ul className="category-list">
-            {blockedCategories.map((category, index) => (
-              <li className="category-item" key={index}>
-                <span>{category}</span>
-                <DeleteCategoriesButton
-                  categoryName={category}
-                  onDeleteCategory={handleDeleteCategory}
-                />
-              </li>
-            ))}
-          </ul>
+          <div className="scroll-container">
+            <ul className="category-list">
+              {blockedCategories.map((category, index) => (
+                <li className="category-item" key={index}>
+                  <span>{category}</span>
+                  <DeleteCategoriesButton
+                    categoryName={category}
+                    onDeleteCategory={handleDeleteCategory}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* a rectangle container for Blocking Categories */}
@@ -158,19 +151,21 @@ const BlockedPages = () => {
             </div>
           </div>
 
-          <ul className="category-list">
-            {(inputValue ? filteredOptions : availableCategories).map(
-              (category, index) => (
-                <li className="category-item" key={index}>
-                  <span>{category}</span>
-                  <AddCategoriesButton
-                    categoryName={category}
-                    onAddCategory={handleAddCategory}
-                  />
-                </li>
-              )
-            )}
-          </ul>
+          <div className="scroll-container">
+            <ul className="category-list">
+              {(inputValue ? filteredOptions : availableCategories).map(
+                (category, index) => (
+                  <li className="category-item" key={index}>
+                    <span>{category}</span>
+                    <AddCategoriesButton
+                      categoryName={category}
+                      onAddCategory={handleAddCategory}
+                    />
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
         </div>
       </div>
       {/* // end of main screen container */}
