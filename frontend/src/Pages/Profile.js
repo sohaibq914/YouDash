@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Navbar from "../Components/navbar";
 
 function Profile() {
   // State to handle the edit mode for each field
@@ -24,6 +25,7 @@ function Profile() {
   };
 
   return (
+    // <Navbar></Navbar>
     <div style={styles.container}>
       <h1 style={styles.title}>Profile</h1>
       <div style={styles.profilePicContainer}>

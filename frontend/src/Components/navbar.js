@@ -1,9 +1,9 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import NavDropdown from "react-bootstrap/NavDropdown";
 import BlockedPage from "../Pages/BlockedPages.tsx";
-import GoalCreate from "../Pages/GoalCreate";
+import GoalCreate from "../Pages/GoalCreate.js";
 
 function NavbarComponent() {
   return (
@@ -21,7 +21,7 @@ function NavbarComponent() {
           <Nav.Link href="/analytics">Analytics</Nav.Link>
           <Nav.Link href="/block-categories">Blocked Categories</Nav.Link>
         </Nav>
-        </div>
+      </div>
     </Navbar>
   );
 }
