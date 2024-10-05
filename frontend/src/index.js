@@ -4,7 +4,7 @@ import App from "./App";
 import GoalCreate from "./Pages/GoalCreate";
 import GoalView from "./Pages/GoalView";
 import Profile from "./Pages/Profile";
-import navbar from "./Components/navbar";
+// import navbar from "./Components/navbar";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

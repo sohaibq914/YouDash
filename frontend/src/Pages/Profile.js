@@ -1,15 +1,36 @@
-import React, { useState } from "react";
-import Navbar from "../Components/navbar";
+import React, { useState, useEffect } from "react";
+// import Navbar from "../Components/navbar";
+import axios from "axios"; // Import axios for API calls
 
 function Profile() {
-  // State to handle the edit mode for each field
   const [editField, setEditField] = useState(null);
   const [profile, setProfile] = useState({
     name: "John Doe",
-    bio: "I'm a software developer passionate about creating user-friendly applications.",
+    bio: "", // Initialize bio as an empty string
     email: "john.doe@example.com",
     password: "********",
   });
+
+  // Fetch the user profile data from the backend when the component mounts
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const userID = 12345; // Replace with the actual userID
+        const response = await axios.get(`http://localhost:8080/profile/${userID}`);
+        const userData = response.data;
+        setProfile({
+          name: userData.name,
+          bio: userData.bio || "", // Populate the bio from the backend
+          email: userData.email,
+          password: "********",
+        });
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []); // Empty dependency array means this useEffect runs once on component mount
 
   const handleEditClick = (field) => {
     setEditField(field);
@@ -19,13 +40,22 @@ function Profile() {
     setProfile({ ...profile, [editField]: e.target.value });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setEditField(null);
-    // aws stuff here
+
+    if (editField === "bio") {
+      // Send updated bio to the backend
+      try {
+        const userID = 12345; // Replace with the actual userID
+        const response = await axios.put(`http://localhost:8080/profile/${userID}/updateBio`, { bio: profile.bio });
+        console.log(response.data); // Log success message
+      } catch (error) {
+        console.error("Error updating bio:", error);
+      }
+    }
   };
 
   return (
-    // <Navbar></Navbar>
     <div style={styles.container}>
       <h1 style={styles.title}>Profile</h1>
       <div style={styles.profilePicContainer}>
@@ -51,7 +81,6 @@ function Profile() {
   );
 }
 
-// Inline styles for simplicity
 const styles = {
   container: {
     width: "400px",
