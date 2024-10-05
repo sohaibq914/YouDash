@@ -74,15 +74,28 @@ function GoalEditComponent(props) {
           .catch((error) => console.error(error));
       };
 
+    const deleteGoal = (e) => {
+        console.log('deleted');
+        axios
+                  .post("http://localhost:8080/goals/thename/delete", goal)
+                  .then((response) => console.log(response))
+                  .catch((error) => console.error(error));
+        window.location.reload();
+    };
+
   return (
-    <div className="GoalEditComponent">
-        <table className="tableGoalView">
+    <div className="GoalEditComponent goalEditField">
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+            <button type="button" className="deleteBtn" id={'delete' + uniqueId} name="deleteGoal" onClick={deleteGoal}>
+                                     Delete
+                                    </button></div>
+        <table className="tableGoalView" style={{width: "90%"}}>
         <tbody>
         <tr>
-        <td>
+        <td style={{width: "30%"}}>
             <h3 style={{marginTop: "0.5rem"}}>Name: </h3>
         </td>
-        <td>
+        <td style={{width: "70%"}}>
             <input type="text" id={'goalName' + uniqueId} defaultValue={goal?.goalName || "ERROR"} onBlur={updateName} />
         </td>
         </tr>
@@ -132,12 +145,12 @@ function GoalEditComponent(props) {
         </tr>
         <tr>
         <td>
-        <button type="button" style={{ width: "100%" }} id={'aimAboveGoal' + uniqueId} name="watchLessThanGoal" value={false} onClick={aimForMoreBtn}>
+        <button type="button" style={{ width: "100%" }} className="responsiveGoalButton" id={'aimAboveGoal' + uniqueId} name="watchLessThanGoal" value={false} onClick={aimForMoreBtn}>
                          Aim Above
                         </button>
         </td>
         <td>
-                        <button type="button" style={{ width: "100%" }} id={'aimBelowGoal' + uniqueId} name="watchLessThanGoal" value={true} onClick={aimForLessBtn}>
+                        <button type="button" style={{ width: "100%" }} className="responsiveGoalButton" id={'aimBelowGoal' + uniqueId} name="watchLessThanGoal" value={true} onClick={aimForLessBtn}>
                           Aim Below
                         </button>
         </td>

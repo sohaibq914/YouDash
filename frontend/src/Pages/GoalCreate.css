@@ -1,5 +1,5 @@
 .GoalCreate {
-    margin-top: 4em;
+    margin-top: 90px;
 }
 
 body {
@@ -19,10 +19,13 @@ h2 {
 h3 {
 
     text-align:right;
+    font-size: 3vw;
 
 }
 
-button {
+
+
+.responsiveGoalButton {
 
     background-color: #02CCDD;
     transition-duration: 0.2s;
@@ -33,14 +36,26 @@ button {
     margin-right: auto;
 }
 
-button:hover {
+@media (max-width:450px){
+    .responsiveGoalButton {
+        font-size: 110%;
+        text-align: center;
+        padding: 5% 5%;
+    }
+
+    .disappearWhenSmall {
+        display: none;
+    }
+}
+
+.responsiveGoalButton button:hover {
 
     background-color: #12AABB;
     box-shadow: 0 0 0.5em 0 rgba(0,0,0,0.24);
 
 }
 
-button:active {
+.responsiveGoalButton button:active {
   background-color: #227799;
   transform: translateY(0.25em);
 }
@@ -52,7 +67,7 @@ button:active {
 }
 
 .tableGoal {
-
+    table-layout:fixed;
     margin-left: auto;
     margin-right: auto;
 
@@ -64,8 +79,11 @@ button:active {
 
 }
 
-.tableTime td {
+.tableTime {
+    width: 100%;
+}
 
+.tableTime td {
     padding: 0.25em 0.25em;
 
 }

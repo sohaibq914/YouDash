@@ -70,7 +70,16 @@ function GoalCreate() {
     axios
       .post("http://localhost:8080/goals/thename/create", userData)
       .then((response) => console.log(response))
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        if (error.response.status == '409') {
+            alert("No duplicate goals!");
+        } else {
+            console.error(error);
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          }
+      });
   };
   return (
     <div className="GoalCreate">
@@ -80,7 +89,7 @@ function GoalCreate() {
           <tbody>
             <tr>
               <td>
-                <h3>Goal Name:</h3>
+                <h3 className="inputLabel">Goal Name:</h3>
               </td>
               <td>
                 <input type="text" id="goalName" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
@@ -88,7 +97,7 @@ function GoalCreate() {
             </tr>
             <tr>
               <td>
-                <h3>Goal Description:</h3>
+                <h3 className="inputLabel">Goal Description:</h3>
               </td>
               <td>
                 <input type="text" id="goalDescription" name="goalDescription" required={false} onChange={handleChange} value={data.goalDescription} />
@@ -96,27 +105,27 @@ function GoalCreate() {
             </tr>
             <tr>
               <td>
-                <h3>Watchtime Limit:</h3>
+                <h3 className="inputLabel">Watchtime Limit:</h3>
               </td>
               <td>
                 <table className="tableTime">
                   <tbody>
                     <tr>
-                      <td>Hours:</td>
-                      <td>
-                        <input type="range" min="0" max="40" id="hoursRange" name="hoursRange" step="1" onChange={hourRangeChange} />
+                      <td><h4 style={{fontSize: "calc(0.9rem + .3vw)"}}>Hours:</h4></td>
+                      <td className="disappearWhenSmall">
+                        <input type="range" style={{ width: "100%" }}  min="0" max="40" id="hoursRange" name="hoursRange" step="1" onChange={hourRangeChange} />
                       </td>
                       <td>
-                        <input type="number" id="hoursInput" name="hoursInput" required={true} min="0" max="40" onChange={hourInputChange} />
+                        <input type="number" style={{ width: "100%" }} id="hoursInput" name="hoursInput" required={true} min="0" max="40" onChange={hourInputChange} />
                       </td>
                     </tr>
                     <tr>
-                      <td>Minutes:</td>
-                      <td>
-                        <input type="range" min="0" max="55" id="minutesRange" name="minutesRange" step="5" onChange={minuteRangeChange} />
+                      <td><h4 style={{fontSize: "calc(0.9rem + .3vw)"}}>Minutes:</h4></td>
+                      <td className="disappearWhenSmall">
+                        <input type="range" style={{ width: "100%" }} min="0" max="55" id="minutesRange" name="minutesRange" step="5" onChange={minuteRangeChange} />
                       </td>
                       <td>
-                        <input type="number" id="minutesInput" name="minutesInput" required={true} min="0" max="59" onChange={minuteInputChange} />
+                        <input type="number" style={{ width: "100%" }} id="minutesInput" name="minutesInput" required={true} min="0" max="59" onChange={minuteInputChange} />
                       </td>
                     </tr>
                   </tbody>
@@ -125,20 +134,20 @@ function GoalCreate() {
             </tr>
             <tr>
               <td>
-                <h3>Aim Above or Below Limit:</h3>
+                <h3 className="inputLabel">Aim Above or Below Limit:</h3>
               </td>
               <td>
-                <button type="button" style={{ width: "50%" }} className="selectedAimAboveBelowButton" id="aimAboveGoal" name="watchLessThanGoal" value={false} onClick={handleAboveGoalBtn}>
+                <button type="button" style={{ width: "50%" }} className="selectedAimAboveBelowButton responsiveGoalButton" id="aimAboveGoal" name="watchLessThanGoal" value={false} onClick={handleAboveGoalBtn}>
                   Above
                 </button>
-                <button type="button" style={{ width: "50%" }} id="aimBelowGoal" name="watchLessThanGoal" value={true} onClick={handleBelowGoalBtn}>
+                <button type="button" style={{ width: "50%" }} className="responsiveGoalButton" id="aimBelowGoal" name="watchLessThanGoal" value={true} onClick={handleBelowGoalBtn}>
                   Below
                 </button>
               </td>
             </tr>
             <tr>
               <td>
-                <h3>Category:</h3>
+                <h3 className="inputLabel">Category:</h3>
               </td>
               <td>
                 <select id="category" defaultValue="ALL" name="category">
@@ -150,7 +159,7 @@ function GoalCreate() {
             </tr>
             <tr>
               <td colSpan="2">
-                <button style={{ width: "100%" }} type="submit">
+                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmit">
                   Create Goal
                 </button>
               </td>

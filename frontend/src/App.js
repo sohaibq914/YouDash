@@ -22,8 +22,7 @@ function App() {
   }, []);
 
   return (
-
-    <div className="App">
+    <div className="App" style={{width:'100%', overflow: 'hidden'}}>
         <Navbar/>
         <RouterPages/>
     </div>

@@ -14,9 +14,9 @@ function NavbarComponent() {
           <Nav.Link href="/home">Home</Nav.Link>
           <Nav.Link href="/leaderboards">Leaderboards</Nav.Link>
           <NavDropdown title="Goals" id="goal-dropdown">
-            <NavDropdown.Item href="/goalsView">View</NavDropdown.Item>
-            <NavDropdown.Item href="/goalsCreate">Create</NavDropdown.Item>
-            <NavDropdown.Item href="/goalsEdit">Edit</NavDropdown.Item>
+            <NavDropdown.Item id="goalsView" href="/goalsView">View</NavDropdown.Item>
+            <NavDropdown.Item id="goalsCreate" href="/goalsCreate">Create</NavDropdown.Item>
+            <NavDropdown.Item id="goalsEdit" href="/goalsEdit">Edit</NavDropdown.Item>
           </NavDropdown>
           <Nav.Link href="/analytics">Analytics</Nav.Link>
           <Nav.Link href="/block-categories">Blocked Categories</Nav.Link>

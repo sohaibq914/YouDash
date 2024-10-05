@@ -7,7 +7,7 @@ function GoalComponent(props) {
     const goal = props.goal;
   return (
     <div className="GoalComponent">
-        <table className="tableGoalView">
+        <table className="tableGoalView" style={{width: "90%"}}>
         <tbody>
         <tr>
         <td>
