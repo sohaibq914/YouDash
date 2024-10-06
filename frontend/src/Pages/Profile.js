@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import Navbar from "../Components/navbar";
+import Navbar from "../Components/navbar";
 import axios from "axios";
 
 function Profile() {
@@ -10,6 +10,7 @@ function Profile() {
     email: "",
     password: "********", // Default value for display purposes
   });
+  const [isGmail, setIsGmail] = useState(false); // State to track if the email is Gmail
 
   // Fetch the user profile data from the backend when the component mounts
   useEffect(() => {
@@ -18,11 +19,16 @@ function Profile() {
         const userID = 12345; // Replace with the actual userID
         const response = await axios.get(`http://localhost:8080/profile/${userID}`);
         const userData = response.data;
+
+        // Check if the email is a Gmail address and set state accordingly
+        const emailIsGmail = userData.email.endsWith("@gmail.com");
+        setIsGmail(emailIsGmail);
+
         setProfile({
           name: userData.name || "",
           bio: userData.bio || "",
           email: userData.email || "",
-          password: "********", // Do not fetch actual password for security reasons
+          password: "********", // Do not fetch the actual password for security reasons
         });
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -33,6 +39,11 @@ function Profile() {
   }, []); // Empty dependency array means this useEffect runs once on component mount
 
   const handleEditClick = (field) => {
+    // Prevent editing of email and password fields if the email is Gmail
+    if ((field === "email" || field === "password") && isGmail) {
+      alert("Email and password cannot be edited for Gmail accounts.");
+      return;
+    }
     setEditField(field);
   };
 
@@ -48,7 +59,7 @@ function Profile() {
       const response = await axios.put(`http://localhost:8080/profile/${userID}/updateProfile`, {
         name: profile.name,
         bio: profile.bio,
-        email: profile.email,
+        email: isGmail ? null : profile.email, // Send email only if not Gmail
         password: profile.password === "********" ? null : profile.password, // Send password only if changed
       });
       console.log(response.data); // Log success message
@@ -66,13 +77,27 @@ function Profile() {
       {Object.entries(profile).map(([key, value]) => (
         <div key={key} style={styles.fieldContainer}>
           <div style={styles.fieldLabel}>{key.charAt(0).toUpperCase() + key.slice(1)}</div>
-          {editField === key ? <input type={key === "password" ? "password" : "text"} value={profile[key]} onChange={handleChange} style={styles.input} /> : <div style={styles.fieldValue}>{value}</div>}
+          {editField === key ? (
+            <input
+              type={key === "password" ? "password" : "text"}
+              value={profile[key]}
+              onChange={handleChange}
+              style={styles.input}
+              disabled={isGmail && (key === "email" || key === "password")} // Disable input if email is Gmail
+            />
+          ) : (
+            <div style={styles.fieldValue}>{value}</div>
+          )}
           {editField === key ? (
             <button onClick={handleSave} style={styles.saveButton}>
               Save
             </button>
           ) : (
-            <button onClick={() => handleEditClick(key)} style={styles.editButton}>
+            <button
+              onClick={() => handleEditClick(key)}
+              style={styles.editButton}
+              disabled={isGmail && (key === "email" || key === "password")} // Disable button if email is Gmail
+            >
               Edit
             </button>
           )}
@@ -130,6 +155,7 @@ const styles = {
     backgroundColor: "#e0e0e0",
     border: "none",
     borderRadius: "5px",
+    disabled: { cursor: "not-allowed", opacity: 0.5 }, // Add disabled styles
   },
   saveButton: {
     padding: "5px 10px",
