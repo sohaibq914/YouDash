@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/youtube")
+@CrossOrigin(origins = {
+    "http://localhost:3000", 
+    "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"
+})
 public class YouTubeAPIController {
 
     private final YoutubeAPIService youtubeAPIService;
@@ -18,7 +22,7 @@ public class YouTubeAPIController {
     }
 
     @GetMapping("/video-category")
-    public ResponseEntity<String> getVideoCategoryId(@RequestParam String url) {
+    public ResponseEntity<String> getVideoCategoryId(@RequestParam("url") String url) {
 
         try {
             String categoryID = youtubeAPIService.getVideoCategoryID(url);
