@@ -22,7 +22,7 @@ function Signup() {
       availableCategories: []
     };
 
-    axios.post('/api/users', newUser)
+    axios.post('http://localhost:8080/api/users/signup', newUser)
       .then(response => {
         // Handle successful sign-up
         console.log('Sign-up successful', response.data);

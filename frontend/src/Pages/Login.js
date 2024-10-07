@@ -10,7 +10,7 @@ function Login() {
     e.preventDefault();
     const loginData = { username, password };
 
-    axios.post('/api/users/login', loginData)
+    axios.post('http://localhost:8080/api/users/login', loginData)
       .then(response => {
         // If login is successful, you can store user data or redirect
         console.log('Login successful', response.data);

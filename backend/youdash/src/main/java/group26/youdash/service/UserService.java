@@ -8,12 +8,20 @@ import group26.youdash.model.User;
 import group26.youdash.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service // Marks this class as a service component in the Spring framework
+/**
+ * UserService implements UserRepository for user-related operations.
+ * Author: Abdul Wajid Arikattayil
+ */
 public class UserService implements UserRepository {
 
-    @Autowired // Automatically injects an instance of DynamoDBMapper to interact with DynamoDB
+    @Autowired // Automatically injects an instance of DynamoDBMapper
     private DynamoDBMapper dynamoDBMapper;
+
+    // Generates unique IDs across all users
+    private static final AtomicInteger userIdCounter = new AtomicInteger(1);
 
     /**
      * Save a user to DynamoDB.
@@ -22,7 +30,10 @@ public class UserService implements UserRepository {
      */
     @Override
     public User save(User user) {
-        dynamoDBMapper.save(user); // Use DynamoDBMapper to save the user to the DynamoDB table
+        // Set a unique ID for the user
+        user.setId(userIdCounter.getAndIncrement());
+
+        dynamoDBMapper.save(user); // Save the user to the DynamoDB table
         return user; // Return the saved user object
     }
 
@@ -33,7 +44,7 @@ public class UserService implements UserRepository {
      */
     @Override
     public User findById(int id) {
-        return dynamoDBMapper.load(User.class, id); // Use DynamoDBMapper to load the user by ID
+        return dynamoDBMapper.load(User.class, id); // Load the user by ID
     }
 
     /**
@@ -44,11 +55,11 @@ public class UserService implements UserRepository {
     public void delete(int id) {
         User user = dynamoDBMapper.load(User.class, id); // Load the user by ID
         if (user != null) { // If the user exists
-            dynamoDBMapper.delete(user); // Use DynamoDBMapper to delete the user
+            dynamoDBMapper.delete(user); // Delete the user
         }
     }
 
-        /**
+    /**
      * Find user by username in DynamoDB.
      * @param username The username to search for.
      * @return The User object if found, null if not.
@@ -61,7 +72,7 @@ public class UserService implements UserRepository {
         // Search through the result for the user with the matching username
         for (User user : scanResult) {
             if (user.getUsername().equals(username)) {
-                return user;
+                return user; // Return user if found
             }
         }
         return null; // Return null if no user is found
