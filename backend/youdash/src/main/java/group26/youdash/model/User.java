@@ -1,11 +1,11 @@
 package group26.youdash.model;
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import group26.youdash.classes.Goal;
 
 import java.util.List;
 
-@DynamoDBTable(tableName = "Users")
+@DynamoDBTable(tableName = "Users")  // Specify the DynamoDB table name
 public class User {
 
     private int id;
@@ -18,46 +18,86 @@ public class User {
     private List<Goal> goals;
     private List<String> blocked;
     private List<String> availableCategories;
+    private String bio;  // Add the bio attribute here
 
     @DynamoDBHashKey
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @DynamoDBAttribute
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @DynamoDBAttribute
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @DynamoDBAttribute
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     @DynamoDBAttribute
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @DynamoDBAttribute
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     @DynamoDBAttribute
-    public boolean isRegistered() { return registered; }
-    public void setRegistered(boolean registered) { this.registered = registered; }
+    public boolean isRegistered() {
+        return registered;
+    }
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
 
     @DynamoDBAttribute
-    public List<Goal> getGoals() { return goals; }
-    public void setGoals(List<Goal> goals) { this.goals = goals; }
+    public List<Goal> getGoals() {
+        return goals;
+    }
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
+    }
 
     @DynamoDBAttribute
-    public List<String> getBlocked() { return blocked; }
-    public void setBlocked(List<String> blocked) { this.blocked = blocked; }
+    public List<String> getBlocked() {
+        return blocked;
+    }
+    public void setBlocked(List<String> blocked) {
+        this.blocked = blocked;
+    }
 
-    @DynamoDBAttribute
-    public List<String> getAvailableCategories() { return availableCategories;}
-    public void setAvailableCategories(List<String> availableCategories) {this.availableCategories = availableCategories;}
+    // Add getter and setter for the new bio attribute
+    @DynamoDBAttribute  // Map the bio field to a DynamoDB attribute
+    public String getBio() {
+        return bio;
+    }
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 }
-
-
