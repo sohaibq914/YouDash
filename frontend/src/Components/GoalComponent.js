@@ -9,6 +9,13 @@ function GoalComponent(props) {
     <div className="GoalComponent">
         <table className="tableGoalView" style={{width: "90%"}}>
         <tbody>
+        {(!goal?.multiplier || false) ? (
+        <>
+        <tr>
+                <td colSpan="2">
+                    <h3 style={{marginTop: "0.5rem", textAlign: "center"}}>Watch Time Goal</h3>
+                </td>
+        </tr>
         <tr>
         <td>
             <h3 style={{marginTop: "0.5rem"}}>Name: </h3>
@@ -22,7 +29,7 @@ function GoalComponent(props) {
             <h3 style={{marginTop: "0.5rem"}}>Description: </h3>
         </td>
         <td>
-            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalDescription || "ERROR"}</h3>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalDescription || "None"}</h3>
         </td>
         </tr>
         <tr>
@@ -30,7 +37,7 @@ function GoalComponent(props) {
             <h3 style={{marginTop: "0.5rem"}}>Category: </h3>
         </td>
         <td>
-            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.category || "ERROR"}</h3>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.theCategory || "ERROR"}</h3>
         </td>
         </tr>
         <tr>
@@ -66,6 +73,67 @@ function GoalComponent(props) {
               )}
         </td>
         </tr>
+        </>
+        ) : (
+        <>
+                <tr>
+                <td colSpan="2">
+                    <h3 style={{marginTop: "0.5rem", textAlign: "center"}}>Quality Goal</h3>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Name: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalName || "ERROR"}</h3>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Description: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalDescription || "None"}</h3>
+                </td>
+                </tr>
+
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Category To Watch: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.categoryToWatch || "ERROR"}</h3>
+                </td>
+                </tr>
+
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Category To Avoid: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.categoryToAvoid || "ERROR"}</h3>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Multiplier: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.multiplier || "ERROR"}</h3>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Goal Progress: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress || "N/A"}</h3>
+                </td>
+                </tr>
+
+        </>
+        )}
         </tbody>
         </table>
     </div>

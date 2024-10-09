@@ -1,17 +1,15 @@
 package group26.youdash.service;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import group26.youdash.classes.Goal;
 import group26.youdash.classes.WatchTimeGoal;
-import group26.youdash.controller.QualityGoal;
+import group26.youdash.classes.QualityGoal;
 import group26.youdash.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.Queue;
 
 @Service
 public class GoalsService {
@@ -28,7 +26,8 @@ public class GoalsService {
             for (Goal goal : goals) {
                 if (goal instanceof WatchTimeGoal) {
                     wtgoals.add((WatchTimeGoal) goal);
-                } else {
+                }
+                if (goal instanceof QualityGoal) {
                     qgoals.add((QualityGoal) goal);
                 }
             }

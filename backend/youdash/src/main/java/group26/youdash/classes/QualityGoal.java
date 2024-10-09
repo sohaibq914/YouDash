@@ -1,4 +1,4 @@
-package group26.youdash.controller;
+package group26.youdash.classes;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
@@ -19,9 +19,9 @@ public class QualityGoal extends Goal {
 
     public QualityGoal () {} //default constructor
 
-    public QualityGoal(String goalName, String goalDescription, float goalProgress, String userID,
+    public QualityGoal(String goalName, String goalDescription, String userID,
                        String categoryToWatch, String categoryToAvoid, float multiplier) {
-        super(goalName, goalDescription, goalProgress, userID);
+        super(goalName, goalDescription, 0.0f, userID);
         this.categoryToWatch = categoryToWatch;
         this.categoryToAvoid = categoryToAvoid;
         this.multiplier = multiplier;
@@ -55,5 +55,13 @@ public class QualityGoal extends Goal {
     }
     public void setMultiplier(float multiplier) {
         this.multiplier = multiplier;
+    }
+
+    @Override
+    public String toString() {
+        return "QualityGoal: " + super.toString() +
+                ", categoryToAvoid: " + categoryToAvoid +
+                ", categoryToWatch: " + categoryToWatch +
+                ", multiplier: " + multiplier;
     }
 }

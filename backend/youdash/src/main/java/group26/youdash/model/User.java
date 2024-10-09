@@ -2,7 +2,7 @@ package group26.youdash.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import group26.youdash.classes.WatchTimeGoal;
-import group26.youdash.controller.QualityGoal;
+import group26.youdash.classes.QualityGoal;
 
 import java.util.List;
 
