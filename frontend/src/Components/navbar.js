@@ -1,27 +1,25 @@
-import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
-function NavbarComponent() {
+function BasicExample() {
   return (
-    <Navbar className="bg-body-tertiary fixed-top" expand="md">
+    <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="/home">YouDash</Navbar.Brand>
-        {/* Add Toggle button for responsive menu */}
-        <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav">
+        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/home">Home</Nav.Link>
-            <Nav.Link href="/leaderboards">Leaderboards</Nav.Link>
-            <NavDropdown title="Goals" id="goal-dropdown">
-              <NavDropdown.Item href="/goalsView">View</NavDropdown.Item>
-              <NavDropdown.Item href="/goalsCreate">Create</NavDropdown.Item>
-              <NavDropdown.Item href="/goalsEdit">Edit</NavDropdown.Item>
+            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#link">Link</Nav.Link>
+            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/analytics">Analytics</Nav.Link>
-            <Nav.Link href="/block-categories">Blocked Categories</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -29,4 +27,4 @@ function NavbarComponent() {
   );
 }
 
-export default NavbarComponent;
+export default BasicExample;
