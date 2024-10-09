@@ -56,7 +56,7 @@ function QualityGoalCreate() {
                 <h3 className="inputLabel">Goal Name:</h3>
               </td>
               <td>
-                <input type="text" id="goalName" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
+                <input type="text" id="goalNameQ" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
               </td>
             </tr>
             <tr>
@@ -64,7 +64,7 @@ function QualityGoalCreate() {
                 <h3 className="inputLabel">Goal Description:</h3>
               </td>
               <td>
-                <input type="text" id="goalDescription" name="goalDescription" required={false} onChange={handleChange} value={data.goalDescription} />
+                <input type="text" id="goalDescriptionQ" name="goalDescription" required={false} onChange={handleChange} value={data.goalDescription} />
               </td>
             </tr>
             <tr>
@@ -106,7 +106,7 @@ function QualityGoalCreate() {
             </tr>
             <tr>
               <td colSpan="2">
-                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmit">
+                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmitQ">
                   Create Goal
                 </button>
               </td>

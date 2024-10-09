@@ -24,13 +24,13 @@ export const Navbar = () => {
           <NavLink to="/block-categories">Block Categories</NavLink>
         </li>
         <li>
-          <NavLink to="/goalsCreate">Create Goals</NavLink>
+          <NavLink id="goalsCreate" to="/goalsCreate">Create Goals</NavLink>
         </li>
         <li>
-          <NavLink to="/goalsView">View Goals</NavLink>
+          <NavLink id="goalsView" to="/goalsView">View Goals</NavLink>
         </li>
         <li>
-          <NavLink to="/goalsEdit">Edit Goals</NavLink>
+          <NavLink id="goalsEdit" to="/goalsEdit">Edit Goals</NavLink>
         </li>
         <li>
           <NavLink to="/profile">Profile</NavLink>

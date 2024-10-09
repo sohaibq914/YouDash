@@ -111,6 +111,11 @@ function GoalEditComponent(props) {
 
     const deleteGoal = (e) => {
         console.log('deleted');
+        if (!goal.hasOwnProperty("multiplier")) {
+            goal["@type"] = "WatchTimeGoal";
+        } else {
+            goal["@type"] = "QualityGoal";
+        }
         axios
                   .post("http://localhost:8080/goals/thename/delete", goal)
                   .then((response) => console.log(response))
