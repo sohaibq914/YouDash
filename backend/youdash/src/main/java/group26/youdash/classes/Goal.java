@@ -37,7 +37,6 @@ public abstract class Goal {
     public String getGoalId() {
         return goalId;
     }
-
     public void setGoalId(String goalId) {
         this.goalId = goalId;
     }
@@ -46,7 +45,6 @@ public abstract class Goal {
     public String getGoalName() {
         return goalName;
     }
-
     public void setGoalName(String goalName) {
         this.goalName = goalName;
     }
@@ -55,7 +53,6 @@ public abstract class Goal {
     public String getGoalDescription() {
         return goalDescription;
     }
-
     public void setGoalDescription(String goalDescription) {
         this.goalDescription = goalDescription;
     }
@@ -64,7 +61,6 @@ public abstract class Goal {
     public float getGoalProgress() {
         return goalProgress;
     }
-
     public void setGoalProgress(float goalProgress) {
         this.goalProgress = goalProgress;
     }
@@ -73,7 +69,6 @@ public abstract class Goal {
     public String getUserID() {
         return userID;
     }
-
     public void setUserID(String userID) {
         this.userID = userID;
     }

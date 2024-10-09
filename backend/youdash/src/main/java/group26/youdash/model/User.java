@@ -94,7 +94,7 @@ public class User {
     public List<QualityGoal> getQgoals() { return qgoals; }
     public void setQgoals(List<QualityGoal> qgoals) { this.qgoals = qgoals; }
 
-    @DynamoDBAttribute
+    @DynamoDBAttribute(attributeName = "blocked")
     public List<String> getBlocked() {
         return blocked;
     }
@@ -103,7 +103,7 @@ public class User {
     }
 
     // Add getter and setter for the new bio attribute
-    @DynamoDBAttribute  // Map the bio field to a DynamoDB attribute
+    @DynamoDBAttribute(attributeName = "bio")  // Map the bio field to a DynamoDB attribute
     public String getBio() {
         return bio;
     }
@@ -111,7 +111,7 @@ public class User {
         this.bio = bio;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBAttribute(attributeName = "availableCategories")
     public List<String> getAvailableCategories() { return availableCategories;}
     public void setAvailableCategories(List<String> availableCategories) {this.availableCategories = availableCategories;}
 }

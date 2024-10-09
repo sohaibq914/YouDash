@@ -27,6 +27,9 @@ export const Navbar = () => {
           <NavLink to="/goalsCreate">Create Goals</NavLink>
         </li>
         <li>
+          <NavLink to="/goalsView">View Goals</NavLink>
+        </li>
+        <li>
           <NavLink to="/goalsEdit">Edit Goals</NavLink>
         </li>
         <li>
