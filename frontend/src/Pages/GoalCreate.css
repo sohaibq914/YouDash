@@ -62,7 +62,7 @@ h3 {
 
 .selectedAimAboveBelowButton {
 
-    background-color: #12AABB;
+    background-color: #12AABB !important;
 
 }
 

@@ -1,7 +1,8 @@
 package group26.youdash.model;
-
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import group26.youdash.classes.Goal;
+
+import group26.youdash.classes.WatchTimeGoal;
+import group26.youdash.controller.QualityGoal;
 
 import java.util.List;
 
@@ -15,7 +16,9 @@ public class User {
     private String password;
     private String phoneNumber;
     private boolean registered;
-    private List<Goal> goals;
+    //private List<Goal> goals;
+    private List<WatchTimeGoal> wtgoals;
+    private List<QualityGoal> qgoals;
     private List<String> blocked;
     private List<String> availableCategories;
     private String bio;  // Add the bio attribute here
@@ -76,13 +79,20 @@ public class User {
         this.registered = registered;
     }
 
-    @DynamoDBAttribute
-    public List<Goal> getGoals() {
-        return goals;
-    }
-    public void setGoals(List<Goal> goals) {
-        this.goals = goals;
-    }
+
+    //https://jspong.github.io/2021/07/19/AbstractDynamoAttributes.html
+    /*@DynamoDBAttribute(attributeName = "goals")
+    @DynamoDBTypeConverted(converter = GoalConverter.class)
+    public List<Goal> getGoals() { return goals; }
+    public void setGoals(List<Goal> goals) { this.goals = goals; }*/
+
+    @DynamoDBAttribute(attributeName = "wtgoals")
+    public List<WatchTimeGoal> getWtgoals() { return wtgoals; }
+    public void setWtgoals(List<WatchTimeGoal> wtgoals) { this.wtgoals = wtgoals; }
+
+    @DynamoDBAttribute(attributeName = "qgoals")
+    public List<QualityGoal> getQgoals() { return qgoals; }
+    public void setQgoals(List<QualityGoal> qgoals) { this.qgoals = qgoals; }
 
     @DynamoDBAttribute
     public List<String> getBlocked() {
@@ -100,4 +110,10 @@ public class User {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
+    @DynamoDBAttribute
+    public List<String> getAvailableCategories() { return availableCategories;}
+    public void setAvailableCategories(List<String> availableCategories) {this.availableCategories = availableCategories;}
 }
+
+

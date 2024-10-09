@@ -1,9 +1,22 @@
 package group26.youdash.classes;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import group26.youdash.controller.QualityGoal;
 
+
+//https://stackoverflow.com/questions/30362446/deserialize-json-with-jackson-into-polymorphic-types-a-complete-example-is-giv
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = WatchTimeGoal.class, name = "WatchTimeGoal"),
+        @JsonSubTypes.Type(value = QualityGoal.class, name = "QualityGoal")
+    }
+)
 @DynamoDBTable(tableName = "Goals")
-public class Goal {
+public abstract class Goal {
     private String goalId;
     private String goalName;
     private String goalDescription;

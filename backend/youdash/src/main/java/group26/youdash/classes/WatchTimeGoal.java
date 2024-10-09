@@ -1,5 +1,11 @@
 package group26.youdash.classes;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
+@JsonTypeName("WatchTimeGoal")
 public class WatchTimeGoal extends Goal {
 
     //This describes the category the goal is measuring
@@ -13,6 +19,8 @@ public class WatchTimeGoal extends Goal {
 
     //This describes whether the user is aiming to exceed or be lower than goal
     private boolean watchLessThanGoal;
+
+    public WatchTimeGoal () {} //default constructor
 
     public WatchTimeGoal(String goalName, String goalDescription, String userID,
                          Categories category, int goalWatchTime, boolean watchLessThanGoal) {
@@ -40,18 +48,22 @@ public class WatchTimeGoal extends Goal {
         this.watchLessThanGoal = watchLessThanGoal;
     }
 
+    @DynamoDBAttribute(attributeName = "category")
     public Categories getCategory() {
         return category;
     }
 
+    @DynamoDBAttribute(attributeName = "currentWatchTime")
     public float getCurrentWatchTime() {
         return currentWatchTime;
     }
 
+    @DynamoDBAttribute(attributeName = "goalWatchTime")
     public int getGoalWatchTime() {
         return goalWatchTime;
     }
 
+    @DynamoDBAttribute(attributeName = "watchLessThanGoal")
     public boolean isWatchLessThanGoal() {
         return watchLessThanGoal;
     }
