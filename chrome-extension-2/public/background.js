@@ -38,32 +38,42 @@ function checkIfCategoryBlocked(categoryId) {
     });
   }
 
+let lastUrl = '';
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.url && changeInfo.url.includes('youtube.com/watch')) {
       // Extract the current YouTube video URL
       const videoUrl = changeInfo.url;
-  
-      // Send the YouTube URL to your backend using a GET request with query parameters
-      fetch(`http://localhost:8080/youtube/video-category?url=${encodeURIComponent(videoUrl)}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.text())
-      .then(data => {
-        console.log('Response from backend:', data);
-        
-        // data = Category ID: 10 as example
-        const splitData = data.split(": ");
-        const categoryId = parseInt(splitData[1], 10);
+      if (lastUrl != videoUrl) {
+        lastUrl = videoUrl;
 
-        checkIfCategoryBlocked(categoryId);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+         // Send a message to the content script to reset logic for the new video
+        chrome.tabs.sendMessage(tabId, { action: "resetLogic" });
+
+         // Send the YouTube URL to your backend using a GET request with query parameters
+        fetch(`http://localhost:8080/youtube/video-category?url=${encodeURIComponent(videoUrl)}`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log('Response from backend:', data);
+            
+            // data = Category ID: 10 as example
+            const splitData = data.split(": ");
+            const categoryId = parseInt(splitData[1], 10);
+
+            checkIfCategoryBlocked(categoryId);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+      }
+    }
+    else {
+        lastUrl = '';
     }
   });
   
