@@ -7,7 +7,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   background-color: #0f172a;
-  color: white;
+  color: black;
   position: sticky;
   top: 0;
 }
@@ -17,7 +17,7 @@ nav .title {
   margin: 1rem;
   font-weight: bold;
   text-decoration: none;
-  color: white;
+  color: black;
 }
 
 nav ul {
@@ -31,7 +31,7 @@ nav ul li {
 nav ul li a {
   display: block;
   text-decoration: none;
-  color: white;
+  color: black;
   padding: 0.5rem;
   margin: 0 0.5rem;
   border-radius: 0.5rem;

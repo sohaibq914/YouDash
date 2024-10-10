@@ -22,6 +22,9 @@ public class User {
     private List<String> blocked;
     private List<String> availableCategories;
     private String bio;  // Add the bio attribute here
+    private String profilePicture; // New field for storing profile picture URL
+    private boolean darkMode;
+
 
     private List<String> historyURLs;
 
@@ -121,6 +124,23 @@ public class User {
     public List<String> getHistoryURLs() { return historyURLs; }
     public void setHistoryURLs(List<String> historyURLs) {this.historyURLs = historyURLs; }
 
+    // New getter and setter for profile picture URL
+    @DynamoDBAttribute(attributeName = "profilePicture")
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    @DynamoDBAttribute(attributeName = "darkMode")  // Map the new attribute to DynamoDB
+    public boolean isDarkMode() {
+        return darkMode;
+    }
+
+    public void setDarkMode(boolean darkMode) {
+        this.darkMode = darkMode;
+    }
 }
 
 
