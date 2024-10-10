@@ -1,11 +1,12 @@
 package group26.youdash.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
-import group26.youdash.classes.Goal;
+import group26.youdash.classes.WatchTimeGoal;
+import group26.youdash.classes.QualityGoal;
 
 import java.util.List;
 
-@DynamoDBTable(tableName = "Users")
+@DynamoDBTable(tableName = "Users")  // Specify the DynamoDB table name
 public class User {
 
     private int id;
@@ -15,49 +16,111 @@ public class User {
     private String password;
     private String phoneNumber;
     private boolean registered;
-    private List<Goal> goals;
+    //private List<Goal> goals;
+    private List<WatchTimeGoal> wtgoals;
+    private List<QualityGoal> qgoals;
     private List<String> blocked;
     private List<String> availableCategories;
+    private String bio;  // Add the bio attribute here
+
+    private List<String> historyURLs;
 
     @DynamoDBHashKey
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @DynamoDBAttribute
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @DynamoDBAttribute
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @DynamoDBAttribute
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     @DynamoDBAttribute
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @DynamoDBAttribute
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     @DynamoDBAttribute
-    public boolean isRegistered() { return registered; }
-    public void setRegistered(boolean registered) { this.registered = registered; }
+    public boolean isRegistered() {
+        return registered;
+    }
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
 
-    @DynamoDBAttribute
+
+    //https://jspong.github.io/2021/07/19/AbstractDynamoAttributes.html
+    /*@DynamoDBAttribute(attributeName = "goals")
+    @DynamoDBTypeConverted(converter = GoalConverter.class)
     public List<Goal> getGoals() { return goals; }
-    public void setGoals(List<Goal> goals) { this.goals = goals; }
+    public void setGoals(List<Goal> goals) { this.goals = goals; }*/
 
-    @DynamoDBAttribute
-    public List<String> getBlocked() { return blocked; }
-    public void setBlocked(List<String> blocked) { this.blocked = blocked; }
+    @DynamoDBAttribute(attributeName = "wtgoals")
+    public List<WatchTimeGoal> getWtgoals() { return wtgoals; }
+    public void setWtgoals(List<WatchTimeGoal> wtgoals) { this.wtgoals = wtgoals; }
 
-    @DynamoDBAttribute
+    @DynamoDBAttribute(attributeName = "qgoals")
+    public List<QualityGoal> getQgoals() { return qgoals; }
+    public void setQgoals(List<QualityGoal> qgoals) { this.qgoals = qgoals; }
+
+    @DynamoDBAttribute(attributeName = "blocked")
+    public List<String> getBlocked() {
+        return blocked;
+    }
+    public void setBlocked(List<String> blocked) {
+        this.blocked = blocked;
+    }
+
+    // Add getter and setter for the new bio attribute
+    @DynamoDBAttribute(attributeName = "bio")  // Map the bio field to a DynamoDB attribute
+    public String getBio() {
+        return bio;
+    }
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    @DynamoDBAttribute(attributeName = "availableCategories")
     public List<String> getAvailableCategories() { return availableCategories;}
     public void setAvailableCategories(List<String> availableCategories) {this.availableCategories = availableCategories;}
+
+    @DynamoDBAttribute(attributeName = "historyURLs")
+    public List<String> getHistoryURLs() { return historyURLs; }
+    public void setHistoryURLs(List<String> historyURLs) {this.historyURLs = historyURLs; }
+
 }
 
 

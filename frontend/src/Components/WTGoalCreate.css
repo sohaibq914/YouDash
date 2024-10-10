@@ -1,6 +1,3 @@
-.GoalCreate {
-}
-
 body {
 
     font-family: Inter, sans-serif;
@@ -59,7 +56,7 @@ h3 {
   transform: translateY(0.25em);
 }
 
-.selectedGoalTypeButton {
+.selectedAimAboveBelowButton {
 
     background-color: #12AABB !important;
 

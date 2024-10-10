@@ -10,12 +10,15 @@ function GoalEditComponent(props) {
     let originalGoalName = props.goal.goalName;
 
     useEffect (() => {
-        if (goal.watchLessThanGoal) {
-            document.getElementById('aimAboveGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
-            document.getElementById('aimBelowGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
-        } else {
-          document.getElementById('aimAboveGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
-          document.getElementById('aimBelowGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+
+        if (!goal.hasOwnProperty("multiplier")) {
+            if (goal.watchLessThanGoal) {
+                document.getElementById('aimAboveGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+                document.getElementById('aimBelowGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
+            } else {
+              document.getElementById('aimAboveGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
+              document.getElementById('aimBelowGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+            }
         }
     }, []);
 
@@ -30,9 +33,19 @@ function GoalEditComponent(props) {
       };
 
     const updateCategory = (e) => {
-        goal.category = document.getElementById('category' + uniqueId).value;
+        goal.theCategory = document.getElementById('category' + uniqueId).value;
         submitChange(e);
       };
+
+    const updateCategoryToWatch = (e) => {
+          goal.categoryToWatch = document.getElementById('categoryToWatch' + uniqueId).value;
+          submitChange(e);
+        };
+
+    const updateCategoryToAvoid = (e) => {
+            goal.categoryToAvoid = document.getElementById('categoryToAvoid' + uniqueId).value;
+            submitChange(e);
+          };
 
     const updateGoalWatchTime = (e) => {
         const newWT =  document.getElementById('goalWatchTime' + uniqueId).value;
@@ -46,26 +59,48 @@ function GoalEditComponent(props) {
         }
       };
 
+      const updateMultiplier = (e) => {
+              const mult =  document.getElementById('multiplier' + uniqueId).value;
+              if (mult > 0) {
+                  goal.multiplier = mult;
+                  submitChange(e);
+              } else {
+                  alert("Invalid Multiplier! Must be greater than 0.");
+                  document.getElementById('multiplier' + uniqueId).value = goal.multiplier;
+              }
+            };
+
     const aimForLessBtn = (e) => {
         goal.watchLessThanGoal = "true";
-        document.getElementById('aimAboveGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
-        document.getElementById('aimBelowGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
+        if (!goal.hasOwnProperty("multiplier")) {
+            document.getElementById('aimAboveGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+            document.getElementById('aimBelowGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
+        }
         submitChange(e);
       };
 
     const aimForMoreBtn = (e) => {
       goal.watchLessThanGoal = "false";
-      document.getElementById('aimAboveGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
-      document.getElementById('aimBelowGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+      if (!goal.hasOwnProperty("multiplier")) {
+        document.getElementById('aimAboveGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
+        document.getElementById('aimBelowGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+      }
       submitChange(e);
     };
 
     const submitChange = (e) => {
         e.preventDefault();
+
+        if (!goal.hasOwnProperty("multiplier")) {
+            goal["@type"] = "WatchTimeGoal";
+        } else {
+            goal["@type"] = "QualityGoal";
+        }
         const goalUpdate = {
             originalName: originalGoalName,
-            wtg: goal
+            g: goal
         };
+        console.log(goal);
         originalGoalName = goal.goalName;
         console.log(originalGoalName);
         axios
@@ -76,6 +111,11 @@ function GoalEditComponent(props) {
 
     const deleteGoal = (e) => {
         console.log('deleted');
+        if (!goal.hasOwnProperty("multiplier")) {
+            goal["@type"] = "WatchTimeGoal";
+        } else {
+            goal["@type"] = "QualityGoal";
+        }
         axios
                   .post("http://localhost:8080/goals/thename/delete", goal)
                   .then((response) => console.log(response))
@@ -104,15 +144,17 @@ function GoalEditComponent(props) {
             <h3 style={{marginTop: "0.5rem"}}>Description: </h3>
         </td>
         <td>
-            <input type="text" id={'goalDescription' + uniqueId} defaultValue={goal?.goalDescription || "ERROR"} onBlur={updateDescription} />
+            <input type="text" id={'goalDescription' + uniqueId} defaultValue={goal?.goalDescription || "None"} onBlur={updateDescription} />
         </td>
         </tr>
+        {(!goal?.multiplier || false) ? (
+        <>
         <tr>
         <td>
             <h3 style={{marginTop: "0.5rem"}}>Category: </h3>
         </td>
         <td>
-            <select id={'category' + uniqueId} defaultValue={goal.category} name="category" onChange={updateCategory}>
+            <select id={'category' + uniqueId} defaultValue={goal.theCategory} name="theCategory" onChange={updateCategory}>
               <option value="ALL">All Categories</option>
               <option value="SPORTS">Sports</option>
               <option value="BLOG">Blog</option>
@@ -137,14 +179,6 @@ function GoalEditComponent(props) {
         </tr>
         <tr>
         <td>
-            <h3 style={{marginTop: "0.5rem"}}>Goal Progress: </h3>
-        </td>
-        <td>
-            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress || "N/A"}</h3>
-        </td>
-        </tr>
-        <tr>
-        <td>
         <button type="button" style={{ width: "100%" }} className="responsiveGoalButton" id={'aimAboveGoal' + uniqueId} name="watchLessThanGoal" value={false} onClick={aimForMoreBtn}>
                          Aim Above
                         </button>
@@ -153,6 +187,51 @@ function GoalEditComponent(props) {
                         <button type="button" style={{ width: "100%" }} className="responsiveGoalButton" id={'aimBelowGoal' + uniqueId} name="watchLessThanGoal" value={true} onClick={aimForLessBtn}>
                           Aim Below
                         </button>
+        </td>
+        </tr>
+        </>
+        ) : (
+        <>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Category To Avoid: </h3>
+        </td>
+        <td>
+            <select id={'categoryToAvoid' + uniqueId} defaultValue={goal.categoryToAvoid} name="categoryToAvoid" onChange={updateCategoryToAvoid}>
+              <option value="ALL">All Categories</option>
+              <option value="SPORTS">Sports</option>
+              <option value="BLOG">Blog</option>
+            </select>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Category To Watch: </h3>
+        </td>
+        <td>
+            <select id={'categoryToWatch' + uniqueId} defaultValue={goal.categoryToWatch} name="categoryToWatch" onChange={updateCategoryToWatch}>
+              <option value="ALL">All Categories</option>
+              <option value="SPORTS">Sports</option>
+              <option value="BLOG">Blog</option>
+            </select>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Multiplier: </h3>
+        </td>
+        <td>
+            <input type="number" id={'multiplier' + uniqueId} defaultValue={goal?.multiplier || "0"} onBlur={updateMultiplier} />
+        </td>
+        </tr>
+        </>
+        )}
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Goal Progress: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress || "N/A"}</h3>
         </td>
         </tr>
         </tbody>

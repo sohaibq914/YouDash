@@ -1,9 +1,21 @@
 package group26.youdash.classes;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+
+//https://stackoverflow.com/questions/30362446/deserialize-json-with-jackson-into-polymorphic-types-a-complete-example-is-giv
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = WatchTimeGoal.class, name = "WatchTimeGoal"),
+        @JsonSubTypes.Type(value = QualityGoal.class, name = "QualityGoal")
+    }
+)
 @DynamoDBTable(tableName = "Goals")
-public class Goal {
+public abstract class Goal {
     private String goalId;
     private String goalName;
     private String goalDescription;
@@ -24,7 +36,6 @@ public class Goal {
     public String getGoalId() {
         return goalId;
     }
-
     public void setGoalId(String goalId) {
         this.goalId = goalId;
     }
@@ -33,7 +44,6 @@ public class Goal {
     public String getGoalName() {
         return goalName;
     }
-
     public void setGoalName(String goalName) {
         this.goalName = goalName;
     }
@@ -42,7 +52,6 @@ public class Goal {
     public String getGoalDescription() {
         return goalDescription;
     }
-
     public void setGoalDescription(String goalDescription) {
         this.goalDescription = goalDescription;
     }
@@ -51,7 +60,6 @@ public class Goal {
     public float getGoalProgress() {
         return goalProgress;
     }
-
     public void setGoalProgress(float goalProgress) {
         this.goalProgress = goalProgress;
     }
@@ -60,7 +68,6 @@ public class Goal {
     public String getUserID() {
         return userID;
     }
-
     public void setUserID(String userID) {
         this.userID = userID;
     }
@@ -69,4 +76,7 @@ public class Goal {
     public String toString() {
         return "Goal Name: " + goalName + ", Goal Description: " + goalDescription + ", Goal Progress: " + goalProgress + ", User ID: " + userID;
     }
+
+    public abstract float computeProgress();
+
 }

@@ -2,7 +2,12 @@ package group26.youdash.controller;
 
 
 import group26.youdash.classes.Goal;
+import group26.youdash.classes.QualityGoal;
 import group26.youdash.classes.WatchTimeGoal;
+import group26.youdash.service.GoalsService;
+import group26.youdash.service.UserService;
+import group26.youdash.service.YoutubeAPIService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +25,32 @@ import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 @CrossOrigin(origins = "http://localhost:3000")  // Allow React app to access this API
 public class GoalController {
 
-    ArrayList<WatchTimeGoal> temp = new ArrayList<>();
+
+    private final YoutubeAPIService youtubeAPIService;
+
+    @Autowired
+    public GoalController(YoutubeAPIService youtubeAPIService) {
+        this.youtubeAPIService = youtubeAPIService;
+    }
+
+    @Autowired
+    private GoalsService gs;
+
+    @Autowired
+    private UserService us;
+
+    ArrayList<Goal> temp = new ArrayList<>();
 
     //mapping for "/goals/user/create" that creates a goal based on json
     @PostMapping(path = "/{user}/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> getMessage(@PathVariable("user") String user, @RequestBody WatchTimeGoal wtgoal) {
-        System.out.println(wtgoal);
-        //Add goal to database
+    public ResponseEntity<String> createGoal(@PathVariable("user") String user, @RequestBody Goal goal) {
+        System.out.println(user);
+        System.out.println(goal);
+        //System.out.println((QualityGoal) goal);
 
-
+        int userId = 12345;
         for (int i = 0; i < temp.size(); i++) {
-            if (wtgoal.getGoalName().equals(temp.get(i).getGoalName())) {
+            if (goal.getGoalName().equals(temp.get(i).getGoalName())) {
                 //can't have duplicate names
                 System.out.println("Error: Duplicate Goal Name");
                 HttpHeaders header = new HttpHeaders();
@@ -41,36 +61,105 @@ public class GoalController {
         HttpHeaders header = new HttpHeaders();
         header.add("200", "uno");
         System.out.println("Received New Goal");
-        temp.add(wtgoal);
+        temp.add(goal);
+        gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
-
+    String[] matches = {
+      "Film & Animation",
+          "Autos & Vehicles",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "Music",
+          "11",
+          "12",
+          "13",
+          "14",
+          "Pets & Animals",
+          "16",
+          "Sports",
+          "Short Movies",
+          "Travel & Events",
+          "Gaming",
+          "Videoblogging",
+          "People & Blogs",
+          "Comedy",
+          "Entertainment",
+          "News & Politics",
+          "Howto & Style",
+          "Education",
+          "Science & Technology",
+          "Nonprofits & Activism",
+          "Movies",
+          "Anime/Animation",
+          "Action/Adventure",
+          "Classics",
+          "Comedy",
+          "Documentary",
+          "Drama",
+          "Family",
+          "Foreign",
+          "Horror",
+          "Sci-Fi/Fantasy",
+          "Thriller",
+          "Shorts",
+          "Shows",
+          "Trailers"
+    };
     @GetMapping("/{user}/view")
-    public ArrayList<WatchTimeGoal> getName(@PathVariable("user") String user)
+    public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
     {
+        int userId = 12345;
         System.out.println(user + "Goal View Requested");
         System.out.println(temp);
+        ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
+        for(int i = 0; i < temp.size(); i++) {
+            if (temp.get(i) instanceof WatchTimeGoal) {
+                for (String vid : vids) {
+                    try {
+                        if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((WatchTimeGoal) temp.get(i)).getTheCategory())
+                                || ((WatchTimeGoal) temp.get(i)).getTheCategory().equals("ALL")) {
+                            System.out.println("Matched video type");
+                            ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(10);
+                        } else {
+                            System.out.println("no match: " + youtubeAPIService.getVideoCategoryID(vid));
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+            if (temp.get(i) instanceof QualityGoal) {
+                System.out.println("TODO Quality goal youtube stuff");
+            }
+        }
         return temp;
     }
 
     private static class updateGoalPackage {
         public String originalName;
-        public WatchTimeGoal wtg;
+        public Goal g;
 
-        public updateGoalPackage(String originalName, WatchTimeGoal wtg) {
+        public updateGoalPackage(String originalName, Goal g) {
             this.originalName = originalName;
-            this.wtg = wtg;
+            this.g = g;
         }
     }
 
     //mapping for "/goals/user/create" that creates a goal based on json
     @PostMapping(path = "/{user}/edit", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> editGoal(@PathVariable("user") String user, @RequestBody updateGoalPackage wtgoalPkg) {
-        System.out.println(wtgoalPkg);
+    public ResponseEntity<String> editGoal(@PathVariable("user") String user, @RequestBody updateGoalPackage goalPkg) {
+        int userId = 12345;
+        System.out.println(goalPkg.g);
         //Update goal based on name
         for (int i = 0; i < temp.size(); i++) {
-            if (temp.get(i).getGoalName().equals(wtgoalPkg.originalName)) {
-                temp.set(i, wtgoalPkg.wtg);
+            if (temp.get(i).getGoalName().equals(goalPkg.originalName)) {
+                temp.set(i, goalPkg.g);
                 //replace in database
                 break;
             }
@@ -80,6 +169,7 @@ public class GoalController {
         header.add("200", "uno");
         System.out.println("Updated New Goal");
         System.out.println(temp);
+        gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
 
@@ -87,6 +177,7 @@ public class GoalController {
     public ResponseEntity<String> deleteGoal(@PathVariable("user") String user, @RequestBody Goal goalToDelete)
     {
         //Add goal to database
+        int userId = 12345;
 
         for (int i = 0; i < temp.size(); i++) {
             if (temp.get(i).getGoalName().equals(goalToDelete.getGoalName())) {
@@ -99,6 +190,7 @@ public class GoalController {
         HttpHeaders header = new HttpHeaders();
         header.add("200", "Removed Goal");
         System.out.println("Removed Goal" + goalToDelete.getGoalName());
+        gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
 
