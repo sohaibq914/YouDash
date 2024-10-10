@@ -33,7 +33,7 @@ const AddCategoriesButton: React.FC<AddCategoriesButtonProps> = ({ categoryName,
 
   return (
     <div>
-      <button className="add-btn" onClick={handleClick}>Add</button>
+      <button className="add-btn" onClick={handleClick}  id={`add-btn-${categoryName}`}>Add</button>
     </div>
   );
 };

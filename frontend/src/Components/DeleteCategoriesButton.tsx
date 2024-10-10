@@ -40,7 +40,7 @@ export const DeleteCategoriesButton: React.FC<DeleteCategoriesButtonProps> = ({
 
   return (
     <div>
-      <button className="delete-btn" onClick={handleDelete}>
+      <button className="delete-btn" onClick={handleDelete}  id={`delete-btn-${categoryName}`}>
         Delete
       </button>
     </div>

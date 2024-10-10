@@ -28,8 +28,11 @@ public class YoutubeAPIService {
         // Example: "https://www.youtube.com/watch?v=abcd1234"
         // Video ID will be abcd1234
         String[] splitUrl = url.split("v=");
+    
         if (splitUrl.length > 1) {
-            return splitUrl[1];
+            // Split again by "&" to remove any additional parameters after the video ID
+            String videoId = splitUrl[1].split("&")[0];
+            return videoId;
         } else {
             throw new IllegalArgumentException("Invalid YouTube URL");
         }
@@ -48,6 +51,7 @@ public class YoutubeAPIService {
                 .queryParam("id", videoID)
                 .queryParam("key", YOUTUBE_API_KEY)
                 .toUriString();
+        System.out.println(url);
 
         // ResponseEntity is in charge of making the API request
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);

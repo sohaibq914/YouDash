@@ -115,13 +115,14 @@ const BlockedPages = () => {
           </div>
 
           <div className="scroll-container">
-            <ul className="category-list">
+            <ul className="category-list" id="blockedCategories-list">
               {blockedCategories.map((category, index) => (
                 <li className="category-item" key={index}>
                   <span>{category}</span>
                   <DeleteCategoriesButton
                     categoryName={category}
                     onDeleteCategory={handleDeleteCategory}
+                    
                   />
                 </li>
               ))}
@@ -146,13 +147,14 @@ const BlockedPages = () => {
                 placeholder="Search Category"
                 aria-label="Category"
                 value={inputValue}
+                id="addCategoryInput"
                 onChange={handleInputChange}
               />
             </div>
           </div>
 
           <div className="scroll-container">
-            <ul className="category-list">
+            <ul className="category-list" id="availableCategories-list">
               {(inputValue ? filteredOptions : availableCategories).map(
                 (category, index) => (
                   <li className="category-item" key={index}>
