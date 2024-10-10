@@ -1,14 +1,19 @@
 package group26.youdash.service;
 import group26.youdash.classes.YoutubeAPI.YouTubeContentDetails;
+import group26.youdash.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import group26.youdash.classes.YoutubeAPI.YouTubeSnippet;
 import group26.youdash.classes.YoutubeAPI.YouTubeVideoResponse;
+import java.util.NoSuchElementException;
+import java.util.List;
 
 @Service
 public class YoutubeAPIService {
@@ -22,6 +27,9 @@ public class YoutubeAPIService {
         this.restTemplate = restTemplate;
     }
 
+    @Autowired
+    private DynamoDBMapper dynamoDBMapper;
+
 
 
     // Get the video ID for the given youtube video
@@ -29,8 +37,11 @@ public class YoutubeAPIService {
         // Example: "https://www.youtube.com/watch?v=abcd1234"
         // Video ID will be abcd1234
         String[] splitUrl = url.split("v=");
+    
         if (splitUrl.length > 1) {
-            return splitUrl[1];
+            // Split again by "&" to remove any additional parameters after the video ID
+            String videoId = splitUrl[1].split("&")[0];
+            return videoId;
         } else {
             throw new IllegalArgumentException("Invalid YouTube URL");
         }
@@ -49,6 +60,7 @@ public class YoutubeAPIService {
                 .queryParam("id", videoID)
                 .queryParam("key", YOUTUBE_API_KEY)
                 .toUriString();
+        System.out.println(url);
 
         // ResponseEntity is in charge of making the API request
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -145,8 +157,31 @@ public class YoutubeAPIService {
         throw new IllegalArgumentException("No video found for the provided ID");
         
     }
- 
 
+
+    public void addVideoURL(int userId, String url) {
+        User user = dynamoDBMapper.load(User.class, userId);
+        
+        if (user != null) {
+
+            List<String> watchHistory = user.getHistoryURLs();
+            //add the youtube url to the watchhistory
+            watchHistory.add(url);
+        }
+        else {
+            throw new NoSuchElementException("Category not found in available categories");
+        }
+    }
+
+    public List<String> getWatchHistory(int userID) {
+        User user = dynamoDBMapper.load(User.class, userID);
+        if (user != null) {
+            return user.getHistoryURLs();
+        } 
+        else {
+            throw new NoSuchElementException("User with ID " + userID + " not found");
+        }
+    }
 
 
 

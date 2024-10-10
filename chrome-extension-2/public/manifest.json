@@ -10,7 +10,8 @@
   "permissions": [
     "storage",        
     "activeTab",     
-    "tabs"
+    "tabs",
+    "scripting"
   ],
   "background": {
     "service_worker": "background.js"
@@ -19,7 +20,8 @@
     {
       "matches": ["*://*.youtube.com/*"],
       "js": ["contentScript.js"],
-      "css": ["blockpopup.css"]
+      "css": ["blockpopup.css"],
+      "run_at": "document_end"
     }
   ],
   "host_permissions": [

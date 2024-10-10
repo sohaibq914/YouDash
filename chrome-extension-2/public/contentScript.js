@@ -1,9 +1,9 @@
-let popupClosed = false; 
+
 
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log(`got to listener on content script`);
     if (request.action === "showBlockedPopup") {
-        popupClosed = false; // Reset when a new popup is shown
         showBlockedPopup();
     }
 });
@@ -31,7 +31,6 @@ function showPopup() {
   const closeButton = popup.querySelector('.close-btn');
   closeButton.addEventListener('click', () => {
       popup.style.display = 'none'; // Hide popup
-      popupClosed = true; // Mark the popup as closed
   });
 }
 
@@ -40,21 +39,17 @@ function showPopup() {
 function showBlockedPopup() {
   showPopup();
 
-  // Pause the video
   const video = document.querySelector('video');
   if (video) {
-      video.pause();
+    video.pause();
 
-      // Add event listener for playing the video
-      video.addEventListener('play', function onVideoPlay() {
-          if (popupClosed) {
-              // If the popup was closed and the user tries to play the video, show it again
-              showPopup();
-              video.pause(); // Pause the video again
-
-              // Prevent multiple event listeners from stacking
-              video.removeEventListener('play', onVideoPlay);
-          }
-      });
+    // Re-add the event listener for playing the video
+    video.addEventListener('play', () => {
+      const popup = document.querySelector('.youdash-popup');
+      if (popup && popup.style.display === 'none') {
+        video.pause();
+        showPopup();
+      }
+    }, { once: true }); // Use { once: true } to ensure the listener is added only once
   }
 }
