@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./WTGoalCreate.css";
-import navbar from "../Components/navbar";
+// import navbar from "../Components/navbar";
 
 function WTGoalCreate() {
   const [data, setData] = useState({ goalName: "", goalDescription: "", goalWatchTime: "", theCategory: "", watchLessThanGoal: "false" });
@@ -60,7 +60,7 @@ function WTGoalCreate() {
     hours = document.getElementById("hoursInput").value;
     const theCategory = document.getElementById("category").value;
     const userData = {
-     "@type": "WatchTimeGoal",
+      "@type": "WatchTimeGoal",
       goalName: data.goalName,
       goalDescription: data.goalDescription,
       goalWatchTime: +minutes + +hours * 60,
@@ -72,14 +72,14 @@ function WTGoalCreate() {
       .post("http://localhost:8080/goals/thename/create", userData)
       .then((response) => console.log(response))
       .catch((error) => {
-        if (error.response.status == '409') {
-            alert("No duplicate goals!");
+        if (error.response.status == "409") {
+          alert("No duplicate goals!");
         } else {
-            console.error(error);
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          }
+          console.error(error);
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
       });
   };
   return (
@@ -111,16 +111,20 @@ function WTGoalCreate() {
                 <table className="tableTime">
                   <tbody>
                     <tr>
-                      <td><h4 style={{fontSize: "calc(0.9rem + .3vw)"}}>Hours:</h4></td>
+                      <td>
+                        <h4 style={{ fontSize: "calc(0.9rem + .3vw)" }}>Hours:</h4>
+                      </td>
                       <td className="disappearWhenSmall">
-                        <input type="range" style={{ width: "100%" }}  min="0" max="40" id="hoursRange" name="hoursRange" step="1" onChange={hourRangeChange} />
+                        <input type="range" style={{ width: "100%" }} min="0" max="40" id="hoursRange" name="hoursRange" step="1" onChange={hourRangeChange} />
                       </td>
                       <td>
                         <input type="number" style={{ width: "100%" }} id="hoursInput" name="hoursInput" required={true} min="0" max="40" onChange={hourInputChange} />
                       </td>
                     </tr>
                     <tr>
-                      <td><h4 style={{fontSize: "calc(0.9rem + .3vw)"}}>Minutes:</h4></td>
+                      <td>
+                        <h4 style={{ fontSize: "calc(0.9rem + .3vw)" }}>Minutes:</h4>
+                      </td>
                       <td className="disappearWhenSmall">
                         <input type="range" style={{ width: "100%" }} min="0" max="55" id="minutesRange" name="minutesRange" step="5" onChange={minuteRangeChange} />
                       </td>

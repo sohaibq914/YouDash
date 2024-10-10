@@ -4,7 +4,7 @@ import GoalCreate from "./Pages/GoalCreate";
 import GoalView from "./Pages/GoalView";
 import GoalEdit from "./Pages/GoalEdit";
 import Home from "./Pages/Home";
-import Navbar from "./Components/navbar.js";
+// import Navbar from "./Components/navbar.js";
 import Profile from "./Pages/Profile.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";

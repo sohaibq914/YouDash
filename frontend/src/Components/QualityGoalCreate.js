@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./QualityGoalCreate.css";
-import navbar from "../Components/navbar";
+// import navbar from "../Components/navbar";
 
 function QualityGoalCreate() {
   const [data, setData] = useState({ goalName: "", goalDescription: "", categoryToWatch: "", categoryToAvoid: "", multiplier: 0 });
@@ -19,31 +19,31 @@ function QualityGoalCreate() {
     e.preventDefault();
     const categoryToWatch = document.getElementById("categoryToWatch").value;
     const categoryToAvoid = document.getElementById("categoryToAvoid").value;
-    if(+data.multiplier <= 0) {
-             alert("Invalid Multiplier! Must be greater than 0.");
-             return;
-     }
+    if (+data.multiplier <= 0) {
+      alert("Invalid Multiplier! Must be greater than 0.");
+      return;
+    }
     const userData = {
-     "@type": "QualityGoal",
+      "@type": "QualityGoal",
       goalName: data.goalName,
       goalDescription: data.goalDescription,
       categoryToWatch: categoryToWatch,
       categoryToAvoid: categoryToAvoid,
-      multiplier: +data.multiplier
+      multiplier: +data.multiplier,
     };
     console.log(userData);
     axios
       .post("http://localhost:8080/goals/thename/create", userData)
       .then((response) => console.log(response))
       .catch((error) => {
-        if (error.response.status == '409') {
-            alert("No duplicate goals!");
+        if (error.response.status == "409") {
+          alert("No duplicate goals!");
         } else {
-            console.error(error);
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          }
+          console.error(error);
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
       });
   };
   return (
@@ -96,13 +96,13 @@ function QualityGoalCreate() {
                 <h3 className="inputLabel">Multiplier</h3>
               </td>
               <td>
-                <input type="number" style={{ width: "100%" }} id="multiplier" name="multiplier" required={true} onChange={handleChange} value={data.multiplier}/>
+                <input type="number" style={{ width: "100%" }} id="multiplier" name="multiplier" required={true} onChange={handleChange} value={data.multiplier} />
               </td>
             </tr>
             <tr>
-                <td colSpan="2">
-                    <p>Your goal is 'Category To Watch' x Multiplier = 'Category To Avoid'</p>
-                </td>
+              <td colSpan="2">
+                <p>Your goal is 'Category To Watch' x Multiplier = 'Category To Avoid'</p>
+              </td>
             </tr>
             <tr>
               <td colSpan="2">

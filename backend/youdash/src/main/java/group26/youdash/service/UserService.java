@@ -4,16 +4,21 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import group26.youdash.model.User;
 import group26.youdash.repository.UserRepository;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService implements UserRepository {
 
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
+
+    @Autowired
+    private FileStorageService fileStorageService;  // Autowire the FileStorageServic
 
     @Override
     public User save(User user) {
@@ -69,6 +74,36 @@ public class UserService implements UserRepository {
         }
     }
 
+    public String uploadProfilePicture(int userID, MultipartFile file) throws IOException {
+        User user = dynamoDBMapper.load(User.class, userID);
+        if (user == null) throw new NoSuchElementException("User not found");
 
+        // Use FileStorageService to upload the file and get the URL
+        String profilePictureUrl = fileStorageService.uploadFile(file);
+
+        // Update the user's profilePicture attribute with the S3 URL
+        user.setProfilePicture(profilePictureUrl);
+        dynamoDBMapper.save(user);
+
+        return profilePictureUrl;
+    }
+
+
+    // Method to update dark mode preference for a specific user
+    public void updateUserDarkMode(int userID, boolean darkMode) {
+        User user = dynamoDBMapper.load(User.class, userID);
+        if (user == null) throw new NoSuchElementException("User not found");
+
+        user.setDarkMode(darkMode);  // Set the new dark mode value
+        dynamoDBMapper.save(user);   // Save the updated user object in DynamoDB
+    }
+
+    // Method to get dark mode preference for a specific user
+    public boolean getUserDarkMode(int userID) {
+        User user = dynamoDBMapper.load(User.class, userID);
+        if (user == null) throw new NoSuchElementException("User not found");
+
+        return user.isDarkMode();  // Return the current dark mode preference
+    }
     
 }

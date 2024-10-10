@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../Components/navbar";
 import axios from "axios";
 
 function Profile() {
@@ -8,11 +7,12 @@ function Profile() {
     name: "",
     bio: "",
     email: "",
-    password: "********", // Default value for display purposes
+    password: "********",
+    profilePicture: "", // New field for storing profile picture URL
   });
-  const [isGmail, setIsGmail] = useState(false); // State to track if the email is Gmail
+  const [isGmail, setIsGmail] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null); // New state to track the selected file
 
-  // Fetch the user profile data from the backend when the component mounts
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -20,7 +20,6 @@ function Profile() {
         const response = await axios.get(`http://localhost:8080/profile/${userID}`);
         const userData = response.data;
 
-        // Check if the email is a Gmail address and set state accordingly
         const emailIsGmail = userData.email.endsWith("@gmail.com");
         setIsGmail(emailIsGmail);
 
@@ -28,7 +27,8 @@ function Profile() {
           name: userData.name || "",
           bio: userData.bio || "",
           email: userData.email || "",
-          password: "********", // Do not fetch the actual password for security reasons
+          password: "********",
+          profilePicture: userData.profilePicture || "", // Set profile picture from user data
         });
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -36,10 +36,9 @@ function Profile() {
     };
 
     fetchUserProfile();
-  }, []); // Empty dependency array means this useEffect runs once on component mount
+  }, []);
 
   const handleEditClick = (field) => {
-    // Prevent editing of email and password fields if the email is Gmail
     if ((field === "email" || field === "password") && isGmail) {
       alert("Email and password cannot be edited for Gmail accounts.");
       return;
@@ -53,18 +52,38 @@ function Profile() {
 
   const handleSave = async () => {
     setEditField(null);
-
     try {
       const userID = 12345; // Replace with the actual userID
       const response = await axios.put(`http://localhost:8080/profile/${userID}/updateProfile`, {
         name: profile.name,
         bio: profile.bio,
-        email: isGmail ? null : profile.email, // Send email only if not Gmail
-        password: profile.password === "********" ? null : profile.password, // Send password only if changed
+        email: isGmail ? null : profile.email,
+        password: profile.password === "********" ? null : profile.password,
+        profilePicture: profile.profilePicture, // Include profile picture URL if changed
       });
-      console.log(response.data); // Log success message
+      console.log(response.data);
     } catch (error) {
       console.error("Error updating profile:", error);
+    }
+  };
+
+  // New method to handle profile picture upload
+  const handleProfilePictureUpload = async () => {
+    if (!selectedFile) return;
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const userID = 12345; // Replace with the actual userID
+      const response = await axios.post(`http://localhost:8080/profile/${userID}/uploadProfilePicture`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setProfile({ ...profile, profilePicture: response.data.profilePicture });
+      setSelectedFile(null);
+      alert("Profile picture updated successfully!");
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+      alert("Failed to upload profile picture.");
     }
   };
 
@@ -72,38 +91,31 @@ function Profile() {
     <div style={styles.container}>
       <h1 style={styles.title}>Profile</h1>
       <div style={styles.profilePicContainer}>
-        <div style={styles.profilePic}></div>
+        <img
+          src={profile.profilePicture || "https://via.placeholder.com/100"} // Display profile picture if available
+          alt="Profile"
+          style={styles.profilePic}
+        />
       </div>
+      <input type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} style={styles.fileInput} />
+      <button onClick={handleProfilePictureUpload} style={styles.uploadButton}>
+        Upload Profile Picture
+      </button>
       {Object.entries(profile).map(([key, value]) => (
         <div key={key} style={styles.fieldContainer}>
           <div style={styles.fieldLabel}>{key.charAt(0).toUpperCase() + key.slice(1)}</div>
-          {editField === key ? (
-            <input
-              type={key === "password" ? "password" : "text"}
-              value={profile[key]}
-              onChange={handleChange}
-              style={styles.input}
-              disabled={isGmail && (key === "email" || key === "password")} // Disable input if email is Gmail
-            />
-          ) : (
-            <div style={styles.fieldValue}>{value}</div>
-          )}
+          {editField === key ? <input type={key === "password" ? "password" : "text"} value={profile[key]} onChange={handleChange} style={styles.input} disabled={isGmail && (key === "email" || key === "password")} /> : <div style={styles.fieldValue}>{value}</div>}
           {editField === key ? (
             <button onClick={handleSave} style={styles.saveButton}>
               Save
             </button>
           ) : (
-            <button
-              onClick={() => handleEditClick(key)}
-              style={styles.editButton}
-              disabled={isGmail && (key === "email" || key === "password")} // Disable button if email is Gmail
-            >
+            <button onClick={() => handleEditClick(key)} style={styles.editButton} disabled={isGmail && (key === "email" || key === "password")}>
               Edit
             </button>
           )}
         </div>
       ))}
-      <button style={styles.changeProfileButton}>Change Profile Picture</button>
     </div>
   );
 }
@@ -127,10 +139,18 @@ const styles = {
     width: "100px",
     height: "100px",
     borderRadius: "50%",
+    objectFit: "cover", // Ensure image fits the circular shape
+  },
+  fileInput: {
+    margin: "10px 0",
+  },
+  uploadButton: {
+    padding: "5px 10px",
+    cursor: "pointer",
     backgroundColor: "#e0e0e0",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    border: "none",
+    borderRadius: "5px",
+    marginBottom: "20px",
   },
   fieldContainer: {
     display: "flex",
@@ -155,7 +175,6 @@ const styles = {
     backgroundColor: "#e0e0e0",
     border: "none",
     borderRadius: "5px",
-    disabled: { cursor: "not-allowed", opacity: 0.5 }, // Add disabled styles
   },
   saveButton: {
     padding: "5px 10px",
@@ -164,15 +183,6 @@ const styles = {
     color: "white",
     border: "none",
     borderRadius: "5px",
-  },
-  changeProfileButton: {
-    width: "100%",
-    padding: "10px",
-    cursor: "pointer",
-    backgroundColor: "#e0e0e0",
-    border: "none",
-    borderRadius: "5px",
-    marginTop: "30px",
   },
 };
 
