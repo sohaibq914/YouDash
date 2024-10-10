@@ -49,6 +49,8 @@ let lastUrl = "";
 function blockVideo(url) {
   // Send the YouTube URL to the backend
   console.log("before fetch");
+
+  trackWatchHistory(url);
   fetch(
     `http://localhost:8080/youtube/video-category?url=${encodeURIComponent(
       url
@@ -119,3 +121,24 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
   console.log("End of onUpdated listener");
 });
+
+
+function trackWatchHistory(videoUrl) {
+  console.log("Saving video URL to watch history: " + videoUrl);
+  
+  // Send the YouTube URL to your backend to save in the user's watch history
+  fetch(`http://localhost:8080/watch-history/${userId}/addVideo`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ url: videoUrl }), // Send the video URL in the request body
+  })
+  .then(response => response.text())
+  .then(data => {
+    console.log("Watch history update response:", data);
+  })
+  .catch(error => {
+    console.error("Error saving watch history:", error);
+  });
+}

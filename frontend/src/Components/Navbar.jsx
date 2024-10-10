@@ -72,6 +72,7 @@ export const Navbar = () => {
           <button onClick={handleDarkModeToggle} className="dark-mode-btn">
             {darkMode ? "Light Mode" : "Dark Mode"}
           </button>
+          <NavLink to="/watch-history">Watch History</NavLink>
         </li>
       </ul>
     </nav>
