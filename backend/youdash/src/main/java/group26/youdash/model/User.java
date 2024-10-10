@@ -24,6 +24,8 @@ public class User {
     private String bio;  // Add the bio attribute here
     private String profilePicture; // New field for storing profile picture URL
     private boolean darkMode;
+    private List<Integer> followers;  // New followers attribute to store a list of follower IDs
+
 
 
     private List<String> historyURLs;
@@ -140,6 +142,16 @@ public class User {
 
     public void setDarkMode(boolean darkMode) {
         this.darkMode = darkMode;
+    }
+
+
+    @DynamoDBAttribute(attributeName = "followers")  // Store followers as a list of user IDs
+    public List<Integer> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Integer> followers) {
+        this.followers = followers;
     }
 }
 

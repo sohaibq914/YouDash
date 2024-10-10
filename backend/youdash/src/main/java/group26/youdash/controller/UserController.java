@@ -2,6 +2,10 @@ package group26.youdash.controller;
 
 import group26.youdash.model.User;
 import group26.youdash.service.UserService;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +17,13 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -34,4 +45,55 @@ public class UserController {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/{id}/follow")
+    public ResponseEntity<String> followUser(@PathVariable int id) {
+        try {
+            userService.followUser(id);  // Call the followUser method in the service
+            return new ResponseEntity<>("User followed successfully", HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/{id}/unfollow")
+public ResponseEntity<String> unfollowUser(@PathVariable int id) {
+    try {
+        userService.unfollowUser(id);  // Call the unfollowUser method in the service
+        return new ResponseEntity<>("User unfollowed successfully", HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+}
+
+
+@GetMapping("/{id}/followers")
+public ResponseEntity<List<User>> getFollowers(@PathVariable int id) {
+    try {
+        List<User> followers = userService.getFollowers(id);  // Fetch followers for the given user ID
+        return new ResponseEntity<>(followers, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+
+@GetMapping("/{id}/my-followers")
+public ResponseEntity<List<User>> getMyFollowers(@PathVariable int id) {
+    try {
+        List<User> followers = userService.getMyFollowers(id);  // Fetch followers of the given user ID
+        return new ResponseEntity<>(followers, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+
+
+
+
+
+
+
+
 }
