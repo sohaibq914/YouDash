@@ -1,0 +1,31 @@
+.followers-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.users-list {
+  list-style: none;
+  padding: 0;
+}
+
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.follow-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.follow-button:hover {
+  background-color: #0056b3;
+}

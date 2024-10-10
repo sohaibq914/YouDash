@@ -9,6 +9,7 @@ import Profile from "./Pages/Profile.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Routes, Route, Link } from "react-router-dom"; // Remove Router and only import Routes and Route
+import FollowersPage from "./Pages/FollowersPage.js";
 
 function RouterPages() {
   return (
@@ -23,6 +24,7 @@ function RouterPages() {
         <Route path="/goalsEdit" element={<GoalEdit />} />
         {/* <Route path="/navbar" element={<Navbar />} /> */}
         <Route path="/profile" element={<Profile />} />
+        <Route path="/followers" element={<FollowersPage />} />
       </Routes>
     </div>
   );
