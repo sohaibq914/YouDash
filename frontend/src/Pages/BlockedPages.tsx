@@ -97,81 +97,72 @@ const BlockedPages = () => {
   return (
     //header for currently blocked and category block
     <div>
-      <div className="TitleContainer">
-        <div className="CategoryBlockTitle">
-          <h1>Currently Blocked</h1>
+    {/* main screen container for Blocked Page */}
+    <div className="container">
+      {/* rectangle container for Currently Blocked */}
+      <div className="CurrentlyBlockedCategoriesContainer">
+        <h1>Currently Blocked</h1>
+        <div className="CategoriesRectangleTitle">
+          <h2>Categories</h2>
         </div>
-
-        <div className="CurrentlyBlockedTitle">
-          <h1>Available Categories</h1>
+  
+        <div className="scroll-container">
+          <ul className="category-list" id="blockedCategories-list">
+            {blockedCategories.map((category, index) => (
+              <li className="category-item" key={index}>
+                <span>{category}</span>
+                <DeleteCategoriesButton
+                  categoryName={category}
+                  onDeleteCategory={handleDeleteCategory}
+                />
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-      {/*// main screen container for Blocked Page */}
-      <div className="container">
-        {/* rectangle container for Currently Blocked */}
-        <div className="CurrentlyBlockedCategoriesContainer">
-          <div className="CategoriesRectangleTitle">
-            <h2>Categories</h2>
+  
+      {/* a rectangle container for Blocking Categories */}
+      <div className="AddCategoriesContainer">
+        <h1>Available Categories</h1>
+        {/* Header for container(Category and Search function)*/}
+        <div className="AddCategoriesContainerHeader">
+          <h2>Search:</h2>
+  
+          <div
+            className="input-group flex-nowrap"
+            style={{ paddingLeft: "10px" }}
+          >
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search Category"
+              aria-label="Category"
+              value={inputValue}
+              id="addCategoryInput"
+              onChange={handleInputChange}
+            />
           </div>
-
-          <div className="scroll-container">
-            <ul className="category-list" id="blockedCategories-list">
-              {blockedCategories.map((category, index) => (
+        </div>
+  
+        <div className="scroll-container">
+          <ul className="category-list" id="availableCategories-list">
+            {(inputValue ? filteredOptions : availableCategories).map(
+              (category, index) => (
                 <li className="category-item" key={index}>
                   <span>{category}</span>
-                  <DeleteCategoriesButton
+                  <AddCategoriesButton
                     categoryName={category}
-                    onDeleteCategory={handleDeleteCategory}
-                    
+                    onAddCategory={handleAddCategory}
                   />
                 </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* a rectangle container for Blocking Categories */}
-        <div className="AddCategoriesContainer">
-          {/* Header for container(Category and Search function)*/}
-          <div className="AddCategoriesContainerHeader">
-            <h1>Categories</h1>
-            <h2>Search:</h2>
-
-            <div
-              className="input-group flex-nowrap"
-              style={{ paddingLeft: "10px" }}
-            >
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search Category"
-                aria-label="Category"
-                value={inputValue}
-                id="addCategoryInput"
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-
-          <div className="scroll-container">
-            <ul className="category-list" id="availableCategories-list">
-              {(inputValue ? filteredOptions : availableCategories).map(
-                (category, index) => (
-                  <li className="category-item" key={index}>
-                    <span>{category}</span>
-                    <AddCategoriesButton
-                      categoryName={category}
-                      onAddCategory={handleAddCategory}
-                    />
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
+              )
+            )}
+          </ul>
         </div>
       </div>
-      {/* // end of main screen container */}
-    </div> //end header for currently blocked and category block
+    </div>
+  </div>
+  
   );
 };
 
