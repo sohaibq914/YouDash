@@ -125,5 +125,5 @@ h3 {
 }
 
 .goalEditField h3 {
-    font-size: 4vw;
+    font-size: min(4vw, 20px);
 }

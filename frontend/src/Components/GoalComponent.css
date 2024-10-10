@@ -44,5 +44,5 @@ h3 {
 }
 
 .tableGoalView h3 {
-    font-size: 4vw;
+    font-size: min(4vw, 20px);
 }

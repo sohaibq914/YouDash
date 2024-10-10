@@ -45,7 +45,7 @@ function GoalComponent(props) {
             <h3 style={{marginTop: "0.5rem"}}>Current Watch Time: </h3>
         </td>
         <td>
-            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.currentWatchTime || "0"}</h3>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.currentWatchTime || "0"} minutes</h3>
         </td>
         </tr>
         <tr>
@@ -53,7 +53,7 @@ function GoalComponent(props) {
             <h3 style={{marginTop: "0.5rem"}}>Goal Watch Time: </h3>
         </td>
         <td>
-            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalWatchTime || "0"}</h3>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalWatchTime || "0"} minutes</h3>
         </td>
         </tr>
         <tr>
@@ -61,7 +61,7 @@ function GoalComponent(props) {
             <h3 style={{marginTop: "0.5rem"}}>Goal Progress: </h3>
         </td>
         <td>
-            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress || "N/A"}</h3>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress * 100 || "N/A"}%</h3>
         </td>
         </tr>
         <tr>
@@ -106,6 +106,14 @@ function GoalComponent(props) {
                     <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.categoryToWatch || "ERROR"}</h3>
                 </td>
                 </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Time in Category: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.progressWatch || "0"}</h3>
+                </td>
+                </tr>
 
                 <tr>
                 <td>
@@ -113,6 +121,14 @@ function GoalComponent(props) {
                 </td>
                 <td>
                     <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.categoryToAvoid || "ERROR"}</h3>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Time in Category: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.progressAvoid || "0"}</h3>
                 </td>
                 </tr>
                 <tr>
@@ -128,7 +144,7 @@ function GoalComponent(props) {
                     <h3 style={{marginTop: "0.5rem"}}>Goal Progress: </h3>
                 </td>
                 <td>
-                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress || "N/A"}</h3>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress * 100 || "N/A"}%</h3>
                 </td>
                 </tr>
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import GoalComponent from "../Components/GoalComponent";
-import "./GoalView.css";
+import Cactus from "../Components/Cactus";
+import "./VisualizeGoal.css";
 
-function GoalView() {
+function VisualizeGoal() {
     //const [data, setData] = useState({ goalName: '', goalDescription: '', goalWatchTime: '', category: '', watchLessThanGoal: 'false'});
     const [data, setData] = useState([]);
     const addGoals = (newGoals) => {
@@ -28,11 +28,11 @@ function GoalView() {
             .catch((error) => console.error(error));
     }, []);
   return (
-    <div className="GoalView">
+    <div className="VisualizeGoal">
         {data.map((igoal, index) => (
             <div key={index}>
-                <h3 style={{textAlign: "center"}}>Goal #{index + 1}</h3>
-                <GoalComponent goal={igoal} />
+                <h3 style={{textAlign: "center"}}>Goal #{index + 1}: {igoal.goalName}</h3>
+                <Cactus goal={igoal} />
             </div>
             ))}
 
@@ -41,4 +41,4 @@ function GoalView() {
   );
 }
 
-export default GoalView;
+export default VisualizeGoal;

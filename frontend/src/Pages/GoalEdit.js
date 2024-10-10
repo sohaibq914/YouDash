@@ -31,7 +31,7 @@ const [data, setData] = useState([]);
     <div className="GoalEdit">
         {data.map((igoal, index) => (
             <div key={index}>
-                <h2>Goal #{index + 1}</h2>
+                <h3 style={{textAlign: "center"}}>Goal #{index + 1}</h3>
                 <GoalEditComponent goal={igoal} />
             </div>
             ))}

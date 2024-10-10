@@ -36,3 +36,49 @@
     transform: rotate(360deg);
   }
 }
+
+/* Default (light mode) styles */
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.navbar {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.dark-mode-btn {
+  background-color: #444;
+  color: #ffffff;
+  font-size: min(2vh, 50px);
+  height: min(3vh, 2000px);
+  padding: 1vh;
+  padding-bottom: 4vh;
+}
+
+/* Dark mode styles applied when `dark` class is present on the body */
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark .navbar {
+  background-color: #1e1e1e;
+  color: #f4f4f4;
+}
+
+body.dark .dark-mode-btn {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark mode styles for other elements */
+body.dark a {
+  color: #ffcc00; /* Change link color in dark mode */
+}
+
+body.dark button {
+  background-color: #555;
+  color: #ffffff;
+}

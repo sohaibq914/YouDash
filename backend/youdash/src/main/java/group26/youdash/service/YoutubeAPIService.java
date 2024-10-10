@@ -1,4 +1,5 @@
 package group26.youdash.service;
+import group26.youdash.classes.YoutubeAPI.YouTubeContentDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -63,7 +64,7 @@ public class YoutubeAPIService {
     
     }
 
-    public String getVideoLength(String youtubeUrl) throws Exception{
+    public float getVideoLength(String youtubeUrl) throws Exception{
 
         // Get the specifics video id
         String videoID = extractVideoId(youtubeUrl);
@@ -71,7 +72,7 @@ public class YoutubeAPIService {
         // Make API request URL
         // UriComponentsBuilder will make the url, including the parameters, to request from youtube api
         String url = UriComponentsBuilder.fromHttpUrl( YOUTUBE_API_URL + "/videos")
-                .queryParam("part", "snippet")
+                .queryParam("part", "contentDetails")
                 .queryParam("id", videoID)
                 .queryParam("key", YOUTUBE_API_KEY)
                 .toUriString();
@@ -81,13 +82,12 @@ public class YoutubeAPIService {
 
 
         // return category id once it's parsed
-        return parseLengthId(response.getBody());
+        return parseLength(response.getBody());
 
 
     }
 
-    private String parseLengthId (String json) throws Exception {
-
+    private float parseLength (String json) throws Exception {
         // initiate objectmapper object to map json to object
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -97,8 +97,32 @@ public class YoutubeAPIService {
         // check if response if not empty
         if(!videoResponse.getItems().isEmpty()) {
             // Get snippet and return category id from the snippet
-            YouTubeSnippet youTubeSnippet = videoResponse.getItems().get(0).getSnippet();
-            return youTubeSnippet.getCategoryId();
+            YouTubeContentDetails ytcd = videoResponse.getItems().get(0).getContentDetails();
+            String formattedTime = ytcd.getDuration();
+            float retVal = 0;
+            if (formattedTime.contains("DT")) {
+                retVal += 60 * 24 * Integer.parseInt(formattedTime.substring(1,formattedTime.indexOf('D')));
+            }
+            boolean hours = false;
+            if (formattedTime.contains("H")) {
+                hours = true;
+                retVal += 60 * Integer.parseInt(formattedTime.substring(formattedTime.indexOf('T')+1, formattedTime.indexOf('H')));
+            }
+            boolean minutes = false;
+            if (formattedTime.contains("M")) {
+                minutes = true;
+                if (hours) {
+                    retVal += Integer.parseInt(formattedTime.substring(formattedTime.indexOf('H') + 1, formattedTime.indexOf('M')));
+                } else {
+                    retVal += Integer.parseInt(formattedTime.substring(formattedTime.indexOf('T') + 1, formattedTime.indexOf('M')));
+                }
+            }
+            if (minutes) {
+                retVal += (Integer.parseInt(formattedTime.substring(formattedTime.indexOf('M') + 1, formattedTime.indexOf('S'))) + 0.0f) / 60;
+            } else {
+                retVal += (Integer.parseInt(formattedTime.substring(formattedTime.indexOf('T') + 1, formattedTime.indexOf('S'))) + 0.0f) / 60;
+            }
+            return retVal;
         }
 
         throw new IllegalArgumentException("No video found for the provided ID");

@@ -21,7 +21,8 @@ class GoalTests(unittest.TestCase):
 
     def navigate_to_goal_create(self):
         driver = self.driver
-        driver.execute_script("window.scrollTo(0, -200)")
+        driver.execute_script("window.scrollTo(0, 0)")
+        time.sleep(0.5)
         createDropdown = driver.find_element(by=By.ID, value="goalsCreate")
         assert createDropdown is not None
         createDropdown.click()
@@ -61,6 +62,8 @@ class GoalTests(unittest.TestCase):
         goalSubmit.click()
 
         #create quality goal
+        driver.execute_script("window.scrollTo(0, 0)")
+        time.sleep(0.5)
         qgoalBtn = driver.find_element(by=By.ID, value="qGoalsBtn")
         assert qgoalBtn is not None
         qgoalBtn.click()
@@ -90,19 +93,31 @@ class GoalTests(unittest.TestCase):
         goalSubmitQ = driver.find_element(by=By.ID, value="goalSubmitQ")
         assert goalSubmitQ is not None
         driver.execute_script("window.scrollTo(0, 200)")
-        time.sleep(5)
+        time.sleep(0.5)
         goalSubmitQ.click()
 
 
     def navigate_to_goal_view(self):
         driver = self.driver
+        driver.execute_script("window.scrollTo(0, 0)")
+        time.sleep(0.5)
         viewDropdown = driver.find_element(by=By.ID, value="goalsView")
         assert viewDropdown is not None
         viewDropdown.click()
 
     def navigate_to_goal_edit(self):
         driver = self.driver
+        driver.execute_script("window.scrollTo(0, 0)")
+        time.sleep(0.5)
         editDropdown = driver.find_element(by=By.ID, value="goalsEdit")
+        assert editDropdown is not None
+        editDropdown.click()
+
+    def navigate_to_goal_vis(self):
+        driver = self.driver
+        driver.execute_script("window.scrollTo(0, 0)")
+        time.sleep(0.5)
+        editDropdown = driver.find_element(by=By.ID, value="goalsVis")
         assert editDropdown is not None
         editDropdown.click()
 
@@ -114,7 +129,7 @@ class GoalTests(unittest.TestCase):
         driver = self.driver
         # get python.org using selenium
         self.navigate_to_goal_view()
-        time.sleep(1)
+        time.sleep(2)
         assert "testing goal name" in driver.page_source
         assert "testing goal description" in driver.page_source
         assert "613" in driver.page_source
@@ -129,10 +144,23 @@ class GoalTests(unittest.TestCase):
 
         time.sleep(1)
 
+    def test_create_and_vis_goal(self):
+
+        # get driver
+        driver = self.driver
+        # get python.org using selenium
+        self.navigate_to_goal_vis()
+        time.sleep(1)
+        assert "Goal #1: testing goal name" in driver.page_source
+        assert "Goal Progress: " in driver.page_source
+
+        time.sleep(1)
+
     def test_edit_goal(self):
         driver = self.driver
         action = ActionChains(driver)
         self.navigate_to_goal_edit()
+        time.sleep(2.5)
         fields = driver.find_elements(by=By.TAG_NAME, value="input")
         goalNameField = fields[0]
         assert goalNameField is not None
@@ -150,13 +178,14 @@ class GoalTests(unittest.TestCase):
         assert goalAimAboveBtn is not None
         action.move_to_element(goalAimAboveBtn).click()
         self.navigate_to_goal_view()
-        time.sleep(1)
+        time.sleep(2)
         assert "testing goal name123" in driver.page_source
         assert "testing goal description4567" in driver.page_source
         assert "61" in driver.page_source
         assert "Above" in driver.page_source
         assert "ALL" in driver.page_source
         self.navigate_to_goal_edit()
+        time.sleep(2)
         deleteBtn = driver.find_element(by=By.CLASS_NAME, value="deleteBtn")
         deleteBtn.click()
         time.sleep(0.5)
@@ -185,6 +214,7 @@ class GoalTests(unittest.TestCase):
     def create_dup_goal(self):
         driver = self.driver
         self.navigate_to_goal_create()
+        time.sleep(1)
         action = ActionChains(driver)
         #create watchtime goal
         goalNameInput = driver.find_element(by=By.ID, value="goalName")
@@ -234,10 +264,11 @@ class GoalTests(unittest.TestCase):
     def delete_goals(self):
         driver = self.driver
         self.navigate_to_goal_edit()
+        time.sleep(2)
         deleteBtn = driver.find_element(by=By.CLASS_NAME, value="deleteBtn")
         while deleteBtn is not None:
             deleteBtn.click()
-            time.sleep(0.5)
+            time.sleep(2)
             try:
                 deleteBtn = driver.find_element(by=By.CLASS_NAME, value="deleteBtn")
             except:
