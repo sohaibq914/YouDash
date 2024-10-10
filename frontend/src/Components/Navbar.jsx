@@ -35,6 +35,9 @@ export const Navbar = () => {
         <li>
           <NavLink to="/profile">Profile</NavLink>
         </li>
+        <li>
+          <NavLink to="/watch-history">Watch History</NavLink>
+        </li>
       </ul>
     </nav>
   );

@@ -1,13 +1,18 @@
 package group26.youdash.service;
+import group26.youdash.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import group26.youdash.classes.YoutubeAPI.YouTubeSnippet;
 import group26.youdash.classes.YoutubeAPI.YouTubeVideoResponse;
+import java.util.NoSuchElementException;
+import java.util.List;
 
 @Service
 public class YoutubeAPIService {
@@ -20,6 +25,9 @@ public class YoutubeAPIService {
     public YoutubeAPIService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+
+    @Autowired
+    private DynamoDBMapper dynamoDBMapper;
 
 
 
@@ -125,8 +133,31 @@ public class YoutubeAPIService {
         throw new IllegalArgumentException("No video found for the provided ID");
         
     }
- 
 
+
+    public void addVideoURL(int userId, String url) {
+        User user = dynamoDBMapper.load(User.class, userId);
+        
+        if (user != null) {
+
+            List<String> watchHistory = user.getHistoryURLs();
+            //add the youtube url to the watchhistory
+            watchHistory.add(url);
+        }
+        else {
+            throw new NoSuchElementException("Category not found in available categories");
+        }
+    }
+
+    public List<String> getWatchHistory(int userID) {
+        User user = dynamoDBMapper.load(User.class, userID);
+        if (user != null) {
+            return user.getHistoryURLs();
+        } 
+        else {
+            throw new NoSuchElementException("User with ID " + userID + " not found");
+        }
+    }
 
 
 
