@@ -23,6 +23,8 @@ public class User {
     private List<String> availableCategories;
     private String bio;  // Add the bio attribute here
 
+    private List<String> historyURLs;
+
     @DynamoDBHashKey
     public int getId() {
         return id;
@@ -114,6 +116,11 @@ public class User {
     @DynamoDBAttribute(attributeName = "availableCategories")
     public List<String> getAvailableCategories() { return availableCategories;}
     public void setAvailableCategories(List<String> availableCategories) {this.availableCategories = availableCategories;}
+
+    @DynamoDBAttribute(attributeName = "historyURLs")
+    public List<String> getHistoryURLs() { return historyURLs; }
+    public void setHistoryURLs(List<String> historyURLs) {this.historyURLs = historyURLs; }
+
 }
 
 

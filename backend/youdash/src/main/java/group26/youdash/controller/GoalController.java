@@ -5,6 +5,8 @@ import group26.youdash.classes.Goal;
 import group26.youdash.classes.QualityGoal;
 import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.service.GoalsService;
+import group26.youdash.service.UserService;
+import group26.youdash.service.YoutubeAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,8 +25,19 @@ import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 @CrossOrigin(origins = "http://localhost:3000")  // Allow React app to access this API
 public class GoalController {
 
+
+    private final YoutubeAPIService youtubeAPIService;
+
+    @Autowired
+    public GoalController(YoutubeAPIService youtubeAPIService) {
+        this.youtubeAPIService = youtubeAPIService;
+    }
+
     @Autowired
     private GoalsService gs;
+
+    @Autowired
+    private UserService us;
 
     ArrayList<Goal> temp = new ArrayList<>();
 
@@ -52,12 +65,79 @@ public class GoalController {
         gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
-
+    String[] matches = {
+      "Film & Animation",
+          "Autos & Vehicles",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "Music",
+          "11",
+          "12",
+          "13",
+          "14",
+          "Pets & Animals",
+          "16",
+          "Sports",
+          "Short Movies",
+          "Travel & Events",
+          "Gaming",
+          "Videoblogging",
+          "People & Blogs",
+          "Comedy",
+          "Entertainment",
+          "News & Politics",
+          "Howto & Style",
+          "Education",
+          "Science & Technology",
+          "Nonprofits & Activism",
+          "Movies",
+          "Anime/Animation",
+          "Action/Adventure",
+          "Classics",
+          "Comedy",
+          "Documentary",
+          "Drama",
+          "Family",
+          "Foreign",
+          "Horror",
+          "Sci-Fi/Fantasy",
+          "Thriller",
+          "Shorts",
+          "Shows",
+          "Trailers"
+    };
     @GetMapping("/{user}/view")
     public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
     {
+        int userId = 12345;
         System.out.println(user + "Goal View Requested");
         System.out.println(temp);
+        ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
+        for(int i = 0; i < temp.size(); i++) {
+            if (temp.get(i) instanceof WatchTimeGoal) {
+                for (String vid : vids) {
+                    try {
+                        if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((WatchTimeGoal) temp.get(i)).getTheCategory())
+                                || ((WatchTimeGoal) temp.get(i)).getTheCategory().equals("ALL")) {
+                            System.out.println("Matched video type");
+                            ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(10);
+                        } else {
+                            System.out.println("no match: " + youtubeAPIService.getVideoCategoryID(vid));
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+            if (temp.get(i) instanceof QualityGoal) {
+                System.out.println("TODO Quality goal youtube stuff");
+            }
+        }
         return temp;
     }
 

@@ -8,7 +8,18 @@ public class YouTubeVideoItem {
     private String id;
     private YouTubeSnippet snippet;
 
+    private YouTubeContentDetails contentDetails;
+
+
+
     // Getters and Setters
+
+    public YouTubeContentDetails getContentDetails() { return contentDetails;}
+
+    public void setContentDetails(YouTubeContentDetails contentDetails) {
+        this.contentDetails = contentDetails;
+    }
+
     public String getKind() {
         return kind;
     }

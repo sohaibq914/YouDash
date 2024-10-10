@@ -76,4 +76,7 @@ public abstract class Goal {
     public String toString() {
         return "Goal Name: " + goalName + ", Goal Description: " + goalDescription + ", Goal Progress: " + goalProgress + ", User ID: " + userID;
     }
+
+    public abstract float computeProgress();
+
 }

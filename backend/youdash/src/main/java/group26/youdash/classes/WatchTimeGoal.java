@@ -4,6 +4,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import group26.youdash.model.User;
+import group26.youdash.service.YoutubeAPIService;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 @JsonTypeName("WatchTimeGoal")
@@ -31,7 +36,7 @@ public class WatchTimeGoal extends Goal {
         this.currentWatchTime = computeCurrentWatchTime();
         this.goalWatchTime = goalWatchTime;
         this.watchLessThanGoal = watchLessThanGoal;
-        computeGoalProgress();
+        computeProgress();
     }
 
 
@@ -68,7 +73,7 @@ public class WatchTimeGoal extends Goal {
         this.watchLessThanGoal = watchLessThanGoal;
     }
     //this computes the current goal progress as a float percentage
-    public float computeGoalProgress() {
+    public float computeProgress() {
         computeCurrentWatchTime();
         float progress = currentWatchTime / goalWatchTime;
         setGoalProgress(progress);
@@ -78,6 +83,7 @@ public class WatchTimeGoal extends Goal {
     //this grabs the current user watchtime of "category" from database
     public float computeCurrentWatchTime() {
         //calculate from videos in database
+
         return 0.0f;
     }
 

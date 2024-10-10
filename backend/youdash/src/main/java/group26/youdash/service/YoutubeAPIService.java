@@ -59,6 +59,48 @@ public class YoutubeAPIService {
     
     }
 
+    public String getVideoLength(String youtubeUrl) throws Exception{
+
+        // Get the specifics video id
+        String videoID = extractVideoId(youtubeUrl);
+
+        // Make API request URL
+        // UriComponentsBuilder will make the url, including the parameters, to request from youtube api
+        String url = UriComponentsBuilder.fromHttpUrl( YOUTUBE_API_URL + "/videos")
+                .queryParam("part", "snippet")
+                .queryParam("id", videoID)
+                .queryParam("key", YOUTUBE_API_KEY)
+                .toUriString();
+
+        // ResponseEntity is in charge of making the API request
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+
+        // return category id once it's parsed
+        return parseLengthId(response.getBody());
+
+
+    }
+
+    private String parseLengthId (String json) throws Exception {
+
+        // initiate objectmapper object to map json to object
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // read the json and make it into a YouTubeVideoResponse object
+        YouTubeVideoResponse videoResponse = objectMapper.readValue(json, YouTubeVideoResponse.class);
+
+        // check if response if not empty
+        if(!videoResponse.getItems().isEmpty()) {
+            // Get snippet and return category id from the snippet
+            YouTubeSnippet youTubeSnippet = videoResponse.getItems().get(0).getSnippet();
+            return youTubeSnippet.getCategoryId();
+        }
+
+        throw new IllegalArgumentException("No video found for the provided ID");
+
+    }
+
 
 
     private String parseCategoryId (String json) throws Exception {

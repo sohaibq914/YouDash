@@ -1,17 +1,29 @@
 package group26.youdash.classes;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import group26.youdash.classes.Categories;
 import group26.youdash.classes.Goal;
+import group26.youdash.model.User;
+import group26.youdash.service.YoutubeAPIService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 @JsonTypeName("QualityGoal")
 @DynamoDBTable(tableName = "qgoals")
 public class QualityGoal extends Goal {
+
+
+    @Autowired
+    private DynamoDBMapper dynamoDBMapper;
+
     public String categoryToWatch;
     public String categoryToAvoid;
 
@@ -25,6 +37,7 @@ public class QualityGoal extends Goal {
         this.categoryToWatch = categoryToWatch;
         this.categoryToAvoid = categoryToAvoid;
         this.multiplier = multiplier;
+        computeProgress();
     }
 
 
@@ -63,5 +76,10 @@ public class QualityGoal extends Goal {
                 ", categoryToAvoid: " + categoryToAvoid +
                 ", categoryToWatch: " + categoryToWatch +
                 ", multiplier: " + multiplier;
+    }
+
+    public float computeProgress() {
+        //calculate from videos in database
+        return 0.0f;
     }
 }

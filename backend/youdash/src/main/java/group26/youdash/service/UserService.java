@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import group26.youdash.model.User;
 import group26.youdash.repository.UserRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,16 @@ public class UserService implements UserRepository {
         User user = dynamoDBMapper.load(User.class, userID);
         if (user != null) {
             return user;
+        } else {
+            throw new NoSuchElementException("User with ID " + userID + " not found");
+        }
+    }
+
+    // Method to get user history information
+    public List<String> getUserHistory(int userID) {
+        User user = dynamoDBMapper.load(User.class, userID);
+        if (user != null) {
+            return user.getHistoryURLs();
         } else {
             throw new NoSuchElementException("User with ID " + userID + " not found");
         }
