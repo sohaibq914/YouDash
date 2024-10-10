@@ -22,7 +22,7 @@ function GoalCreate() {
 
   return (
     <div className="GoalCreate">
-      <h2>Create A Goal</h2>
+      <h3 style={{textAlign: "center"}}>Create A Goal</h3>
       <table style={{ width: "100%" }}>
         <tbody>
           <tr>

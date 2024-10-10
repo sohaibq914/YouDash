@@ -20,6 +20,9 @@ function Cactus(props) {
   return (
     <div className="Cactus" style={{width: "100%", alignItems: "center"}}>
 
+        {(goal?.watchLessThanGoal && goal.watchLessThanGoal && progress >= 1) ? (<>
+        <img style={{display: "block", margin: "auto"}} src={cactusDroop} />
+        </>) : (<>
         {(progress < 0.1) ? (<>
         <img style={{display: "block", margin: "auto"}} src={cactus0} />
         </>): (<>
@@ -61,6 +64,7 @@ function Cactus(props) {
         </>): (<>
 
         <img style={{display: "block", margin: "auto"}} src={cactus10} />
+        </>)}
         </>)}
         </>)}
         </>)}

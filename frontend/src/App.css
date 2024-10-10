@@ -51,6 +51,10 @@ body {
 .dark-mode-btn {
   background-color: #444;
   color: #ffffff;
+  font-size: min(2vh, 50px);
+  height: min(3vh, 2000px);
+  padding: 1vh;
+  padding-bottom: 4vh;
 }
 
 /* Dark mode styles applied when `dark` class is present on the body */
