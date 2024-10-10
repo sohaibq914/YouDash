@@ -3,6 +3,7 @@ import BlockedPage from "./Pages/BlockedPages.tsx";
 import GoalCreate from "./Pages/GoalCreate";
 import GoalView from "./Pages/GoalView";
 import GoalEdit from "./Pages/GoalEdit";
+import VisualizeGoal from "./Pages/VisualizeGoal";
 import Home from "./Pages/Home";
 import Navbar from "./Components/navbar.js";
 import Profile from "./Pages/Profile.js";
@@ -21,6 +22,7 @@ function RouterPages() {
         <Route path="/goalsCreate" element={<GoalCreate />} />
         <Route path="/goalsView" element={<GoalView />} />
         <Route path="/goalsEdit" element={<GoalEdit />} />
+        <Route path="/goalsVis" element={<VisualizeGoal />} />
         {/* <Route path="/navbar" element={<Navbar />} /> */}
         <Route path="/profile" element={<Profile />} />
       </Routes>
