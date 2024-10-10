@@ -120,23 +120,41 @@ public class GoalController {
         ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
         for(int i = 0; i < temp.size(); i++) {
             if (temp.get(i) instanceof WatchTimeGoal) {
+                float totalWT = 0.0f;
                 for (String vid : vids) {
                     try {
+                        System.out.println(matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1]);
                         if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((WatchTimeGoal) temp.get(i)).getTheCategory())
                                 || ((WatchTimeGoal) temp.get(i)).getTheCategory().equals("ALL")) {
-                            System.out.println("Matched video type");
-                            ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(10);
-                        } else {
-                            System.out.println("no match: " + youtubeAPIService.getVideoCategoryID(vid));
+                            totalWT += (youtubeAPIService.getVideoLength(vid));
                         }
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                 }
+                ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(totalWT);
             }
             if (temp.get(i) instanceof QualityGoal) {
-                System.out.println("TODO Quality goal youtube stuff");
+                float totalWatch = 0.0f;
+                float totalAvoid = 0.0f;
+                for (String vid : vids) {
+                    try {
+                        if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((QualityGoal) temp.get(i)).getCategoryToAvoid())
+                                || ((QualityGoal) temp.get(i)).getCategoryToAvoid().equals("ALL")) {
+                            totalAvoid += youtubeAPIService.getVideoLength(vid);
+                        }
+                        if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((QualityGoal) temp.get(i)).getCategoryToWatch())
+                                || ((QualityGoal) temp.get(i)).getCategoryToWatch().equals("ALL")) {
+                            totalWatch += youtubeAPIService.getVideoLength(vid);
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    ((QualityGoal) temp.get(i)).setProgressAvoid(totalAvoid);
+                    ((QualityGoal) temp.get(i)).setProgressWatch(totalWatch);
+                }
             }
+            temp.get(i).computeProgress();
         }
         return temp;
     }

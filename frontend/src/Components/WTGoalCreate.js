@@ -58,6 +58,10 @@ function WTGoalCreate() {
     e.preventDefault();
     minutes = document.getElementById("minutesInput").value;
     hours = document.getElementById("hoursInput").value;
+    if (+minutes + +hours * 60 == 0) {
+        alert("Goal watch time must be above 0!");
+        return;
+    }
     const theCategory = document.getElementById("category").value;
     const userData = {
      "@type": "WatchTimeGoal",
@@ -154,6 +158,8 @@ function WTGoalCreate() {
                   <option value="ALL">All Categories</option>
                   <option value="SPORTS">Sports</option>
                   <option value="BLOG">Blog</option>
+                  <option value="DOCUMENTARY">Documentary</option>
+                  <option value="ENTERTAINMENT">Entertainment</option>
                 </select>
               </td>
             </tr>

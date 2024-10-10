@@ -25,8 +25,11 @@ public class QualityGoal extends Goal {
     private DynamoDBMapper dynamoDBMapper;
 
     public String categoryToWatch;
+    public float progressWatch;
     public String categoryToAvoid;
 
+
+    public float progressAvoid;
     public float multiplier;
 
     public QualityGoal () {} //default constructor
@@ -79,7 +82,30 @@ public class QualityGoal extends Goal {
     }
 
     public float computeProgress() {
-        //calculate from videos in database
-        return 0.0f;
+        if (progressAvoid == 0.0f) {
+            setGoalProgress(1);
+        } else if (progressWatch == 0.0f) {
+            setGoalProgress(0);
+        } else {
+            setGoalProgress(progressWatch / (progressAvoid * multiplier));
+        }
+        return getGoalProgress();
+    }
+
+
+    public void setProgressWatch(float progressWatch) {
+        this.progressWatch = progressWatch;
+    }
+
+    public void setProgressAvoid(float progressAvoid) {
+        this.progressAvoid = progressAvoid;
+    }
+
+    public float getProgressWatch() {
+        return progressWatch;
+    }
+
+    public float getProgressAvoid() {
+        return progressAvoid;
     }
 }

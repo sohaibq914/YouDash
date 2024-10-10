@@ -158,6 +158,8 @@ function GoalEditComponent(props) {
               <option value="ALL">All Categories</option>
               <option value="SPORTS">Sports</option>
               <option value="BLOG">Blog</option>
+              <option value="DOCUMENTARY">Documentary</option>
+                  <option value="ENTERTAINMENT">Entertainment</option>
             </select>
         </td>
         </tr>
@@ -166,7 +168,7 @@ function GoalEditComponent(props) {
             <h3 style={{marginTop: "0.5rem"}}>Current Watch Time: </h3>
         </td>
         <td>
-            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.currentWatchTime || "0"}</h3>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.currentWatchTime || "0"} minutes</h3>
         </td>
         </tr>
         <tr>
@@ -201,7 +203,17 @@ function GoalEditComponent(props) {
               <option value="ALL">All Categories</option>
               <option value="SPORTS">Sports</option>
               <option value="BLOG">Blog</option>
+              <option value="DOCUMENTARY">Documentary</option>
+                  <option value="ENTERTAINMENT">Entertainment</option>
             </select>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Time in Category: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.progressAvoid || "0"}</h3>
         </td>
         </tr>
         <tr>
@@ -213,7 +225,17 @@ function GoalEditComponent(props) {
               <option value="ALL">All Categories</option>
               <option value="SPORTS">Sports</option>
               <option value="BLOG">Blog</option>
+              <option value="DOCUMENTARY">Documentary</option>
+                  <option value="ENTERTAINMENT">Entertainment</option>
             </select>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <h3 style={{marginTop: "0.5rem"}}>Time in Category: </h3>
+        </td>
+        <td>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.progressWatch || "0"}</h3>
         </td>
         </tr>
         <tr>
@@ -231,7 +253,7 @@ function GoalEditComponent(props) {
             <h3 style={{marginTop: "0.5rem"}}>Goal Progress: </h3>
         </td>
         <td>
-            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress || "N/A"}</h3>
+            <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goalProgress*100 || "N/A"}%</h3>
         </td>
         </tr>
         </tbody>

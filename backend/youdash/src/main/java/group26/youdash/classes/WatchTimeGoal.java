@@ -33,7 +33,7 @@ public class WatchTimeGoal extends Goal {
                          String theCategory, int goalWatchTime, boolean watchLessThanGoal) {
         super(goalName, goalDescription, 0.0f, userID);
         this.theCategory = theCategory;
-        this.currentWatchTime = computeCurrentWatchTime();
+        this.currentWatchTime = 0.0f;
         this.goalWatchTime = goalWatchTime;
         this.watchLessThanGoal = watchLessThanGoal;
         computeProgress();
@@ -74,17 +74,10 @@ public class WatchTimeGoal extends Goal {
     }
     //this computes the current goal progress as a float percentage
     public float computeProgress() {
-        computeCurrentWatchTime();
-        float progress = currentWatchTime / goalWatchTime;
+        float progress = currentWatchTime / (0.0f + goalWatchTime);
         setGoalProgress(progress);
+        System.out.println(this.getGoalProgress());
         return progress;
-    }
-
-    //this grabs the current user watchtime of "category" from database
-    public float computeCurrentWatchTime() {
-        //calculate from videos in database
-
-        return 0.0f;
     }
 
     @Override

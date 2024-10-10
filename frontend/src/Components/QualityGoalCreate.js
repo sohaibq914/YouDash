@@ -76,6 +76,8 @@ function QualityGoalCreate() {
                   <option value="ALL">All Categories</option>
                   <option value="SPORTS">Sports</option>
                   <option value="BLOG">Blog</option>
+              <option value="DOCUMENTARY">Documentary</option>
+                  <option value="ENTERTAINMENT">Entertainment</option>
                 </select>
               </td>
             </tr>
@@ -88,6 +90,8 @@ function QualityGoalCreate() {
                   <option value="ALL">All Categories</option>
                   <option value="SPORTS">Sports</option>
                   <option value="BLOG">Blog</option>
+              <option value="DOCUMENTARY">Documentary</option>
+                  <option value="ENTERTAINMENT">Entertainment</option>
                 </select>
               </td>
             </tr>
