@@ -160,6 +160,7 @@ public ResponseEntity<List<User>> getMyFollowers(@PathVariable int id) {
      * @return ResponseEntity containing the user if login is successful;
      *         otherwise, HTTP status 401 (UNAUTHORIZED).
      */
+    @CrossOrigin(origins = "chrome-extension://jjbiojjnmgdpdlgjoommonpchgdbjmfc") // Allow CORS for your Chrome extension
     @PostMapping("/login")
     public ResponseEntity<User> loginUser(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
