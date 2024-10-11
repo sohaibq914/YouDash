@@ -8,6 +8,8 @@ import Home from "./Pages/Home";
 // import Navbar from "./Components/navbar.js";
 import Profile from "./Pages/Profile.js";
 import WatchHistory from "./Pages/WatchHistory.tsx";
+import Login from "./Pages/Login";
+import Signup from "./Pages/Signup"
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Routes, Route, Link } from "react-router-dom"; // Remove Router and only import Routes and Route
@@ -25,6 +27,8 @@ function RouterPages() {
         <Route path="/goalsView" element={<GoalView />} />
         <Route path="/goalsEdit" element={<GoalEdit />} />
         <Route path="/goalsVis" element={<VisualizeGoal />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         {/* <Route path="/navbar" element={<Navbar />} /> */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/watch-history" element={<WatchHistory />} />

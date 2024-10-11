@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
+
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+    const handleSignup = (e) => {
+        navigate("/signup");
+    }
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -46,6 +51,10 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <br/>
+
+      <button onClick={handleSignup}>Sign Up</button>
+
     </div>
   );
 }
