@@ -20,10 +20,28 @@ public class BlockedCategoriesService {
         if (user != null) {
             //fetch the list from the user's blocked categories
             List<String> blockedCategories = user.getBlocked();
-            //add new blocked category name
-            blockedCategories.add(categoryName);
-            //save updated list
-            dynamoDBMapper.save(user); 
+
+            // fetch the list from the user's available categories
+            List<String> availableCategories = user.getAvailableCategories();
+
+            if (availableCategories.contains(categoryName)) {
+
+                //add new blocked category name
+                blockedCategories.add(categoryName);
+
+                // remove category from available categories
+                availableCategories.remove(categoryName);
+
+                //save updated list
+                dynamoDBMapper.save(user); 
+            }
+            else {
+                throw new NoSuchElementException("Category not found in available categories");
+            }
+            
+        }
+        else {
+            throw new NoSuchElementException("User ID : " + userId + " not found");
         }
     }
 
@@ -33,12 +51,19 @@ public class BlockedCategoriesService {
         if (user != null) {
             // fetch the blocked categories list
             List<String> blockedCategories = user.getBlocked();
+             // fetch the list from the user's available categories
+             List<String> availableCategories = user.getAvailableCategories();
+
+
             // remove category from the list
             blockedCategories.remove(categoryName);
+            // add it back to available categories
+            availableCategories.add(categoryName);
+
+
             // save updated list 
             dynamoDBMapper.save(user);
 
-            // TODO: add it back to the available categories list
         }
     }
 

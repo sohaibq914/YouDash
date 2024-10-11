@@ -14,7 +14,10 @@ import java.util.HashMap;
 
 @RestController 
 @RequestMapping("/block-categories") 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {
+    "http://localhost:3000", 
+    "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"
+})
 public class CategoriesController {
 
      @Autowired
