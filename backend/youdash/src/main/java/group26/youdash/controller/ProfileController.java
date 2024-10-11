@@ -45,8 +45,13 @@ public class ProfileController {
     public ResponseEntity<Map<String, String>> uploadProfilePicture(
         @PathVariable("userID") int userID, 
         @RequestParam("file") MultipartFile file) {
+            System.out.println("HIIIII");
+            
     
         try {
+            System.out.println("Received request to upload profile picture for user ID: " + userID);
+        System.out.println("File name: " + file.getOriginalFilename());
+        System.out.println("File size: " + file.getSize());
             String profilePictureUrl = userService.uploadProfilePicture(userID, file);
             return new ResponseEntity<>(Map.of("profilePicture", profilePictureUrl), HttpStatus.OK);
         } catch (Exception e) {

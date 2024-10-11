@@ -9,6 +9,9 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,17 +26,22 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
 
-    private final AmazonS3 s3Client;
-    private final String bucketName;
+    private AmazonS3 s3Client;
 
-    public FileStorageService(
-            @Value("${aws.access-key}") String accessKey,
-            @Value("${aws.secret-key}") String secretKey,
-            @Value("${aws.s3.bucket-name}") String bucketName,
-            @Value("${aws.region}") String region) {
+    @Value("${aws.s3.bucket-name}")
+    private String bucketName;
 
-        this.bucketName = bucketName;
+    @Value("${aws.access-key}")
+    private String accessKey;
 
+    @Value("${aws.secret-key}")
+    private String secretKey;
+
+    @Value("${aws.region}")
+    private String region;
+
+    @PostConstruct
+    private void initializeAmazon() {
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
         this.s3Client = AmazonS3ClientBuilder.standard()
                 .withRegion(Regions.fromName(region))
@@ -41,15 +49,23 @@ public class FileStorageService {
                 .build();
     }
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    // Upload a file to S3 with a specific key
+    public String uploadFile(MultipartFile file, String fileName) throws IOException {
         File convertedFile = convertMultiPartToFile(file);
-        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        s3Client.putObject(new PutObjectRequest(bucketName, fileName, convertedFile)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        convertedFile.delete();
-        return s3Client.getUrl(bucketName, fileName).toString();
+        
+        // Upload file to S3 with the specified key
+        try {
+            s3Client.putObject(new PutObjectRequest(bucketName, fileName, convertedFile));
+            convertedFile.delete();  // Delete local copy after upload
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+       
+        
+        return s3Client.getUrl(bucketName, fileName).toString();  // Return the URL of the uploaded file
     }
 
+    // Utility method to convert MultipartFile to File
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convertedFile = new File(file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
@@ -57,6 +73,11 @@ public class FileStorageService {
         }
         return convertedFile;
     }
+
+        // Get the S3 URL for a specific key
+        public String getS3FileUrl(String key) {
+            return s3Client.getUrl(bucketName, key).toString();  // Return the S3 URL for the given key
+        }
 
     // Method to generate a pre-signed URL for the given file name
     public String generatePresignedUrl(String fileName) {

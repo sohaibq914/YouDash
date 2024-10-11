@@ -1,4 +1,5 @@
 package group26.youdash.model;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import group26.youdash.classes.WatchTimeGoal;
@@ -24,6 +25,9 @@ public class User {
     private String bio;  // Add the bio attribute here
     private String profilePicture; // New field for storing profile picture URL
     private boolean darkMode;
+    private List<Integer> followers;  // New followers attribute to store a list of follower IDs
+    private String profilePictureKey; // New field to store S3 key of profile picture
+
 
 
     private List<String> historyURLs;
@@ -36,22 +40,39 @@ public class User {
         this.id = id;
     }
 
-    @DynamoDBAttribute
+    /**
+     * Get the user's name.
+     *
+     * @return The name of the user.
+     */
+    @DynamoDBAttribute // Marks this field as an attribute in the DynamoDB table
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
-        this.name = name;
+        this.name = name; // Set the user's name
     }
 
+    /**
+     * Get the user's email.
+     *
+     * @return The email address of the user.
+     */
     @DynamoDBAttribute
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email; // Set the user's email
     }
 
+    /**
+     * Get the user's username.
+     *
+     * @return The username of the user.
+     */
     @DynamoDBAttribute
     public String getUsername() {
         return username;
@@ -68,6 +89,11 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * Get the user's password.
+     *
+     * @return The password of the user.
+     */
     @DynamoDBAttribute
     public String getPhoneNumber() {
         return phoneNumber;
@@ -141,6 +167,25 @@ public class User {
     public void setDarkMode(boolean darkMode) {
         this.darkMode = darkMode;
     }
+
+
+    @DynamoDBAttribute(attributeName = "followers")  // Store followers as a list of user IDs
+    public List<Integer> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Integer> followers) {
+        this.followers = followers;
+    }
+
+
+        // New attribute to store the S3 key of the profile picture
+        @DynamoDBAttribute(attributeName = "profilePictureKey")
+        public String getProfilePictureKey() {
+            return profilePictureKey;
+        }
+    
+        public void setProfilePictureKey(String profilePictureKey) {
+            this.profilePictureKey = profilePictureKey;
+        }
 }
-
-
