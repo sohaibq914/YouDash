@@ -79,7 +79,7 @@ public class UserService implements UserRepository {
     // Implement this method or retrieve it from security context
     private int getCurrentUserId() {
         // For demonstration, returning a hardcoded user ID. Replace this with actual logic.
-        return 1;  // Replace with logic to get the current user ID (e.g., from the security context or session)
+        return 12345;  // Replace with logic to get the current user ID (e.g., from the security context or session)
     }
 
 

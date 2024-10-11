@@ -15,6 +15,7 @@ function Profile() {
   const [selectedFile, setSelectedFile] = useState(null); // New state to track the selected file
   const [isEmailValid, setIsEmailValid] = useState(true); // New state to track email validity
   const [isPasswordValid, setIsPasswordValid] = useState(true); // New state to track password validity
+  const [isBioValid, setIsBioValid] = useState(true); // New state to track bio validity
   const navigate = useNavigate(); // Initialize the useNavigate hook
 
   useEffect(() => {
@@ -28,7 +29,6 @@ function Profile() {
         setIsGmail(emailIsGmail);
 
         // Set the profile with the fetched data, including the profile picture
-        console.log("SUPPPPP" + userData.profilePicture);
         setProfile({
           name: userData.name || "",
           bio: userData.bio || "",
@@ -57,6 +57,11 @@ function Profile() {
     return password.length >= 5;
   };
 
+  // Helper function to validate bio (non-empty)
+  const validateBio = (bio) => {
+    return bio.trim() !== "";
+  };
+
   const handleEditClick = (field) => {
     if ((field === "email" || field === "password") && isGmail) {
       alert("Email and password cannot be edited for Gmail accounts.");
@@ -80,10 +85,16 @@ function Profile() {
       const valid = validatePassword(value);
       setIsPasswordValid(valid);
     }
+
+    // Check bio validity in real-time
+    if (editField === "bio") {
+      const valid = validateBio(value);
+      setIsBioValid(valid);
+    }
   };
 
   const handleSave = async () => {
-    // Validate email and password before saving
+    // Validate email, password, and bio before saving
     if (editField === "email" && !isEmailValid) {
       alert("Please enter a valid email address.");
       return;
@@ -91,6 +102,11 @@ function Profile() {
 
     if (editField === "password" && !isPasswordValid) {
       alert("Password must be at least 5 characters long.");
+      return;
+    }
+
+    if (editField === "bio" && !isBioValid) {
+      alert("Bio cannot be empty.");
       return;
     }
 
@@ -136,7 +152,6 @@ function Profile() {
     <div style={styles.container}>
       <h1 style={styles.title}>Profile</h1>
       <div style={styles.profilePicContainer}>
-        {console.log(profile.profilePicture)}
         <img
           src={profile.profilePicture || "https://via.placeholder.com/100"} // Display profile picture if available
           alt="Profile"
@@ -166,18 +181,19 @@ function Profile() {
                 onChange={handleChange}
                 style={{
                   ...styles.input,
-                  borderColor: (key === "email" && !isEmailValid) || (key === "password" && !isPasswordValid) ? "red" : "initial",
+                  borderColor: (key === "email" && !isEmailValid) || (key === "password" && !isPasswordValid) || (key === "bio" && !isBioValid) ? "red" : "initial",
                 }}
                 disabled={isGmail && (key === "email" || key === "password")}
               />
               {key === "email" && !isEmailValid && <span style={styles.errorText}>Invalid email format</span>}
               {key === "password" && !isPasswordValid && <span style={styles.errorText}>Password must be at least 5 characters long</span>}
+              {key === "bio" && !isBioValid && <span style={styles.errorText}>Bio cannot be empty</span>}
             </>
           ) : (
             <div style={styles.fieldValue}>{value}</div>
           )}
           {editField === key ? (
-            <button onClick={handleSave} style={styles.saveButton} disabled={(key === "email" && !isEmailValid) || (key === "password" && !isPasswordValid)}>
+            <button onClick={handleSave} style={styles.saveButton} disabled={(key === "email" && !isEmailValid) || (key === "password" && !isPasswordValid) || (key === "bio" && !isBioValid)}>
               Save
             </button>
           ) : (
