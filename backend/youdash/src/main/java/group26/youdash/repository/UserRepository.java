@@ -30,4 +30,5 @@ public interface UserRepository {
      * @param id The ID of the user to delete.
      */
     void delete(int id);
+
 }

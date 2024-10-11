@@ -20,6 +20,7 @@ public class UserService implements UserRepository {
     @Autowired // Automatically injects an instance of DynamoDBMapper
     private DynamoDBMapper dynamoDBMapper;
 
+
     // Generates unique IDs across all users
     private static final AtomicInteger userIdCounter = new AtomicInteger(1);
 
