@@ -1,4 +1,5 @@
 package group26.youdash.model;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import group26.youdash.classes.WatchTimeGoal;
@@ -39,22 +40,39 @@ public class User {
         this.id = id;
     }
 
-    @DynamoDBAttribute
+    /**
+     * Get the user's name.
+     *
+     * @return The name of the user.
+     */
+    @DynamoDBAttribute // Marks this field as an attribute in the DynamoDB table
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
-        this.name = name;
+        this.name = name; // Set the user's name
     }
 
+    /**
+     * Get the user's email.
+     *
+     * @return The email address of the user.
+     */
     @DynamoDBAttribute
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email; // Set the user's email
     }
 
+    /**
+     * Get the user's username.
+     *
+     * @return The username of the user.
+     */
     @DynamoDBAttribute
     public String getUsername() {
         return username;
@@ -71,6 +89,11 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * Get the user's password.
+     *
+     * @return The password of the user.
+     */
     @DynamoDBAttribute
     public String getPhoneNumber() {
         return phoneNumber;
@@ -166,5 +189,3 @@ public class User {
             this.profilePictureKey = profilePictureKey;
         }
 }
-
-
