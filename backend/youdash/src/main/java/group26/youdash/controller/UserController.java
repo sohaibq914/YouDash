@@ -2,6 +2,7 @@ package group26.youdash.controller;
 
 import group26.youdash.model.LoginRequest;
 import group26.youdash.model.User;
+import group26.youdash.service.EmailService;
 import group26.youdash.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     /**
      * Creates a new user.
@@ -79,6 +83,8 @@ public class UserController {
         User savedUser = userService.save(user);
         if (savedUser != null) {
             System.out.println("User saved successfully: " + savedUser);
+            emailService.sendEmail(savedUser.getEmail(), "Welcome to YouDash",
+            "Thank you for signing up, " + savedUser.getName() + "!");
             return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
         } else {
             System.out.println("Failed to save user.");
@@ -98,9 +104,22 @@ public class UserController {
     public ResponseEntity<User> loginUser(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
+        
         User user = userService.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+        
+        if (user != null) {
+            String storedPassword = user.getPassword();
+            
+            // Check if the stored password is null
+            if (storedPassword == null) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // or another suitable response
+            }
+            
+            if (storedPassword.equals(password)) {
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

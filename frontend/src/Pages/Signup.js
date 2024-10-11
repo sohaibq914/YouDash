@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [name, setName] = useState('');
@@ -7,6 +8,7 @@ function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const navigate = useNavigate();
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -26,6 +28,7 @@ function Signup() {
       .then(response => {
         // Handle successful sign-up
         console.log('Sign-up successful', response.data);
+        navigate("/home");
       })
       .catch(error => {
         // Handle sign-up error
