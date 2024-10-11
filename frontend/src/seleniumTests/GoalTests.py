@@ -54,7 +54,7 @@ class GoalTests(unittest.TestCase):
 
         goalCategorySelect = Select(driver.find_element(by=By.ID, value="category"))
         assert goalCategorySelect is not None
-        goalCategorySelect.select_by_value("BLOG")
+        goalCategorySelect.select_by_value("Entertainment")
         goalSubmit = driver.find_element(by=By.ID, value="goalSubmit")
         assert goalSubmit is not None
         driver.execute_script("window.scrollTo(0, 200)")
@@ -83,7 +83,7 @@ class GoalTests(unittest.TestCase):
 
         categoryToAvoid = Select(driver.find_element(by=By.ID, value="categoryToAvoid"))
         assert categoryToAvoid is not None
-        categoryToAvoid.select_by_value("SPORTS")
+        categoryToAvoid.select_by_value("Sports")
 
         goalMultInput = driver.find_element(by=By.ID, value="multiplier")
         assert goalMultInput is not None
@@ -104,6 +104,7 @@ class GoalTests(unittest.TestCase):
         viewDropdown = driver.find_element(by=By.ID, value="goalsView")
         assert viewDropdown is not None
         viewDropdown.click()
+        time.sleep(8)
 
     def navigate_to_goal_edit(self):
         driver = self.driver
@@ -112,6 +113,7 @@ class GoalTests(unittest.TestCase):
         editDropdown = driver.find_element(by=By.ID, value="goalsEdit")
         assert editDropdown is not None
         editDropdown.click()
+        time.sleep(8)
 
     def navigate_to_goal_vis(self):
         driver = self.driver
@@ -120,6 +122,7 @@ class GoalTests(unittest.TestCase):
         editDropdown = driver.find_element(by=By.ID, value="goalsVis")
         assert editDropdown is not None
         editDropdown.click()
+        time.sleep(8)
 
 
     # Test case method. It should always start with test_
@@ -134,12 +137,12 @@ class GoalTests(unittest.TestCase):
         assert "testing goal description" in driver.page_source
         assert "613" in driver.page_source
         assert "Below" in driver.page_source
-        assert "BLOG" in driver.page_source
+        assert "Entertainment" in driver.page_source
 
         assert "testing goal name q" in driver.page_source
         assert "testing goal description q" in driver.page_source
         assert "10" in driver.page_source
-        assert "SPORTS" in driver.page_source
+        assert "Sports" in driver.page_source
         assert "ALL" in driver.page_source
 
         time.sleep(1)
@@ -190,6 +193,7 @@ class GoalTests(unittest.TestCase):
         deleteBtn.click()
         time.sleep(0.5)
         fields = driver.find_elements(by=By.TAG_NAME, value="input")
+        time.sleep(2)
         goalNameFieldQ = fields[0]
         assert goalNameFieldQ is not None
         goalNameFieldQ.send_keys("123")
@@ -198,7 +202,7 @@ class GoalTests(unittest.TestCase):
         goalDescFieldQ.send_keys("4567")
         goalCategoryFieldQ = Select(driver.find_element(by=By.TAG_NAME, value="select"))
         assert goalCategoryFieldQ is not None
-        goalCategoryFieldQ.select_by_value("BLOG")
+        goalCategoryFieldQ.select_by_value("Entertainment")
         mult = fields[2]
         assert mult is not None
         mult.send_keys(Keys.BACKSPACE)
@@ -207,7 +211,7 @@ class GoalTests(unittest.TestCase):
         assert "testing goal name q123" in driver.page_source
         assert "testing goal description q4567" in driver.page_source
         assert "1" in driver.page_source
-        assert "BLOG" in driver.page_source
+        assert "Entertainment" in driver.page_source
         assert "ALL" in driver.page_source
 
 
@@ -239,7 +243,7 @@ class GoalTests(unittest.TestCase):
 
         goalCategorySelect = Select(driver.find_element(by=By.ID, value="category"))
         assert goalCategorySelect is not None
-        goalCategorySelect.select_by_value("BLOG")
+        goalCategorySelect.select_by_value("Entertainment")
         goalSubmit = driver.find_element(by=By.ID, value="goalSubmit")
         assert goalSubmit is not None
         driver.execute_script("window.scrollTo(0, 200)")
@@ -268,7 +272,7 @@ class GoalTests(unittest.TestCase):
         deleteBtn = driver.find_element(by=By.CLASS_NAME, value="deleteBtn")
         while deleteBtn is not None:
             deleteBtn.click()
-            time.sleep(2)
+            time.sleep(8)
             try:
                 deleteBtn = driver.find_element(by=By.CLASS_NAME, value="deleteBtn")
             except:

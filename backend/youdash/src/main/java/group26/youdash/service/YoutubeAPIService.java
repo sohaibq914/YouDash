@@ -60,7 +60,7 @@ public class YoutubeAPIService {
                 .queryParam("id", videoID)
                 .queryParam("key", YOUTUBE_API_KEY)
                 .toUriString();
-        System.out.println(url);
+        //System.out.println(url);
 
         // ResponseEntity is in charge of making the API request
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);

@@ -115,15 +115,15 @@ public class GoalController {
     public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
     {
         int userId = 12345;
-        System.out.println(user + "Goal View Requested");
-        System.out.println(temp);
+        //System.out.println(user + "Goal View Requested");
+        //System.out.println(temp);
         ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
         for(int i = 0; i < temp.size(); i++) {
             if (temp.get(i) instanceof WatchTimeGoal) {
                 float totalWT = 0.0f;
                 for (String vid : vids) {
                     try {
-                        System.out.println(matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1]);
+                        //System.out.println(matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1]);
                         if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((WatchTimeGoal) temp.get(i)).getTheCategory())
                                 || ((WatchTimeGoal) temp.get(i)).getTheCategory().equals("ALL")) {
                             totalWT += (youtubeAPIService.getVideoLength(vid));
