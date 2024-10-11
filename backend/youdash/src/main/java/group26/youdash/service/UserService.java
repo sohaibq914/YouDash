@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class UserService implements UserRepository {
 
+    
+
 
     public void followUser(int userId) {
         // Find the user to be followed
@@ -203,18 +205,44 @@ public class UserService implements UserRepository {
         }
     }
 
+
+    // Upload profile picture to a single S3 bucket using FileStorageService
     public String uploadProfilePicture(int userID, MultipartFile file) throws IOException {
         User user = dynamoDBMapper.load(User.class, userID);
         if (user == null) throw new NoSuchElementException("User not found");
 
-        // Use FileStorageService to upload the file and get the URL
-        String profilePictureUrl = fileStorageService.uploadFile(file);
+        // Create a unique key for the profile picture using the userID
+        String profilePictureKey = "user-" + userID + "-profile-picture." + getExtension(file.getOriginalFilename());
+        System.out.println(profilePictureKey);
 
-        // Update the user's profilePicture attribute with the S3 URL
-        user.setProfilePicture(profilePictureUrl);
+        // Upload the file to S3 and get the URL
+        String profilePictureUrl = fileStorageService.uploadFile(file, profilePictureKey);
+        // Update user's profile picture key in the database
+        user.setProfilePictureKey(profilePictureKey);
         dynamoDBMapper.save(user);
 
+        System.out.println("BEFOREE RETURNNNING");
         return profilePictureUrl;
+    }
+
+    // Get the profile picture URL for a specific user
+    public String getProfilePictureUrl(int userID) {
+        User user = dynamoDBMapper.load(User.class, userID);
+        if (user == null) throw new NoSuchElementException("User not found");
+
+        String profilePictureKey = user.getProfilePictureKey();
+        if (profilePictureKey == null || profilePictureKey.isEmpty()) {
+            return null;  // Return null or a default URL if no profile picture is set
+        }
+
+        // Use FileStorageService to get the S3 URL for the profile picture key
+        return fileStorageService.getS3FileUrl(profilePictureKey);
+    }
+
+
+    // Helper method to extract file extension
+    private String getExtension(String filename) {
+        return filename.substring(filename.lastIndexOf(".") + 1);
     }
 
 

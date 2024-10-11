@@ -25,6 +25,7 @@ public class User {
     private String profilePicture; // New field for storing profile picture URL
     private boolean darkMode;
     private List<Integer> followers;  // New followers attribute to store a list of follower IDs
+    private String profilePictureKey; // New field to store S3 key of profile picture
 
 
 
@@ -153,6 +154,17 @@ public class User {
     public void setFollowers(List<Integer> followers) {
         this.followers = followers;
     }
+
+
+        // New attribute to store the S3 key of the profile picture
+        @DynamoDBAttribute(attributeName = "profilePictureKey")
+        public String getProfilePictureKey() {
+            return profilePictureKey;
+        }
+    
+        public void setProfilePictureKey(String profilePictureKey) {
+            this.profilePictureKey = profilePictureKey;
+        }
 }
 
 

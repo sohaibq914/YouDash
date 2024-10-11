@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 
 function Profile() {
   const [editField, setEditField] = useState(null);
@@ -14,6 +15,7 @@ function Profile() {
   const [selectedFile, setSelectedFile] = useState(null); // New state to track the selected file
   const [isEmailValid, setIsEmailValid] = useState(true); // New state to track email validity
   const [isPasswordValid, setIsPasswordValid] = useState(true); // New state to track password validity
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -25,13 +27,17 @@ function Profile() {
         const emailIsGmail = userData.email.endsWith("@gmail.com");
         setIsGmail(emailIsGmail);
 
+        // Set the profile with the fetched data, including the profile picture
+        console.log("SUPPPPP" + userData.profilePicture);
         setProfile({
           name: userData.name || "",
           bio: userData.bio || "",
           email: userData.email || "",
           password: "",
-          profilePicture: userData.profilePicture || "", // Set profile picture from user data
+          profilePicture: "https://profilepicture12.s3.us-east-2.amazonaws.com/" + userData.profilePictureKey || "", // Set profile picture from user data
         });
+
+        console.log("Profile data fetched:", userData); // Check the fetched profile data
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
@@ -91,14 +97,14 @@ function Profile() {
     setEditField(null);
     try {
       const userID = 12345; // Replace with the actual userID
-      const response = await axios.put(`http://localhost:8080/profile/${userID}/updateProfile`, {
+      const response = await axios.put(`http://localhost:8080/profiles/${userID}/updateProfile`, {
         name: profile.name,
         bio: profile.bio,
         email: isGmail ? null : profile.email,
         password: profile.password === "********" ? null : profile.password,
         profilePicture: profile.profilePicture, // Include profile picture URL if changed
       });
-      console.log(response.data);
+      console.log("Profile updated:", response.data);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -115,6 +121,8 @@ function Profile() {
       const response = await axios.post(`http://localhost:8080/profile/${userID}/uploadProfilePicture`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
+      console.log("Profile picture uploaded successfully:", response.data.profilePicture);
       setProfile({ ...profile, profilePicture: response.data.profilePicture });
       setSelectedFile(null);
       alert("Profile picture updated successfully!");
@@ -128,6 +136,7 @@ function Profile() {
     <div style={styles.container}>
       <h1 style={styles.title}>Profile</h1>
       <div style={styles.profilePicContainer}>
+        {console.log(profile.profilePicture)}
         <img
           src={profile.profilePicture || "https://via.placeholder.com/100"} // Display profile picture if available
           alt="Profile"
@@ -138,6 +147,14 @@ function Profile() {
       <button onClick={handleProfilePictureUpload} style={styles.uploadButton}>
         Upload Profile Picture
       </button>
+
+      <button
+        onClick={() => navigate("/followers")} // Use the useNavigate hook to redirect
+        style={styles.followersButton}
+      >
+        View Followers
+      </button>
+
       {Object.entries(profile).map(([key, value]) => (
         <div key={key} style={styles.fieldContainer}>
           <div style={styles.fieldLabel}>{key.charAt(0).toUpperCase() + key.slice(1)}</div>
@@ -153,7 +170,6 @@ function Profile() {
                 }}
                 disabled={isGmail && (key === "email" || key === "password")}
               />
-              {/* Show validation messages */}
               {key === "email" && !isEmailValid && <span style={styles.errorText}>Invalid email format</span>}
               {key === "password" && !isPasswordValid && <span style={styles.errorText}>Password must be at least 5 characters long</span>}
             </>

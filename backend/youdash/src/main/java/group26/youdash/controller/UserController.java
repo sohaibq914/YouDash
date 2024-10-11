@@ -88,12 +88,4 @@ public ResponseEntity<List<User>> getMyFollowers(@PathVariable int id) {
     }
 }
 
-
-
-
-
-
-
-
-
 }
