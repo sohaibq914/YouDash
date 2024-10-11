@@ -80,6 +80,13 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<User> signUpUser(@RequestBody User user) {
         System.out.println("Received sign-up request for user: " + user);
+
+            // Check if a user with the same username already exists
+    User existingUser = userService.findByUsername(user.getUsername());
+    if (existingUser != null) {
+        System.out.println("Username already taken: " + user.getUsername());
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
         User savedUser = userService.save(user);
         if (savedUser != null) {
             System.out.println("User saved successfully: " + savedUser);
@@ -104,18 +111,17 @@ public class UserController {
     public ResponseEntity<User> loginUser(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        
+
         User user = userService.findByUsername(username);
-        
         if (user != null) {
             String storedPassword = user.getPassword();
-            
             // Check if the stored password is null
             if (storedPassword == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // or another suitable response
             }
-            
+            System.out.println("here");
             if (storedPassword.equals(password)) {
+                System.out.println("done");
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

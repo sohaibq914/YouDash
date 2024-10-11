@@ -49,4 +49,10 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return "password" + password + " " + username;
+    }
 }

@@ -32,6 +32,9 @@ function Signup() {
       })
       .catch(error => {
         // Handle sign-up error
+        if(error.response.status == "409") {
+          alert("Username already taken");
+        }
         console.error('Sign-up failed', error);
       });
   };
