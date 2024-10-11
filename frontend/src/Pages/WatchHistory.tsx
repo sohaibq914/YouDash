@@ -22,15 +22,13 @@ function WatchHistory() {
 
     const fetchWatchHistory = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/watch-history/${userID}/historyList`
-        );
+        const response = await axios.get(`http://localhost:8080/watch-history/${userID}/historyList`);
         setWatchHistoryList(response.data.watchHistory);
-       // If fetching the watch history is successful, show an alert
+        // If fetching the watch history is successful, show an alert
         alert("Watch history loaded successfully!");
       } catch (error) {
         console.error("Error fetching watch history", error);
-         // If there is an error, show an alert indicating the failure
+        // If there is an error, show an alert indicating the failure
         alert("Failed to load watch history.");
       }
     };
@@ -46,17 +44,11 @@ function WatchHistory() {
   console.log(watchHistoryList);
 
   // Render each row with the corresponding history URL
-  function renderRow({
-    index,
-    style,
-  }: {
-    index: number;
-    style: React.CSSProperties;
-  }) {
+  function renderRow({ index, style }: { index: number; style: React.CSSProperties }) {
     return (
       <ListItem style={style} key={index} component="div" disablePadding id="watchHistory-list">
         <ListItemButton>
-          <ListItemText primary={watchHistoryList[index] } />
+          <ListItemText primary={watchHistoryList[index]} />
         </ListItemButton>
       </ListItem>
     );
@@ -72,17 +64,16 @@ function WatchHistory() {
         flexDirection: "column", // Align children in column (h1 above list)
         alignItems: "center", // Center horizontally
         justifyContent: "center", // Center vertically
-        bgcolor: "background.paper",
+        bgcolor: "background.black",
       }}
     >
-      <h1 style={{ marginBottom: "20px" }}>Watch History</h1>{" "}
-      {/* Margin to create space below heading */}
+      <h1 style={{ marginBottom: "20px" }}>Watch History</h1> {/* Margin to create space below heading */}
       <Box
         sx={{
           backgroundColor: "#f0f0f0", // Background color for the list
           padding: "10px", // Optional padding
           borderRadius: "8px", // Optional border radius for rounded corners
-          height:"150vh"
+          height: "150vh",
         }}
       >
         <FixedSizeList
@@ -91,7 +82,7 @@ function WatchHistory() {
           itemSize={46}
           overscanCount={5}
           itemCount={200}
-          style={{ backgroundColor: "#f0f0f0" }} // Background for the list
+          style={{ backgroundColor: "blue", color: "white" }} // Background for the list
         >
           {renderRow}
         </FixedSizeList>
