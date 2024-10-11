@@ -46,7 +46,7 @@ function WatchHistory() {
   // Render each row with the corresponding history URL
   function renderRow({ index, style }: { index: number; style: React.CSSProperties }) {
     return (
-      <ListItem style={style} key={index} component="div" disablePadding id="watchHistory-list">
+      <ListItem style={style} key={index} component="div"  id="watchHistory-list" sx={{ mb: 2 }}>
         <ListItemButton>
           <ListItemText primary={watchHistoryList[index]} />
         </ListItemButton>
