@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 
+import group26.youdash.classes.YoutubeAPI.VideoHistory;
 import group26.youdash.model.User;
 import group26.youdash.repository.UserRepository;
 
@@ -223,11 +224,16 @@ public class UserService implements UserRepository {
         }
     }
 
-    // Method to get user history information
+    // Method to get user history information (only urls)
     public List<String> getUserHistory(int userID) {
         User user = dynamoDBMapper.load(User.class, userID);
         if (user != null) {
-            return user.getHistoryURLs();
+            List<String> retVal = new ArrayList<>();
+            List<VideoHistory> vh = user.getHistory();
+            for (VideoHistory v : vh) {
+                retVal.add(v.getVideoName());
+            }
+            return retVal;
         } else {
             throw new NoSuchElementException("User with ID " + userID + " not found");
         }

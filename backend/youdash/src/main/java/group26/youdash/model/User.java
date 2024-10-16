@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.classes.QualityGoal;
+import group26.youdash.classes.YoutubeAPI.VideoHistory;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class User {
 
 
 
-    private List<String> historyURLs;
+    private List<VideoHistory> history;
 
     @DynamoDBHashKey
     public int getId() {
@@ -146,9 +147,9 @@ public class User {
     public List<String> getAvailableCategories() { return availableCategories;}
     public void setAvailableCategories(List<String> availableCategories) {this.availableCategories = availableCategories;}
 
-    @DynamoDBAttribute(attributeName = "historyURLs")
-    public List<String> getHistoryURLs() { return historyURLs; }
-    public void setHistoryURLs(List<String> historyURLs) {this.historyURLs = historyURLs; }
+    @DynamoDBAttribute(attributeName = "history")
+    public List<VideoHistory> getHistory() { return history; }
+    public void setHistory(List<VideoHistory> history) {this.history = history; }
 
     // New getter and setter for profile picture URL
     @DynamoDBAttribute(attributeName = "profilePicture")
