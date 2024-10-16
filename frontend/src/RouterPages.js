@@ -21,18 +21,18 @@ function RouterPages() {
       {/* Routes holds each page */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/block-categories" element={<BlockedPage />} />
-        <Route path="/goalsCreate" element={<GoalCreate />} />
-        <Route path="/goalsView" element={<GoalView />} />
-        <Route path="/goalsEdit" element={<GoalEdit />} />
-        <Route path="/goalsVis" element={<VisualizeGoal />} />
+        <Route path="/:userId/home" element={<Home />} />
+        <Route path="/:userId/block-categories" element={<BlockedPage />} />
+        <Route path="/:userId/goalsCreate" element={<GoalCreate />} />
+        <Route path="/:userId/goalsView" element={<GoalView />} />
+        <Route path="/:userId/goalsEdit" element={<GoalEdit />} />
+        <Route path="/:userId/goalsVis" element={<VisualizeGoal />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         {/* <Route path="/navbar" element={<Navbar />} /> */}
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/watch-history" element={<WatchHistory />} />
-        <Route path="/followers" element={<FollowersPage />} />
+        <Route path="/:userId/profile" element={<Profile />} />
+        <Route path="/:userId/watch-history" element={<WatchHistory />} />
+        <Route path="/:userId/followers" element={<FollowersPage />} />
       </Routes>
     </div>
   );

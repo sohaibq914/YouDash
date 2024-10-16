@@ -231,7 +231,7 @@ public class UserService implements UserRepository {
             List<String> retVal = new ArrayList<>();
             List<VideoHistory> vh = user.getHistory();
             for (VideoHistory v : vh) {
-                retVal.add(v.getVideoName());
+                retVal.add(v.getUrl());
             }
             return retVal;
         } else {

@@ -14,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
@@ -27,9 +24,8 @@ import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 public class GoalController {
 
 
-    //remove when not needed
-    //@Autowired
-    //private WatchHistoryService whs;
+    @Autowired
+    private WatchHistoryService whs;
 
     private final YoutubeAPIService youtubeAPIService;
 
@@ -70,7 +66,7 @@ public class GoalController {
         gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
-    String[] matches = {
+    ArrayList<String> matches = new ArrayList<>(Arrays.asList(
       "Film & Animation",
           "Autos & Vehicles",
           "3",
@@ -115,49 +111,44 @@ public class GoalController {
           "Shorts",
           "Shows",
           "Trailers"
-    };
+    ));
     @GetMapping("/{user}/view")
     public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
     {
-        int userId = 12345;
-        //System.out.println(user + "Goal View Requested");
-        //System.out.println(temp);
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
         //whs.addVideo(userId, "https://www.youtube.com/watch?v=AqvyzO3IPXc");
-        ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
+        //ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
         for(int i = 0; i < temp.size(); i++) {
             if (temp.get(i) instanceof WatchTimeGoal) {
-                float totalWT = 0.0f;
-                for (String vid : vids) {
-                    try {
-                        //System.out.println(matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1]);
-                        if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((WatchTimeGoal) temp.get(i)).getTheCategory())
-                                || ((WatchTimeGoal) temp.get(i)).getTheCategory().equals("ALL")) {
-                            totalWT += (youtubeAPIService.getVideoLength(vid));
-                        }
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                try {
+                    if (((WatchTimeGoal) temp.get(i)).getTheCategory().equals("ALL")) {
+                        ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(whs.getWatchTimeTotal(userId));
+                    } else {
+                        ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(whs.getWatchTimeByCategory(userId, matches.indexOf((String)((WatchTimeGoal) temp.get(i)).getTheCategory())+1));
                     }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
-                ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(totalWT);
             }
             if (temp.get(i) instanceof QualityGoal) {
-                float totalWatch = 0.0f;
-                float totalAvoid = 0.0f;
-                for (String vid : vids) {
-                    try {
-                        if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((QualityGoal) temp.get(i)).getCategoryToAvoid())
-                                || ((QualityGoal) temp.get(i)).getCategoryToAvoid().equals("ALL")) {
-                            totalAvoid += youtubeAPIService.getVideoLength(vid);
-                        }
-                        if (matches[Integer.parseInt(youtubeAPIService.getVideoCategoryID(vid))-1].equalsIgnoreCase(((QualityGoal) temp.get(i)).getCategoryToWatch())
-                                || ((QualityGoal) temp.get(i)).getCategoryToWatch().equals("ALL")) {
-                            totalWatch += youtubeAPIService.getVideoLength(vid);
-                        }
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                try {
+                    if (((QualityGoal) temp.get(i)).getCategoryToAvoid().equals("ALL")) {
+                        ((QualityGoal) temp.get(i)).setProgressAvoid(whs.getWatchTimeTotal(userId));
+                    } else {
+                        ((QualityGoal) temp.get(i)).setProgressAvoid(whs.getWatchTimeByCategory(userId, matches.indexOf(((QualityGoal) temp.get(i)).getCategoryToAvoid())+1));
                     }
-                    ((QualityGoal) temp.get(i)).setProgressAvoid(totalAvoid);
-                    ((QualityGoal) temp.get(i)).setProgressWatch(totalWatch);
+                    if (((QualityGoal) temp.get(i)).getCategoryToWatch().equals("ALL")) {
+                        ((QualityGoal) temp.get(i)).setProgressWatch(whs.getWatchTimeTotal(userId));
+                    } else {
+                        ((QualityGoal) temp.get(i)).setProgressWatch(whs.getWatchTimeByCategory(userId, matches.indexOf(((QualityGoal) temp.get(i)).getCategoryToWatch())+1));
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
             }
             temp.get(i).computeProgress();
