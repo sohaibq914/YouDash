@@ -48,7 +48,7 @@ public class WatchHistoryService {
             }
 
             try {
-                VideoHistory vh = new VideoHistory(url, youtubeAPIService.getVideoLength(url), youtubeAPIService.getVideoName(url), Integer.parseInt(youtubeAPIService.getVideoCategoryID(url)));
+                VideoHistory vh = new VideoHistory(url, youtubeAPIService.getVideoLength(url), youtubeAPIService.getVideoName(url), Integer.parseInt(youtubeAPIService.getVideoCategoryID(url)), "" + userID);
                 watchHistory.add(vh);
                 user.setHistory(watchHistory);
                 dynamoDBMapper.save(user);

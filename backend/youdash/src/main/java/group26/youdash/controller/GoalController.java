@@ -6,6 +6,7 @@ import group26.youdash.classes.QualityGoal;
 import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.service.GoalsService;
 import group26.youdash.service.UserService;
+import group26.youdash.service.WatchHistoryService;
 import group26.youdash.service.YoutubeAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,10 @@ import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 @CrossOrigin(origins = "http://localhost:3000")  // Allow React app to access this API
 public class GoalController {
 
+
+    //remove when not needed
+    //@Autowired
+    //private WatchHistoryService whs;
 
     private final YoutubeAPIService youtubeAPIService;
 
@@ -117,6 +122,7 @@ public class GoalController {
         int userId = 12345;
         //System.out.println(user + "Goal View Requested");
         //System.out.println(temp);
+        //whs.addVideo(userId, "https://www.youtube.com/watch?v=AqvyzO3IPXc");
         ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
         for(int i = 0; i < temp.size(); i++) {
             if (temp.get(i) instanceof WatchTimeGoal) {
