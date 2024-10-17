@@ -7,8 +7,9 @@ import group26.youdash.classes.QualityGoal;
 import group26.youdash.classes.YoutubeAPI.VideoHistory;
 
 import java.util.List;
+import java.util.Map;
 
-@DynamoDBTable(tableName = "Users")  // Specify the DynamoDB table name
+@DynamoDBTable(tableName = "Users") // Specify the DynamoDB table name
 public class User {
 
     private int id;
@@ -18,25 +19,25 @@ public class User {
     private String password;
     private String phoneNumber;
     private boolean registered;
-    //private List<Goal> goals;
+    // private List<Goal> goals;
     private List<WatchTimeGoal> wtgoals;
     private List<QualityGoal> qgoals;
     private List<String> blocked;
     private List<String> availableCategories;
-    private String bio;  // Add the bio attribute here
+    private String bio; // Add the bio attribute here
     private String profilePicture; // New field for storing profile picture URL
     private boolean darkMode;
-    private List<Integer> followers;  // New followers attribute to store a list of follower IDs
+    private List<Integer> followers; // New followers attribute to store a list of follower IDs
     private String profilePictureKey; // New field to store S3 key of profile picture
 
-
-
     private List<VideoHistory> history;
+    private List<Map<String, String>> promptHistory;
 
     @DynamoDBHashKey
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -78,6 +79,7 @@ public class User {
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -86,6 +88,7 @@ public class User {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -99,6 +102,7 @@ public class User {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -107,60 +111,86 @@ public class User {
     public boolean isRegistered() {
         return registered;
     }
+
     public void setRegistered(boolean registered) {
         this.registered = registered;
     }
 
-
-    //https://jspong.github.io/2021/07/19/AbstractDynamoAttributes.html
-    /*@DynamoDBAttribute(attributeName = "goals")
-    @DynamoDBTypeConverted(converter = GoalConverter.class)
-    public List<Goal> getGoals() { return goals; }
-    public void setGoals(List<Goal> goals) { this.goals = goals; }*/
+    // https://jspong.github.io/2021/07/19/AbstractDynamoAttributes.html
+    /*
+     * @DynamoDBAttribute(attributeName = "goals")
+     * 
+     * @DynamoDBTypeConverted(converter = GoalConverter.class)
+     * public List<Goal> getGoals() { return goals; }
+     * public void setGoals(List<Goal> goals) { this.goals = goals; }
+     */
 
     @DynamoDBAttribute(attributeName = "wtgoals")
-    public List<WatchTimeGoal> getWtgoals() { return wtgoals; }
-    public void setWtgoals(List<WatchTimeGoal> wtgoals) { this.wtgoals = wtgoals; }
+    public List<WatchTimeGoal> getWtgoals() {
+        return wtgoals;
+    }
+
+    public void setWtgoals(List<WatchTimeGoal> wtgoals) {
+        this.wtgoals = wtgoals;
+    }
 
     @DynamoDBAttribute(attributeName = "qgoals")
-    public List<QualityGoal> getQgoals() { return qgoals; }
-    public void setQgoals(List<QualityGoal> qgoals) { this.qgoals = qgoals; }
+    public List<QualityGoal> getQgoals() {
+        return qgoals;
+    }
+
+    public void setQgoals(List<QualityGoal> qgoals) {
+        this.qgoals = qgoals;
+    }
 
     @DynamoDBAttribute(attributeName = "blocked")
     public List<String> getBlocked() {
         return blocked;
     }
+
     public void setBlocked(List<String> blocked) {
         this.blocked = blocked;
     }
 
     // Add getter and setter for the new bio attribute
-    @DynamoDBAttribute(attributeName = "bio")  // Map the bio field to a DynamoDB attribute
+    @DynamoDBAttribute(attributeName = "bio") // Map the bio field to a DynamoDB attribute
     public String getBio() {
         return bio;
     }
+
     public void setBio(String bio) {
         this.bio = bio;
     }
 
     @DynamoDBAttribute(attributeName = "availableCategories")
-    public List<String> getAvailableCategories() { return availableCategories;}
-    public void setAvailableCategories(List<String> availableCategories) {this.availableCategories = availableCategories;}
+    public List<String> getAvailableCategories() {
+        return availableCategories;
+    }
+
+    public void setAvailableCategories(List<String> availableCategories) {
+        this.availableCategories = availableCategories;
+    }
 
     @DynamoDBAttribute(attributeName = "history")
-    public List<VideoHistory> getHistory() { return history; }
-    public void setHistory(List<VideoHistory> history) {this.history = history; }
+    public List<VideoHistory> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<VideoHistory> history) {
+        this.history = history;
+    }
 
     // New getter and setter for profile picture URL
     @DynamoDBAttribute(attributeName = "profilePicture")
     public String getProfilePicture() {
         return profilePicture;
     }
+
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
 
-    @DynamoDBAttribute(attributeName = "darkMode")  // Map the new attribute to DynamoDB
+    @DynamoDBAttribute(attributeName = "darkMode") // Map the new attribute to DynamoDB
     public boolean isDarkMode() {
         return darkMode;
     }
@@ -169,8 +199,7 @@ public class User {
         this.darkMode = darkMode;
     }
 
-
-    @DynamoDBAttribute(attributeName = "followers")  // Store followers as a list of user IDs
+    @DynamoDBAttribute(attributeName = "followers") // Store followers as a list of user IDs
     public List<Integer> getFollowers() {
         return followers;
     }
@@ -179,14 +208,22 @@ public class User {
         this.followers = followers;
     }
 
+    // New attribute to store the S3 key of the profile picture
+    @DynamoDBAttribute(attributeName = "profilePictureKey")
+    public String getProfilePictureKey() {
+        return profilePictureKey;
+    }
 
-        // New attribute to store the S3 key of the profile picture
-        @DynamoDBAttribute(attributeName = "profilePictureKey")
-        public String getProfilePictureKey() {
-            return profilePictureKey;
-        }
-    
-        public void setProfilePictureKey(String profilePictureKey) {
-            this.profilePictureKey = profilePictureKey;
-        }
+    public void setProfilePictureKey(String profilePictureKey) {
+        this.profilePictureKey = profilePictureKey;
+    }
+
+    @DynamoDBAttribute(attributeName = "promptHistory") // No need for a custom converter
+    public List<Map<String, String>> getPromptHistory() {
+        return promptHistory;
+    }
+
+    public void setPromptHistory(List<Map<String, String>> promptHistory) {
+        this.promptHistory = promptHistory;
+    }
 }

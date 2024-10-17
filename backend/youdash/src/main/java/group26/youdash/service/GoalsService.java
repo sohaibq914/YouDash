@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -38,6 +39,12 @@ public class GoalsService {
         } else {
             throw new NoSuchElementException("User ID : " + userId + " not found");
         }
+    }
+
+
+    public List<WatchTimeGoal> getUserGoals(int userId) {
+        User user = dynamoDBMapper.load(User.class, userId);
+        return user != null ? user.getWtgoals(): new ArrayList<>();
     }
 
 }
