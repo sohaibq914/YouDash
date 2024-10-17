@@ -21,6 +21,7 @@ function Login() {
         // Handle successful login
         console.log('Login successful', response.data);
         navigate("/" + response.data.id + "/home");
+        window.location.reload();
       })
       .catch(error => {
         // Handle login error

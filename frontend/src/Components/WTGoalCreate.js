@@ -73,7 +73,7 @@ function WTGoalCreate() {
     };
     console.log(userData);
     axios
-      .post("http://localhost:8080/goals/thename/create", userData)
+      .post("http://localhost:8080/goals/" + getUser() + "/create", userData)
       .then((response) => console.log(response))
       .catch((error) => {
         if (error.response.status == "409") {
@@ -86,6 +86,18 @@ function WTGoalCreate() {
         }
       });
   };
+
+  const getUser = () => {
+              let theUrl = window.location.href;
+              console.log(theUrl);
+              if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+                  return null;
+              }
+              console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+              return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
+
+          }
+
   return (
     <div className="WTGoalCreate">
       <form onSubmit={handleSubmit}>

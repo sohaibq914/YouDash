@@ -2,6 +2,7 @@ package group26.youdash.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
+import group26.youdash.classes.TimeOfDayGoal;
 import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.classes.QualityGoal;
 import group26.youdash.classes.YoutubeAPI.VideoHistory;
@@ -22,6 +23,8 @@ public class User {
     // private List<Goal> goals;
     private List<WatchTimeGoal> wtgoals;
     private List<QualityGoal> qgoals;
+
+    private List<TimeOfDayGoal> todgoals;
     private List<String> blocked;
     private List<String> availableCategories;
     private String bio; // Add the bio attribute here
@@ -142,6 +145,11 @@ public class User {
     public void setQgoals(List<QualityGoal> qgoals) {
         this.qgoals = qgoals;
     }
+
+
+    @DynamoDBAttribute(attributeName = "todgoals")
+    public List<TimeOfDayGoal> getTodgoals() { return todgoals; }
+    public void setTodgoals(List<TimeOfDayGoal> todgoals) { this.todgoals = todgoals; }
 
     @DynamoDBAttribute(attributeName = "blocked")
     public List<String> getBlocked() {

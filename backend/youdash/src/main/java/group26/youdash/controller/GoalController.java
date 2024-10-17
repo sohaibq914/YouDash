@@ -115,6 +115,7 @@ public class GoalController {
     @GetMapping("/{user}/view")
     public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
     {
+        System.out.println(user);
         int userId;
         if (user.equals("")) {
             userId = 12345;
