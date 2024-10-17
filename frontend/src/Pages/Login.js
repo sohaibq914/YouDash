@@ -20,7 +20,7 @@ function Login() {
       .then(response => {
         // Handle successful login
         console.log('Login successful', response.data);
-        navigate("/home");
+        navigate("/" + response.data.id + "/home");
       })
       .catch(error => {
         // Handle login error

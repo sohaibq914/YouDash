@@ -72,6 +72,48 @@ public class YoutubeAPIService {
     
     }
 
+    public String getVideoName(String youtubeUrl) throws Exception{
+
+        // Get the specifics video id
+        String videoID = extractVideoId(youtubeUrl);
+
+        // Make API request URL
+        // UriComponentsBuilder will make the url, including the parameters, to request from youtube api
+        String url = UriComponentsBuilder.fromHttpUrl( YOUTUBE_API_URL + "/videos")
+                .queryParam("part", "snippet")
+                .queryParam("id", videoID)
+                .queryParam("key", YOUTUBE_API_KEY)
+                .toUriString();
+        //System.out.println(url);
+
+        // ResponseEntity is in charge of making the API request
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+
+        // return category id once it's parsed
+        return parseVideoName(response.getBody());
+
+
+    }
+
+
+    private String parseVideoName(String json) throws Exception {
+        // initiate objectmapper object to map json to object
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // read the json and make it into a YouTubeVideoResponse object
+        YouTubeVideoResponse videoResponse = objectMapper.readValue(json, YouTubeVideoResponse.class);
+
+        // check if response if not empty
+        if(!videoResponse.getItems().isEmpty()) {
+            // Get snippet and return category id from the snippet
+            YouTubeSnippet youTubeSnippet = videoResponse.getItems().get(0).getSnippet();
+            return youTubeSnippet.getTitle();
+        }
+
+        throw new IllegalArgumentException("No video found for the provided ID");
+    }
+
     public float getVideoLength(String youtubeUrl) throws Exception{
 
         // Get the specifics video id
@@ -159,6 +201,8 @@ public class YoutubeAPIService {
     }
 
 
+
+/*
     public void addVideoURL(int userId, String url) {
         User user = dynamoDBMapper.load(User.class, userId);
         
@@ -181,7 +225,7 @@ public class YoutubeAPIService {
         else {
             throw new NoSuchElementException("User with ID " + userID + " not found");
         }
-    }
+    }*/
 
 
 
