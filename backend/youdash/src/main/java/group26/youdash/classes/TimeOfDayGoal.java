@@ -8,7 +8,6 @@ import group26.youdash.model.User;
 import group26.youdash.service.YoutubeAPIService;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
@@ -17,68 +16,114 @@ import java.util.ArrayList;
 public class TimeOfDayGoal extends Goal{
 
     //time to watch
-    public LocalDateTime startWatch;
-    public LocalDateTime endWatch;
+    public int startWatchHour;
+    public int startWatchMinute;
+    public int endWatchHour;
+    public int endWatchMinute;
     //time to avoid, can be all other than above
-    public LocalDateTime startAvoid;
-    public LocalDateTime endAvoid;
+    public int startAvoidHour;
+    public int startAvoidMinute;
+    public int endAvoidHour;
+    public int endAvoidMinute;
 
     // multiplier
-    float multiplier;
+    public float multiplier;
 
     //optional categories
-    int categoryWatch;
-    int categoryAvoid;
+    public String categoryWatch;
+    public String categoryAvoid;
 
     public TimeOfDayGoal(){};
 
-    public TimeOfDayGoal(String goalName, String goalDescription, float goalProgress, String userID,
-                         LocalDateTime startWatch, LocalDateTime endWatch, LocalDateTime startAvoid,
-                         LocalDateTime endAvoid, float multiplier, int categoryWatch, int categoryAvoid) {
-        super(goalName, goalDescription, goalProgress, userID);
-        this.startWatch = startWatch;
-        this.endWatch = endWatch;
-        this.startAvoid = startAvoid;
-        this.endAvoid = endAvoid;
+    public TimeOfDayGoal(String goalName, String goalDescription, String userID,
+                         int startWatchHour, int startWatchMinute, int endWatchHour, int endWatchMinute,
+                         int startAvoidHour, int startAvoidMinute, int endAvoidHour, int endAvoidMinute,
+                         float multiplier, String categoryWatch, String categoryAvoid) {
+        super(goalName, goalDescription, 0.0f, userID);
+        this.startWatchHour = startWatchHour;
+        this.startWatchMinute = startWatchMinute;
+        this.endWatchHour = endWatchHour;
+        this.endWatchMinute = endWatchMinute;
+        this.startAvoidHour = startAvoidHour;
+        this.startAvoidMinute = startAvoidMinute;
+        this.endAvoidHour = endAvoidHour;
+        this.endAvoidMinute = endAvoidMinute;
         this.multiplier = multiplier;
         this.categoryWatch = categoryWatch;
         this.categoryAvoid = categoryAvoid;
+
     }
 
-    @DynamoDBAttribute(attributeName = "startWatch")
-    public LocalDateTime getStartWatch() {
-        return startWatch;
+    @DynamoDBAttribute(attributeName = "startWatchHour")
+    public int getStartWatchHour() {
+        return startWatchHour;
     }
 
-    public void setStartWatch(LocalDateTime startWatch) {
-        this.startWatch = startWatch;
+    public void setStartWatchHour(int startWatchHour) {
+        this.startWatchHour = startWatchHour;
     }
 
-    @DynamoDBAttribute(attributeName = "endWatch")
-    public LocalDateTime getEndWatch() {
-        return endWatch;
+    @DynamoDBAttribute(attributeName = "startWatchMinute")
+    public int getStartWatchMinute() {
+        return startWatchMinute;
     }
 
-    public void setEndWatch(LocalDateTime endWatch) {
-        this.endWatch = endWatch;
+    public void setStartWatchMinute(int startWatchMinute) {
+        this.startWatchMinute = startWatchMinute;
     }
 
-    @DynamoDBAttribute(attributeName = "startAvoid")
-    public LocalDateTime getStartAvoid() {
-        return startAvoid;
+    @DynamoDBAttribute(attributeName = "endWatchMinute")
+    public int getEndWatchMinute() {
+        return endWatchMinute;
     }
 
-    public void setStartAvoid(LocalDateTime startAvoid) {
-        this.startAvoid = startAvoid;
+    public void setEndWatchMinute(int endWatchMinute) {
+        this.endWatchMinute = endWatchMinute;
     }
 
-    @DynamoDBAttribute(attributeName = "endAvoid")
-    public LocalDateTime getEndAvoid() {
-        return endAvoid;
+    @DynamoDBAttribute(attributeName = "endWatchHour")
+    public int getEndWatchHour() {
+        return endWatchHour;
     }
 
-    public void setEndAvoid(LocalDateTime endAvoid) {
-        this.endAvoid = endAvoid;
+    public void setEndWatchHour(int endWatchHour) {
+        this.endWatchHour = endWatchHour;
+    }
+
+    @DynamoDBAttribute(attributeName = "startAvoidHour")
+    public int getStartAvoidHour() {
+        return startAvoidHour;
+    }
+
+    public void setStartAvoidHour(int startAvoidHour) {
+        this.startAvoidHour = startAvoidHour;
+    }
+
+    @DynamoDBAttribute(attributeName = "startAvoidMinute")
+    public int getStartAvoidMinute() {
+        return startAvoidMinute;
+    }
+
+    public void setStartAvoidMinute(int startAvoidMinute) {
+        this.startAvoidMinute = startAvoidMinute;
+    }
+
+    @DynamoDBAttribute(attributeName = "endAvoidHour")
+    public int getEndAvoidHour() {
+        return endAvoidHour;
+    }
+
+    public void setEndAvoidHour(int endAvoidHour) {
+        this.endAvoidHour = endAvoidHour;
+    }
+
+    @DynamoDBAttribute(attributeName = "endAvoidMinute")
+    public int getEndAvoidMinute() {
+        return endAvoidMinute;
+    }
+
+    public void setEndAvoidMinute(int endAvoidMinute) {
+        this.endAvoidMinute = endAvoidMinute;
     }
 
     @DynamoDBAttribute(attributeName = "multiplier")
@@ -91,25 +136,42 @@ public class TimeOfDayGoal extends Goal{
     }
 
     @DynamoDBAttribute(attributeName = "categoryWatch")
-    public int getCategoryWatch() {
+    public String getCategoryWatch() {
         return categoryWatch;
     }
 
-    public void setCategoryWatch(int categoryWatch) {
+    public void setCategoryWatch(String categoryWatch) {
         this.categoryWatch = categoryWatch;
     }
 
     @DynamoDBAttribute(attributeName = "categoryAvoid")
-    public int getCategoryAvoid() {
+    public String getCategoryAvoid() {
         return categoryAvoid;
     }
 
-    public void setCategoryAvoid(int categoryAvoid) {
+    public void setCategoryAvoid(String categoryAvoid) {
         this.categoryAvoid = categoryAvoid;
     }
 
     @Override
     public float computeProgress() {
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "TimeOfDayGoal{" +
+                "startWatchHour=" + startWatchHour +
+                ", startWatchMinute=" + startWatchMinute +
+                ", endWatchHour=" + endWatchHour +
+                ", endWatchMinute=" + endWatchMinute +
+                ", startAvoidHour=" + startAvoidHour +
+                ", startAvoidMinute=" + startAvoidMinute +
+                ", endAvoidHour=" + endAvoidHour +
+                ", endAvoidMinute=" + endAvoidMinute +
+                ", multiplier=" + multiplier +
+                ", categoryWatch=" + categoryWatch +
+                ", categoryAvoid=" + categoryAvoid +
+                '}';
     }
 }

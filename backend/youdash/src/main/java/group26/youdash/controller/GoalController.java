@@ -3,6 +3,7 @@ package group26.youdash.controller;
 
 import group26.youdash.classes.Goal;
 import group26.youdash.classes.QualityGoal;
+import group26.youdash.classes.TimeOfDayGoal;
 import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.service.GoalsService;
 import group26.youdash.service.UserService;
@@ -47,6 +48,7 @@ public class GoalController {
     public ResponseEntity<String> createGoal(@PathVariable("user") String user, @RequestBody Goal goal) {
         System.out.println(user);
         System.out.println(goal);
+        System.out.println((TimeOfDayGoal)goal);
         //System.out.println((QualityGoal) goal);
 
         int userId = 12345;
