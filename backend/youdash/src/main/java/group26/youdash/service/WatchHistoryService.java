@@ -167,4 +167,26 @@ public class WatchHistoryService {
             throw new NoSuchElementException("User with ID " + userID + " not found");
         }
     }
+
+    public float getWatchTimeByCustomTime(int userID, LocalDateTime start, LocalDateTime end) {
+        User user = dynamoDBMapper.load(User.class, userID);
+
+        if (user != null) {
+            // Get the list of urls from the watch history list
+            List<VideoHistory> watchHistory = user.getHistory();
+
+            if (watchHistory == null) {
+                return 0.0f;
+            }
+            float total = 0.0f;
+            for (VideoHistory vh : watchHistory) {
+                if (LocalDateTime.parse(vh.getTimeStamp()).isAfter(start) && LocalDateTime.parse(vh.getTimeStamp()).isBefore(end)) {
+                    total += vh.getDuration();
+                }
+            }
+            return total;
+        } else {
+            throw new NoSuchElementException("User with ID " + userID + " not found");
+        }
+    }
 }

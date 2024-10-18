@@ -33,6 +33,9 @@ public class TimeOfDayGoal extends Goal{
     public String categoryWatch;
     public String categoryAvoid;
 
+    public float goodTime;
+    public float badTime;
+
     public TimeOfDayGoal(){};
 
     public TimeOfDayGoal(String goalName, String goalDescription, String userID,
@@ -61,6 +64,24 @@ public class TimeOfDayGoal extends Goal{
 
     public void setStartWatchHour(int startWatchHour) {
         this.startWatchHour = startWatchHour;
+    }
+
+    @DynamoDBAttribute(attributeName = "goodTime")
+    public float getGoodTime() {
+        return goodTime;
+    }
+
+    public void setGoodTime(float goodTime) {
+        this.goodTime = goodTime;
+    }
+
+    @DynamoDBAttribute(attributeName = "badTime")
+    public float getBadTime() {
+        return badTime;
+    }
+
+    public void setBadTime(float badTime) {
+        this.badTime = badTime;
     }
 
     @DynamoDBAttribute(attributeName = "startWatchMinute")
@@ -155,7 +176,9 @@ public class TimeOfDayGoal extends Goal{
 
     @Override
     public float computeProgress() {
-        return 0;
+
+        setGoalProgress((goodTime * multiplier)/badTime);
+        return (goodTime * multiplier)/badTime;
     }
 
     @Override
