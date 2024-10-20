@@ -129,4 +129,12 @@ public class OpenAIService {
     }
     
 
+    public List<Map<String, String>> getPromptHistory(int userId) {
+        // Load the user from DynamoDB
+        User user = dbMapper.load(User.class, userId);
+
+        // Fetch the user's prompt history
+        return user.getPromptHistory();
+    }
+
 }

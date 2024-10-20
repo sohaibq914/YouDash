@@ -14,6 +14,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Routes, Route, Link } from "react-router-dom"; // Remove Router and only import Routes and Route
 import FollowersPage from "./Pages/FollowersPage.js";
+import PromptHistory from "./Pages/PromptHistory.tsx";
 
 function RouterPages() {
   return (
@@ -33,6 +34,7 @@ function RouterPages() {
         <Route path="/:userId/profile" element={<Profile />} />
         <Route path="/:userId/watch-history" element={<WatchHistory />} />
         <Route path="/:userId/followers" element={<FollowersPage />} />
+        <Route path="/ai/:userId/promptHistory" element={<PromptHistory />} />
       </Routes>
     </div>
   );

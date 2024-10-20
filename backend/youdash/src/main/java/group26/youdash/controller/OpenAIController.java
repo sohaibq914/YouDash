@@ -2,9 +2,10 @@ package group26.youdash.controller;
 
 import group26.youdash.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/ai")
@@ -26,6 +27,17 @@ public class OpenAIController {
             return new ResponseEntity<>("Error generating recommendations", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @GetMapping(path = "/{userId}/prompt-history")
+    public ResponseEntity<List<Map<String, String>>> getPromptHistory(@PathVariable("userId") int userId) {
+
+        try {
+            List<Map<String, String>> promptHistory = openAIService.getPromptHistory(userId);
+            return ResponseEntity.ok(promptHistory);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
