@@ -54,4 +54,30 @@ public class GoalsService {
         return user != null ? user.getWtgoals(): new ArrayList<>();
     }
 
+        // Get all goals (WatchTimeGoal, QualityGoal, TimeOfDayGoal) for a user
+        public List<Goal> getGoalsByUserId(int userId) {
+            User user = dynamoDBMapper.load(User.class, userId);
+    
+            if (user == null) {
+                throw new NoSuchElementException("User ID : " + userId + " not found");
+            }
+    
+            // Combine all goals into a single list
+            List<Goal> allGoals = new ArrayList<>();
+            
+            if (user.getWtgoals() != null) {
+                allGoals.addAll(user.getWtgoals());
+            }
+            if (user.getQgoals() != null) {
+                allGoals.addAll(user.getQgoals());
+            }
+            if (user.getTodgoals() != null) {
+                allGoals.addAll(user.getTodgoals());
+            }
+    
+            return allGoals;
+        }
+
+    
+
 }

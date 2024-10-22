@@ -116,18 +116,19 @@ public class GoalController {
           "Trailers"
     ));
     @GetMapping("/{user}/view")
-    public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
-    {
+    public ArrayList<Goal> viewGoal(@PathVariable("user") String user) {
         System.out.println(user);
-        int userId;
-        if (user.equals("")) {
-            userId = 12345;
-        } else {
-            userId = Integer.parseInt(user);
+        int userId = user.equals("") ? 12345 : Integer.parseInt(user);
+    
+        // Fetch goals from DynamoDB if temp is empty
+        if (temp.isEmpty()) {
+            temp.addAll(gs.getGoalsByUserId(userId));  // Directly add to the class-level temp
+            System.out.println("YOOOO" + temp);
         }
-        //whs.addVideo(userId, "https://www.youtube.com/watch?v=AqvyzO3IPXc");
-        //ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
-        updateAllGoalsProgress(userId);
+    
+        updateAllGoalsProgress(userId); // Update progress based on user activity
+        System.out.println("TEMP " + temp);
+    
         return temp;
     }
 

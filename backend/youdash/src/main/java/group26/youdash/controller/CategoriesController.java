@@ -88,6 +88,4 @@ public class CategoriesController {
         bcs.addBlockedCategory(userID, categoryName);
         return "Category added successfully!";
     }
-
-    
 }
