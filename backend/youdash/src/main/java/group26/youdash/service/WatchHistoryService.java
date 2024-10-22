@@ -85,6 +85,7 @@ public class WatchHistoryService {
             for (VideoHistory vh : watchHistory) {
                 total += vh.getDuration();
             }
+            System.out.println("TOTAL: " + total);
             return total;
         } else {
             throw new NoSuchElementException("User with ID " + userID + " not found");
@@ -93,6 +94,8 @@ public class WatchHistoryService {
 
     public float getWatchTimeByCategory(int userID, int category) {
         User user = dynamoDBMapper.load(User.class, userID);
+        System.out.println("CATEGORY!!!" + category);
+        System.out.println("userID!!!" + userID);
 
         if (user != null) {
             // Get the list of urls from the watch history list
