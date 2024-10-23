@@ -77,7 +77,7 @@ function TODGoalCreate() {
                 <h3 className="inputLabel">Goal Name:</h3>
               </td>
               <td>
-                <input type="text" id="goalNameQ" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
+                <input type="text" id="goalNameTOD" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
               </td>
             </tr>
             <tr>
@@ -85,7 +85,7 @@ function TODGoalCreate() {
                 <h3 className="inputLabel">Goal Description:</h3>
               </td>
               <td>
-                <input type="text" id="goalDescriptionQ" name="goalDescription" required={false} onChange={handleChange} value={data.goalDescription} />
+                <input type="text" id="goalDescriptionTOD" name="goalDescription" required={false} onChange={handleChange} value={data.goalDescription} />
               </td>
             </tr>
             <tr>
@@ -229,7 +229,7 @@ function TODGoalCreate() {
                 <h3 className="inputLabel">Multiplier:</h3>
               </td>
               <td>
-                <input type="number" style={{ width: "100%" }} id="multiplier" name="multiplier" required={true} onChange={handleChange} value={data.multiplier} />
+                <input type="number" style={{ width: "100%" }} id="multiplierTOD" name="multiplier" required={true} onChange={handleChange} value={data.multiplier} />
               </td>
             </tr>
             <tr>
@@ -239,7 +239,7 @@ function TODGoalCreate() {
             </tr>
             <tr>
               <td colSpan="2">
-                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmitQ">
+                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmitTOD">
                   Create Goal
                 </button>
               </td>
