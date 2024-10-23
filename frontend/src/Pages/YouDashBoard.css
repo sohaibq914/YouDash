@@ -1,0 +1,34 @@
+.titleDash {
+    text-align: center;
+    margin: auto;
+    background-color: #02CCDD;
+    font-weight: bold;
+    padding-top: 1%;
+    padding-bottom: 1%;
+
+}
+
+.YouDashBoard table {
+    width: 90%;
+    margin-top: 3%;
+    margin-left: 5%;
+    margin-right:5%;
+    border-collapse: separate;
+    border-spacing: 1em;
+}
+
+.YouDashBoard tbody {
+    width:100%;
+
+}
+
+.YouDashBoard td {
+    padding: 2%;
+    width: 50%;
+    vertical-align: top;
+    background: #232323;
+}
+
+.YouDashBoard tr {
+    width: 100%;
+}

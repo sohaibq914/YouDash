@@ -15,6 +15,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Routes, Route, Link } from "react-router-dom"; // Remove Router and only import Routes and Route
 import FollowersPage from "./Pages/FollowersPage.js";
 import WatchtimeLeaderboard from "./Pages/WatchtimeLeaderboard.js";
+import YouDashBoard from "./Pages/YouDashBoard"
 
 function RouterPages() {
   return (
@@ -23,6 +24,7 @@ function RouterPages() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/:userId/home" element={<Home />} />
+        <Route path="/:userId/youDashBoard" element={<YouDashBoard />} />
         <Route path="/:userId/block-categories" element={<BlockedPage />} />
         <Route path="/:userId/goalsCreate" element={<GoalCreate />} />
         <Route path="/:userId/goalsView" element={<GoalView />} />
