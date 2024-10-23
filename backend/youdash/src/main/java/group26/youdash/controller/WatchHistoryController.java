@@ -51,4 +51,27 @@ public class WatchHistoryController {
 
         return new ResponseEntity<>("Video added successfully to the watch history", HttpStatus.OK);
     }
+
+
+        // Endpoint to get the total watch time for a user
+        @GetMapping("/{userID}/totalWatchTime")
+        public ResponseEntity<Float> getTotalWatchTime(@PathVariable int userID) {
+            try {
+                float totalWatchTime = whs.getWatchTimeTotal(userID);
+                return ResponseEntity.ok(totalWatchTime);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    
+        // Endpoint to get the watch time filtered by category
+        @GetMapping("/{userID}/watchTimeByCategory/{category}")
+        public ResponseEntity<Float> getWatchTimeByCategory(@PathVariable int userID, @PathVariable int category) {
+            try {
+                float totalWatchTime = whs.getWatchTimeByCategory(userID, category);
+                return ResponseEntity.ok(totalWatchTime);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
 }
