@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./YouDashBoard.css";
+import PieChart from "../Components/PieChart";
 
 function YouDashBoard() {
 
@@ -8,6 +9,7 @@ function YouDashBoard() {
 
   const fullLeft1  = (e) => {
     changeStatus1(1);
+    console.log("resize");
   }
 
   const fullRight1  = (e) => {
@@ -42,19 +44,9 @@ function YouDashBoard() {
                 <tr>
                     <td>
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1left" onClick={fullLeft1}>Expand</button>
-                        <p> Pie Chart Placeholder 1</p>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        Pie
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
+                        <div className="halfPie">
+                            <PieChart />
+                        </div>
                     </td>
                     <td>
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1right" onClick={fullRight1}>Expand</button>
@@ -67,31 +59,9 @@ function YouDashBoard() {
                 <tr>
                     <td colSpan="2">
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1left" onClick={split1}>Split</button>
-                        <p> Pie Chart Placeholder 1</p>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        Pie
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
+                        <div className="fullPie">
+                            <PieChart />
+                        </div>
                     </td>
                 </tr>
 
