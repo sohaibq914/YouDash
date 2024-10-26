@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import chart from "chart.js";
 
+import Confetti from 'react-confetti';
+
 import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -9,13 +11,18 @@ import "./PieChart.css";
 ChartJS.register(ArcElement, Tooltip, Legend);
 function PieChart() {
     const [percent, setPercent] = useState(0);
-
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
     useEffect (() => {
         axios
             .get("http://localhost:8080/goals/" + getUser() + "/pie")
             .then(function (response) {
-                setPercent(response.data);
+                if (response.data > 1) {
+                    setPercent(1);
+                } else {
+                    setPercent(response.data);
+                }
             })
             .catch((error) => console.error(error));
     }, []);
@@ -52,6 +59,14 @@ function PieChart() {
     }, []);
     return (
     <div className="PieChart">
+    {(percent >= 1) ? (
+    <>
+        <Confetti width={width} height={height} />
+    </>
+    ) : (
+    <>
+    </>
+    )}
         <Pie data={data} style={{width: "100%"}}/>
     </div>
     );
