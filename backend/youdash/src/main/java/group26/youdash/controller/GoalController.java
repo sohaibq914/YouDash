@@ -3,6 +3,7 @@ package group26.youdash.controller;
 
 import group26.youdash.classes.Goal;
 import group26.youdash.classes.QualityGoal;
+import group26.youdash.classes.TimeOfDayGoal;
 import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.service.GoalsService;
 import group26.youdash.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
@@ -47,6 +49,7 @@ public class GoalController {
     public ResponseEntity<String> createGoal(@PathVariable("user") String user, @RequestBody Goal goal) {
         System.out.println(user);
         System.out.println(goal);
+        //System.out.println((TimeOfDayGoal)goal);
         //System.out.println((QualityGoal) goal);
 
         int userId = 12345;
@@ -115,6 +118,7 @@ public class GoalController {
     @GetMapping("/{user}/view")
     public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
     {
+        System.out.println(user);
         int userId;
         if (user.equals("")) {
             userId = 12345;
@@ -123,6 +127,34 @@ public class GoalController {
         }
         //whs.addVideo(userId, "https://www.youtube.com/watch?v=AqvyzO3IPXc");
         //ArrayList<String> vids = (ArrayList<String>) us.getUserHistory(userId);
+        updateAllGoalsProgress(userId);
+        return temp;
+    }
+
+    @GetMapping("/{user}/pie")
+    public float pieGoal(@PathVariable("user") String user)
+    {
+        System.out.println(user);
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
+        updateAllGoalsProgress(userId);
+        int numGoals = temp.size();
+        float progress = 0.0f;
+        for (int i = 0; i < numGoals; i++) {
+            if (temp.get(i) instanceof WatchTimeGoal && ((WatchTimeGoal) temp.get(i)).watchLessThanGoal) {
+                progress += 1 - temp.get(i).getGoalProgress();
+            } else {
+                progress += temp.get(i).getGoalProgress();
+            }
+        }
+        return progress / numGoals;
+    }
+
+    private void updateAllGoalsProgress(int userId) {
         for(int i = 0; i < temp.size(); i++) {
             if (temp.get(i) instanceof WatchTimeGoal) {
                 try {
@@ -151,9 +183,67 @@ public class GoalController {
                     System.out.println(e.getMessage());
                 }
             }
+            if (temp.get(i) instanceof TimeOfDayGoal) {
+                try {
+                    System.out.println("Time of day goal!");
+                    float goodTime =0.0f;
+                    float badTime = 0.0f;
+                    for (int d = 1; d <= 7; d++) {
+                        LocalDateTime start = LocalDateTime.now();
+                        LocalDateTime end = LocalDateTime.now();
+                        if (start.getMinute() > ((TimeOfDayGoal) temp.get(i)).getStartWatchMinute() && start.getHour() > ((TimeOfDayGoal) temp.get(i)).getStartWatchHour()) {
+                            start = start.minusDays(d-1);
+                            end = end.minusDays(d-1);
+                        } else {
+                            start = start.minusDays(d);
+                            end = end.minusDays(d);
+                        }
+                        start = start.withMinute(((TimeOfDayGoal) temp.get(i)).startWatchMinute);
+                        start = start.withHour(((TimeOfDayGoal) temp.get(i)).startWatchHour);
+                        start = start.withSecond(0);
+
+                        end = end.withMinute(((TimeOfDayGoal) temp.get(i)).endWatchMinute);
+                        end = end.withHour(((TimeOfDayGoal) temp.get(i)).endWatchHour);
+                        end = end.withSecond(0);
+
+                        LocalDateTime starta = LocalDateTime.now();
+                        LocalDateTime enda = LocalDateTime.now();
+                        if (starta.getMinute() > ((TimeOfDayGoal) temp.get(i)).getStartAvoidMinute() && starta.getHour() > ((TimeOfDayGoal) temp.get(i)).getStartAvoidHour()) {
+                            starta = starta.minusDays(d-1);
+                            enda = enda.minusDays(d-1);
+                        } else {
+                            starta = starta.minusDays(d);
+                            enda = enda.minusDays(d);
+                        }
+                        starta = starta.withMinute(((TimeOfDayGoal) temp.get(i)).startAvoidMinute);
+                        starta = starta.withHour(((TimeOfDayGoal) temp.get(i)).startAvoidHour);
+                        starta = starta.withSecond(0);
+
+                        enda = enda.withMinute(((TimeOfDayGoal) temp.get(i)).endAvoidMinute);
+                        enda = enda.withHour(((TimeOfDayGoal) temp.get(i)).endAvoidHour);
+                        enda = enda.withSecond(0);
+                        System.out.println(start + "\n" + end);
+                        if (((TimeOfDayGoal) temp.get(i)).getCategoryWatch().equals("ALL")) {
+                            goodTime += whs.getWatchTimeByCustomTime(userId, start, end);
+                        } else {
+                            goodTime += whs.getWatchTimeByCategoryAndCustomTime(userId, matches.indexOf(((TimeOfDayGoal) temp.get(i)).getCategoryWatch()) + 1, start, end);
+                        }
+                        if (((TimeOfDayGoal) temp.get(i)).getCategoryAvoid().equals("ALL")) {
+                            badTime += whs.getWatchTimeByCustomTime(userId, starta, enda);
+                        } else {
+                            badTime += whs.getWatchTimeByCategoryAndCustomTime(userId, matches.indexOf(((TimeOfDayGoal) temp.get(i)).getCategoryAvoid()) + 1, starta, enda);
+                        }
+
+                    }
+
+                    ((TimeOfDayGoal) temp.get(i)).setBadTime(badTime);
+                    ((TimeOfDayGoal) temp.get(i)).setGoodTime(goodTime);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
             temp.get(i).computeProgress();
         }
-        return temp;
     }
 
     private static class updateGoalPackage {

@@ -47,6 +47,49 @@ function GoalEditComponent(props) {
             submitChange(e);
           };
 
+  const updateCategoryWatch = (e) => {
+            goal.categoryWatch = document.getElementById('categoryWatch' + uniqueId).value;
+            submitChange(e);
+          };
+
+  const updateCategoryAvoid = (e) => {
+          goal.categoryAvoid = document.getElementById('categoryAvoid' + uniqueId).value;
+          submitChange(e);
+        };
+    const handleChangeEAH = (e) => {
+            goal.endAvoidHour = document.getElementById('endAvoidHour' + uniqueId).value;
+            submitChange(e);
+          };
+
+    const handleChangeEAM = (e) => {
+        goal.endAvoidMinute = document.getElementById('endAvoidMinute' + uniqueId).value;
+        submitChange(e);
+      };
+      const handleChangeSAM = (e) => {
+          goal.startAvoidMinute = document.getElementById('startAvoidMinute' + uniqueId).value;
+          submitChange(e);
+        };
+      const handleChangeSAH = (e) => {
+          goal.startAvoidHour = document.getElementById('startAvoidHour' + uniqueId).value;
+          submitChange(e);
+        };
+      const handleChangeSWH = (e) => {
+          goal.startWatchHour = document.getElementById('startWatchHour' + uniqueId).value;
+          submitChange(e);
+        };
+       const handleChangeSWM = (e) => {
+         goal.startWatchMinute = document.getElementById('startWatchMinute' + uniqueId).value;
+         submitChange(e);
+       };
+       const handleChangeEWM = (e) => {
+         goal.endWatchMinute = document.getElementById('endWatchMinute' + uniqueId).value;
+         submitChange(e);
+       };
+       const handleChangeEWH = (e) => {
+         goal.endWatchHour = document.getElementById('endWatchHour' + uniqueId).value;
+         submitChange(e);
+       };
+
     const updateGoalWatchTime = (e) => {
         const newWT =  document.getElementById('goalWatchTime' + uniqueId).value;
         if (newWT <= maxWT) {
@@ -94,7 +137,11 @@ function GoalEditComponent(props) {
         if (!goal.hasOwnProperty("multiplier")) {
             goal["@type"] = "WatchTimeGoal";
         } else {
-            goal["@type"] = "QualityGoal";
+            if (!goal.hasOwnProperty("startAvoidMinute")) {
+                goal["@type"] = "QualityGoal";
+            } else {
+                goal["@type"] = "TimeOfDayGoal";
+            }
         }
         const goalUpdate = {
             originalName: originalGoalName,
@@ -114,7 +161,11 @@ function GoalEditComponent(props) {
         if (!goal.hasOwnProperty("multiplier")) {
             goal["@type"] = "WatchTimeGoal";
         } else {
-            goal["@type"] = "QualityGoal";
+            if (!goal.hasOwnProperty("startAvoidMinute")) {
+                goal["@type"] = "QualityGoal";
+            } else {
+                goal["@type"] = "TimeOfDayGoal";
+            }
         }
         axios
                   .post("http://localhost:8080/goals/thename/delete", goal)
@@ -222,6 +273,174 @@ function GoalEditComponent(props) {
         </>
         ) : (
         <>
+        {(!goal?.categoryToAvoid || false) ? (
+        <>
+
+        <tr>
+                    <td>
+                        <h3 className="inputLabel">Time to Watch Start:</h3>
+                    </td>
+                    <td>
+
+                        <input type="number" style={{ width: "20%" }} id={'startWatchHour' + uniqueId} name="startWatchHour" min="0" max="23" required={true} onChange={handleChangeSWH} defaultValue={goal?.startWatchHour || '0'} />
+                        :
+                        <input type="number" style={{ width: "40%" }} id={'startWatchMinute' + uniqueId} name="startWatchMinute" min="0" max="59" required={true} onChange={handleChangeSWM} defaultValue={goal?.startWatchMinute || '0'} />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <h3 className="inputLabel">Time to Watch End:</h3>
+                    </td>
+                    <td>
+
+                        <input type="number" style={{ width: "20%" }} id={'endWatchHour' + uniqueId} name="endWatchHour" min="0" max="23" required={true} onChange={handleChangeEWH} defaultValue={goal?.endWatchHour || '0'} />
+                        :
+                        <input type="number" style={{ width: "40%" }} id={'endWatchMinute' + uniqueId} name="endWatchMinute" min="0" max="59" required={true} onChange={handleChangeEWH} defaultValue={goal?.endWatchMinute || '0'} />
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td>
+                        <h3 className="inputLabel">Time to Avoid Start:</h3>
+                    </td>
+                    <td>
+
+                        <input type="number" style={{ width: "20%" }} id={'startAvoidHour' + uniqueId} name="startAvoidHour" min="0" max="23" required={true} onChange={handleChangeSAH} defaultValue={goal?.startAvoidHour || '0'} />
+                        :
+                        <input type="number" style={{ width: "40%" }} id={'startAvoidMinute' + uniqueId} name="startAvoidMinute" min="0" max="59" required={true} onChange={handleChangeSAM} defaultValue={goal?.startAvoidMinute || '0'} />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <h3 className="inputLabel">Time to Avoid End:</h3>
+                    </td>
+                    <td>
+
+                        <input type="number" style={{ width: "20%" }} id={'endAvoidHour' + uniqueId} name="endAvoidHour" min="0" max="23" required={true} onChange={handleChangeEAH} defaultValue={goal?.endAvoidHour || '0'} />
+                        :
+                        <input type="number" style={{ width: "40%" }} id={'endAvoidMinute' + uniqueId} name="endAvoidMinute" min="0" max="59" required={true} onChange={handleChangeEAM} defaultValue={goal?.endAvoidMinute || '0'} />
+                    </td>
+
+                </tr>
+
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Category To Avoid: </h3>
+                </td>
+                <td>
+                    <select id={'categoryAvoid' + uniqueId} defaultValue={goal.categoryToAvoid} name="categoryAvoid" onChange={updateCategoryAvoid}>
+                      <option value="ALL">All Categories</option>
+                        <option value="Film & Animation">Film & Animation</option>
+                        <option value="Autos & Vehicles">Autos & Vehicles</option>
+                        <option value="Music">Music</option>
+                        <option value="Pets & Animals">Pets & Animals</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Short Movies">Short Movies</option>
+                        <option value="Travel & Events">Travel & Events</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Videoblogging">Videoblogging</option>
+                        <option value="People & Blogs">People & Blogs</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="News & Politics">News & Politics</option>
+                        <option value="Howto & Style">Howto & Style</option>
+                        <option value="Education">Education</option>
+                        <option value="Science & Technology">Science & Technology</option>
+                        <option value="Nonprofits & Activism">Nonprofits & Activism</option>
+                        <option value="Movies">Movies</option>
+                        <option value="Anime/Animation">Anime/Animation</option>
+                        <option value="Action/Adventure">Action/Adventure</option>
+                        <option value="Classics">Classics</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Documentary">Documentary</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Family">Family</option>
+                        <option value="Foreign">Foreign</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Sci-Fi/Fantasy">Sci-Fi/Fantasy</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="Shorts">Shorts</option>
+                        <option value="Shows">Shows</option>
+                        <option value="Trailers">Trailers</option>
+
+                    </select>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Bad watchtime: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.badTime || "0"}</h3>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Category To Watch: </h3>
+                </td>
+                <td>
+                    <select id={'categoryWatch' + uniqueId} defaultValue={goal.categoryWatch} name="categoryWatch" onChange={updateCategoryWatch}>
+                      <option value="ALL">All Categories</option>
+                                      <option value="Film & Animation">Film & Animation</option>
+                                      <option value="Autos & Vehicles">Autos & Vehicles</option>
+                                      <option value="Music">Music</option>
+                                      <option value="Pets & Animals">Pets & Animals</option>
+                                      <option value="Sports">Sports</option>
+                                      <option value="Short Movies">Short Movies</option>
+                                      <option value="Travel & Events">Travel & Events</option>
+                                      <option value="Gaming">Gaming</option>
+                                      <option value="Videoblogging">Videoblogging</option>
+                                      <option value="People & Blogs">People & Blogs</option>
+                                      <option value="Comedy">Comedy</option>
+                                      <option value="Entertainment">Entertainment</option>
+                                      <option value="News & Politics">News & Politics</option>
+                                      <option value="Howto & Style">Howto & Style</option>
+                                      <option value="Education">Education</option>
+                                      <option value="Science & Technology">Science & Technology</option>
+                                      <option value="Nonprofits & Activism">Nonprofits & Activism</option>
+                                      <option value="Movies">Movies</option>
+                                      <option value="Anime/Animation">Anime/Animation</option>
+                                      <option value="Action/Adventure">Action/Adventure</option>
+                                      <option value="Classics">Classics</option>
+                                      <option value="Comedy">Comedy</option>
+                                      <option value="Documentary">Documentary</option>
+                                      <option value="Drama">Drama</option>
+                                      <option value="Family">Family</option>
+                                      <option value="Foreign">Foreign</option>
+                                      <option value="Horror">Horror</option>
+                                      <option value="Sci-Fi/Fantasy">Sci-Fi/Fantasy</option>
+                                      <option value="Thriller">Thriller</option>
+                                      <option value="Shorts">Shorts</option>
+                                      <option value="Shows">Shows</option>
+                                      <option value="Trailers">Trailers</option>
+                    </select>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Good watchtime: </h3>
+                </td>
+                <td>
+                    <h3 style={{textAlign: "left", marginTop: "0.5rem"}}>{goal?.goodTime || "0"}</h3>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <h3 style={{marginTop: "0.5rem"}}>Multiplier: </h3>
+                </td>
+                <td>
+                    <input type="number" id={'multiplier' + uniqueId} defaultValue={goal?.multiplier || "0"} onBlur={updateMultiplier} />
+                </td>
+                </tr>
+
+                </>
+
+        ) : (
+        <>
+
         <tr>
         <td>
             <h3 style={{marginTop: "0.5rem"}}>Category To Avoid: </h3>
@@ -331,6 +550,8 @@ function GoalEditComponent(props) {
             <input type="number" id={'multiplier' + uniqueId} defaultValue={goal?.multiplier || "0"} onBlur={updateMultiplier} />
         </td>
         </tr>
+        </>
+        )}
         </>
         )}
         <tr>

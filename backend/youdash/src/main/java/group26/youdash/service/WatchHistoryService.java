@@ -85,6 +85,7 @@ public class WatchHistoryService {
             for (VideoHistory vh : watchHistory) {
                 total += vh.getDuration();
             }
+            System.out.println("TOTAL: " + total);
             return total;
         } else {
             throw new NoSuchElementException("User with ID " + userID + " not found");
@@ -93,6 +94,8 @@ public class WatchHistoryService {
 
     public float getWatchTimeByCategory(int userID, int category) {
         User user = dynamoDBMapper.load(User.class, userID);
+        System.out.println("CATEGORY!!!" + category);
+        System.out.println("userID!!!" + userID);
 
         if (user != null) {
             // Get the list of urls from the watch history list
@@ -159,6 +162,28 @@ public class WatchHistoryService {
             float total = 0.0f;
             for (VideoHistory vh : watchHistory) {
                 if (vh.getCategory() == category && LocalDateTime.parse(vh.getTimeStamp()).isAfter(start) && LocalDateTime.parse(vh.getTimeStamp()).isBefore(end)) {
+                    total += vh.getDuration();
+                }
+            }
+            return total;
+        } else {
+            throw new NoSuchElementException("User with ID " + userID + " not found");
+        }
+    }
+
+    public float getWatchTimeByCustomTime(int userID, LocalDateTime start, LocalDateTime end) {
+        User user = dynamoDBMapper.load(User.class, userID);
+
+        if (user != null) {
+            // Get the list of urls from the watch history list
+            List<VideoHistory> watchHistory = user.getHistory();
+
+            if (watchHistory == null) {
+                return 0.0f;
+            }
+            float total = 0.0f;
+            for (VideoHistory vh : watchHistory) {
+                if (LocalDateTime.parse(vh.getTimeStamp()).isAfter(start) && LocalDateTime.parse(vh.getTimeStamp()).isBefore(end)) {
                     total += vh.getDuration();
                 }
             }

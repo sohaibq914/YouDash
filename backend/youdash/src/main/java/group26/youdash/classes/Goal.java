@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = WatchTimeGoal.class, name = "WatchTimeGoal"),
+        @JsonSubTypes.Type(value = TimeOfDayGoal.class, name = "TimeOfDayGoal"),
         @JsonSubTypes.Type(value = QualityGoal.class, name = "QualityGoal")
     }
 )

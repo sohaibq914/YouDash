@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./QualityGoalCreate.css";
-// import navbar from "../Components/navbar";
+import "./TODGoalCreate.css";
 import { ReactNotifications } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import { Store } from 'react-notifications-component';
 import 'animate.css/animate.min.css';
+// import navbar from "../Components/navbar";
 
-function QualityGoalCreate() {
-  const [data, setData] = useState({ goalName: "", goalDescription: "", categoryToWatch: "", categoryToAvoid: "", multiplier: 0 });
+function TODGoalCreate() {
+  const [data, setData] = useState({ goalName: "", goalDescription: "", startWatchHour: 0, startWatchMinute: 0, endWatchHour: 0, endWatchMinute: 0, startAvoidHour: 0, startAvoidMinute: 0, endAvoidHour: 0, endAvoidMinute: 0, categoryWatch: "", categoryAvoid: "", multiplier: 0 });
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -21,51 +21,59 @@ function QualityGoalCreate() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const categoryToWatch = document.getElementById("categoryToWatch").value;
-    const categoryToAvoid = document.getElementById("categoryToAvoid").value;
+    const categoryWatch = document.getElementById("categoryWatch").value;
+    const categoryAvoid = document.getElementById("categoryAvoid").value;
     if (+data.multiplier <= 0) {
       Store.addNotification({
-                            title: "Goal Creation Error",
-                            message: "Invalid Multiplier! Must be greater than 0.",
-                            type: "warning",
-                            insert: "top",
-                            container: "top-right",
-                              animationIn: ["animate__animated", "animate__fadeIn"],
-                              animationOut: ["animate__animated", "animate__fadeOut"],
-                              dismiss: {
-                                duration: 5000,
-                                onScreen: true
-                              }
-                        });
+                  title: "Goal Creation Error",
+                  message: "Invalid multiplier! Must be greater than 0.",
+                  type: "warning",
+                  insert: "top",
+                  container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                      duration: 5000,
+                      onScreen: true
+                    }
+              });
       return;
     }
     const userData = {
-      "@type": "QualityGoal",
+      "@type": "TimeOfDayGoal",
       goalName: data.goalName,
       goalDescription: data.goalDescription,
-      categoryToWatch: categoryToWatch,
-      categoryToAvoid: categoryToAvoid,
+      categoryWatch: categoryWatch,
+      categoryAvoid: categoryAvoid,
+      startAvoidMinute: +data.startAvoidMinute,
+      startAvoidHour: +data.startAvoidHour,
+      startWatchHour: +data.startWatchHour,
+      startWatchMinute: +data.startWatchMinute,
+      endAvoidHour: +data.endAvoidHour,
+      endAvoidMinute: +data.endAvoidMinute,
+      endWatchHour: +data.endWatchHour,
+      endWatchMinute: +data.endWatchMinute,
       multiplier: +data.multiplier,
     };
     console.log(userData);
     axios
       .post("http://localhost:8080/goals/" + getUser() + "/create", userData)
       .then((response) => {
-          Store.addNotification({
-                                      title: "Goal Creation Success",
-                                      message: "Goal Created!",
-                                      type: "success",
-                                      insert: "top",
-                                      container: "top-right",
-                                        animationIn: ["animate__animated", "animate__fadeIn"],
-                                        animationOut: ["animate__animated", "animate__fadeOut"],
-                                        dismiss: {
-                                          duration: 5000,
-                                          onScreen: true
-                                        }
-                                  });
-          console.log(response)
-        })
+        Store.addNotification({
+                                    title: "Goal Creation Success",
+                                    message: "Goal Created!",
+                                    type: "success",
+                                    insert: "top",
+                                    container: "top-right",
+                                      animationIn: ["animate__animated", "animate__fadeIn"],
+                                      animationOut: ["animate__animated", "animate__fadeOut"],
+                                      dismiss: {
+                                        duration: 5000,
+                                        onScreen: true
+                                      }
+                                });
+        console.log(response)
+      })
       .catch((error) => {
         if (error.response.status == "409") {
           Store.addNotification({
@@ -103,7 +111,7 @@ function QualityGoalCreate() {
           }
 
   return (
-    <div className="QualityGoalCreate">
+    <div className="TODGoalCreate">
       <form onSubmit={handleSubmit}>
         <table className="tableGoal">
           <tbody>
@@ -112,7 +120,7 @@ function QualityGoalCreate() {
                 <h3 className="inputLabel">Goal Name:</h3>
               </td>
               <td>
-                <input type="text" id="goalNameQ" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
+                <input type="text" id="goalNameTOD" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
               </td>
             </tr>
             <tr>
@@ -120,15 +128,64 @@ function QualityGoalCreate() {
                 <h3 className="inputLabel">Goal Description:</h3>
               </td>
               <td>
-                <input type="text" id="goalDescriptionQ" name="goalDescription" required={true} onChange={handleChange} value={data.goalDescription} />
+                <input type="text" id="goalDescriptionTOD" name="goalDescription" required={true} onChange={handleChange} value={data.goalDescription} />
               </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3 className="inputLabel">Time to Watch Start:</h3>
+                </td>
+                <td>
+
+                    <input type="number" style={{ width: "20%" }} id="startWatchHour" name="startWatchHour" min="0" max="23" required={true} onChange={handleChange} value={data.startWatchHour} />
+                    :
+                    <input type="number" style={{ width: "40%" }} id="startWatchMinute" name="startWatchMinute" min="0" max="59" required={true} onChange={handleChange} value={data.startWatchMinute} />
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    <h3 className="inputLabel">Time to Watch End:</h3>
+                </td>
+                <td>
+
+                    <input type="number" style={{ width: "20%" }} id="endWatchHour" name="endWatchHour" min="0" max="23" required={true} onChange={handleChange} value={data.endWatchHour} />
+                    :
+                    <input type="number" style={{ width: "40%" }} id="endWatchMinute" name="endWatchMinute" min="0" max="59" required={true} onChange={handleChange} value={data.endWatchMinute} />
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>
+                    <h3 className="inputLabel">Time to Avoid Start:</h3>
+                </td>
+                <td>
+
+                    <input type="number" style={{ width: "20%" }} id="startAvoidHour" name="startAvoidHour" min="0" max="23" required={true} onChange={handleChange} value={data.startAvoidHour} />
+                    :
+                    <input type="number" style={{ width: "40%" }} id="startAvoidMinute" name="startAvoidMinute" min="0" max="59" required={true} onChange={handleChange} value={data.startAvoidMinute} />
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    <h3 className="inputLabel">Time to Avoid End:</h3>
+                </td>
+                <td>
+
+                    <input type="number" style={{ width: "20%" }} id="endAvoidHour" name="endAvoidHour" min="0" max="23" required={true} onChange={handleChange} value={data.endAvoidHour} />
+                    :
+                    <input type="number" style={{ width: "40%" }} id="endAvoidMinute" name="endAvoidMinute" min="0" max="59" required={true} onChange={handleChange} value={data.endAvoidMinute} />
+                </td>
+
             </tr>
             <tr>
               <td>
                 <h3 className="inputLabel">Category To Watch:</h3>
               </td>
               <td>
-                <select id="categoryToWatch" defaultValue="ALL" name="categoryToWatch">
+                <select id="categoryWatch" defaultValue="ALL" name="categoryWatch">
                   <option value="ALL">All Categories</option>
                                   <option value="Film & Animation">Film & Animation</option>
                                   <option value="Autos & Vehicles">Autos & Vehicles</option>
@@ -170,7 +227,7 @@ function QualityGoalCreate() {
                 <h3 className="inputLabel">Category To Avoid:</h3>
               </td>
               <td>
-                <select id="categoryToAvoid" defaultValue="ALL" name="categoryToAvoid">
+                <select id="categoryAvoid" defaultValue="ALL" name="categoryAvoid">
                   <option value="ALL">All Categories</option>
                                   <option value="Film & Animation">Film & Animation</option>
                                   <option value="Autos & Vehicles">Autos & Vehicles</option>
@@ -207,12 +264,15 @@ function QualityGoalCreate() {
                 </select>
               </td>
             </tr>
+
+
+
             <tr>
               <td>
-                <h3 className="inputLabel">Multiplier</h3>
+                <h3 className="inputLabel">Multiplier:</h3>
               </td>
               <td>
-                <input type="number" style={{ width: "100%" }} id="multiplier" name="multiplier" required={true} onChange={handleChange} value={data.multiplier} />
+                <input type="number" style={{ width: "100%" }} id="multiplierTOD" name="multiplier" required={true} onChange={handleChange} value={data.multiplier} />
               </td>
             </tr>
             <tr>
@@ -222,7 +282,7 @@ function QualityGoalCreate() {
             </tr>
             <tr>
               <td colSpan="2">
-                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmitQ">
+                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmitTOD">
                   Create Goal
                 </button>
               </td>
@@ -234,4 +294,4 @@ function QualityGoalCreate() {
   );
 }
 
-export default QualityGoalCreate;
+export default TODGoalCreate;

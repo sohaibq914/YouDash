@@ -2,6 +2,7 @@ package group26.youdash.service;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import group26.youdash.classes.Goal;
+import group26.youdash.classes.TimeOfDayGoal;
 import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.classes.QualityGoal;
 import group26.youdash.model.User;
@@ -24,6 +25,7 @@ public class GoalsService {
         if (user != null) {
             ArrayList<WatchTimeGoal> wtgoals = new ArrayList<>();
             ArrayList<QualityGoal> qgoals = new ArrayList<>();
+            ArrayList<TimeOfDayGoal> todgoals = new ArrayList<>();
             for (Goal goal : goals) {
                 if (goal instanceof WatchTimeGoal) {
                     wtgoals.add((WatchTimeGoal) goal);
@@ -31,15 +33,20 @@ public class GoalsService {
                 if (goal instanceof QualityGoal) {
                     qgoals.add((QualityGoal) goal);
                 }
+                if (goal instanceof TimeOfDayGoal) {
+                    todgoals.add((TimeOfDayGoal) goal);
+                }
             }
             user.setWtgoals(wtgoals);
             user.setQgoals(qgoals);
+            user.setTodgoals(todgoals);
             //all error handling done in backend, will just be list of goals
             dynamoDBMapper.save(user);
         } else {
             throw new NoSuchElementException("User ID : " + userId + " not found");
         }
     }
+
 
 
     public List<WatchTimeGoal> getUserGoals(int userId) {

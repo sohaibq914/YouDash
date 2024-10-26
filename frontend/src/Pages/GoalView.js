@@ -18,7 +18,7 @@ function GoalView() {
     };
     useEffect (() => {
         axios
-            .get("http://localhost:8080/goals/thename/view")
+            .get("http://localhost:8080/goals/" + getUser() + "/view")
             .then(function (response) {
                 //setData(response.data);
                 clearData();
@@ -27,6 +27,18 @@ function GoalView() {
             })
             .catch((error) => console.error(error));
     }, []);
+
+    const getUser = () => {
+            let theUrl = window.location.href;
+            console.log(theUrl);
+            if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+                return null;
+            }
+            console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
+
+        }
+
   return (
     <div className="GoalView">
         {data.map((igoal, index) => (

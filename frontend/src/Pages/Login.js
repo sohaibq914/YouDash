@@ -21,6 +21,7 @@ function Login() {
         // Handle successful login
         console.log('Login successful', response.data);
         navigate("/" + response.data.id + "/home");
+        window.location.reload();
       })
       .catch(error => {
         // Handle login error
@@ -36,7 +37,9 @@ function Login() {
         <div>
           <label>Username</label>
           <input
+          style={{width: "25%"}}
             type="text"
+            id="loginUsername"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -45,11 +48,12 @@ function Login() {
           <label>Password</label>
           <input
             type="password"
+            id="loginPassword"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">Login</button>
+        <button id="loginBtn" type="submit">Login</button>
       </form>
       <br/>
 
