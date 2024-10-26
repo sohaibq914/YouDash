@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./QualityGoalCreate.css";
 // import navbar from "../Components/navbar";
+import { ReactNotifications } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+import { Store } from 'react-notifications-component';
+import 'animate.css/animate.min.css';
 
 function QualityGoalCreate() {
   const [data, setData] = useState({ goalName: "", goalDescription: "", categoryToWatch: "", categoryToAvoid: "", multiplier: 0 });
@@ -20,7 +24,19 @@ function QualityGoalCreate() {
     const categoryToWatch = document.getElementById("categoryToWatch").value;
     const categoryToAvoid = document.getElementById("categoryToAvoid").value;
     if (+data.multiplier <= 0) {
-      alert("Invalid Multiplier! Must be greater than 0.");
+      Store.addNotification({
+                            title: "Goal Creation Error",
+                            message: "Invalid Multiplier! Must be greater than 0.",
+                            type: "warning",
+                            insert: "top",
+                            container: "top-right",
+                              animationIn: ["animate__animated", "animate__fadeIn"],
+                              animationOut: ["animate__animated", "animate__fadeOut"],
+                              dismiss: {
+                                duration: 5000,
+                                onScreen: true
+                              }
+                        });
       return;
     }
     const userData = {
@@ -34,10 +50,37 @@ function QualityGoalCreate() {
     console.log(userData);
     axios
       .post("http://localhost:8080/goals/" + getUser() + "/create", userData)
-      .then((response) => console.log(response))
+      .then((response) => {
+          Store.addNotification({
+                                      title: "Goal Creation Success",
+                                      message: "Goal Created!",
+                                      type: "success",
+                                      insert: "top",
+                                      container: "top-right",
+                                        animationIn: ["animate__animated", "animate__fadeIn"],
+                                        animationOut: ["animate__animated", "animate__fadeOut"],
+                                        dismiss: {
+                                          duration: 5000,
+                                          onScreen: true
+                                        }
+                                  });
+          console.log(response)
+        })
       .catch((error) => {
         if (error.response.status == "409") {
-          alert("No duplicate goals!");
+          Store.addNotification({
+                                title: "Goal Creation Error",
+                                message: "No duplicate goal names!",
+                                type: "warning",
+                                insert: "top",
+                                container: "top-right",
+                                  animationIn: ["animate__animated", "animate__fadeIn"],
+                                  animationOut: ["animate__animated", "animate__fadeOut"],
+                                  dismiss: {
+                                    duration: 5000,
+                                    onScreen: true
+                                  }
+                            });
         } else {
           console.error(error);
           console.log(error.response.data);
@@ -77,7 +120,7 @@ function QualityGoalCreate() {
                 <h3 className="inputLabel">Goal Description:</h3>
               </td>
               <td>
-                <input type="text" id="goalDescriptionQ" name="goalDescription" required={false} onChange={handleChange} value={data.goalDescription} />
+                <input type="text" id="goalDescriptionQ" name="goalDescription" required={true} onChange={handleChange} value={data.goalDescription} />
               </td>
             </tr>
             <tr>

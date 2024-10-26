@@ -67,7 +67,7 @@ function PieChart() {
     <>
     </>
     )}
-        <Pie data={data} style={{width: "100%"}}/>
+        <Pie id={"pie " + percent} data={data} style={{width: "100%"}}/>
     </div>
     );
 

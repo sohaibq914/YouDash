@@ -9,6 +9,21 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
+
+
+
+
+
+#These test cases were created in sprint 1 and were not required
+#Please note that these test cases no longer work with added functionality from later sprints
+
+
+
+
+
+
+
+
 # inherit TestCase Class and create a new test class
 class GoalTests(unittest.TestCase):
 
