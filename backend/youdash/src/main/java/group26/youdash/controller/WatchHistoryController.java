@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import group26.youdash.service.WatchHistoryService;
 
 import java.util.Map;
@@ -15,14 +14,14 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/watch-history")
 @CrossOrigin(origins = {
-    "http://localhost:3000", 
-    "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"
+        "http://localhost:3000",
+        "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"
 })
 public class WatchHistoryController {
 
     @Autowired
     private WatchHistoryService whs;
-    
+
     @GetMapping("/{userID}/historyList")
     public ResponseEntity<Map<String, List<String>>> getWatchHistory(@PathVariable int userID) {
 
@@ -40,7 +39,7 @@ public class WatchHistoryController {
     public ResponseEntity<String> addVideo(@PathVariable int userID, @RequestBody Map<String, String> body) {
 
         String videoUrl = body.get("url");
-        
+
         // error checking
         if (videoUrl == null || videoUrl.isEmpty()) {
             return new ResponseEntity<>("Invalid URL", HttpStatus.BAD_REQUEST);
@@ -52,26 +51,29 @@ public class WatchHistoryController {
         return new ResponseEntity<>("Video added successfully to the watch history", HttpStatus.OK);
     }
 
+    // Endpoint to get the total watch time for a user
+    @GetMapping("/{userID}/totalWatchTime")
+    public ResponseEntity<Float> getTotalWatchTime(@PathVariable int userID) {
+        try {
+            float totalWatchTime = whs.getWatchTimeTotal(userID);
+            return ResponseEntity.ok(totalWatchTime);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-        // Endpoint to get the total watch time for a user
-        @GetMapping("/{userID}/totalWatchTime")
-        public ResponseEntity<Float> getTotalWatchTime(@PathVariable int userID) {
-            try {
-                float totalWatchTime = whs.getWatchTimeTotal(userID);
-                return ResponseEntity.ok(totalWatchTime);
-            } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    // Endpoint to get the watch time filtered by category
+    @GetMapping("/{userID}/watchTimeByCategory/{category}")
+    public ResponseEntity<Float> getWatchTimeByCategory(@PathVariable int userID, @PathVariable int category) {
+        try {
+            float totalWatchTime = whs.getWatchTimeByCategory(userID, category);
+            return ResponseEntity.ok(totalWatchTime);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    
-        // Endpoint to get the watch time filtered by category
-        @GetMapping("/{userID}/watchTimeByCategory/{category}")
-        public ResponseEntity<Float> getWatchTimeByCategory(@PathVariable int userID, @PathVariable int category) {
-            try {
-                float totalWatchTime = whs.getWatchTimeByCategory(userID, category);
-                return ResponseEntity.ok(totalWatchTime);
-            } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    }
+
+   
+
+
 }

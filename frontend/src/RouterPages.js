@@ -17,6 +17,7 @@ import FollowersPage from "./Pages/FollowersPage.js";
 import PromptHistory from "./Pages/PromptHistory.tsx";
 import WatchtimeLeaderboard from "./Pages/WatchtimeLeaderboard.js";
 import YouDashBoard from "./Pages/YouDashBoard"
+import WatchTimeChart from "./Components/WatchDataChart.jsx";
 
 function RouterPages() {
   return (
@@ -39,6 +40,7 @@ function RouterPages() {
         <Route path="/:userId/followers" element={<FollowersPage />} />
         <Route path="/ai/:userId/promptHistory" element={<PromptHistory />} />
         <Route path="/:userId/watchtime-leaderboard" element={<WatchtimeLeaderboard />} /> {/* Add new route */}
+        <Route path="/:userId/analytics" element={<WatchTimeChart />}/>
       </Routes>
     </div>
   );
