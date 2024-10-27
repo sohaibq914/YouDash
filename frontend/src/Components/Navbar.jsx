@@ -95,6 +95,9 @@ export const Navbar = () => {
         <NavLink to={"/" + String(userID) + "/watch-history"}>Watch History</NavLink>
         </li>
         <li>
+          <NavLink to={"/" + String(userID) + "/analytics"}>Analytics</NavLink>
+        </li>
+        <li>
           {/* Dark mode toggle button */}
           <button onClick={handleDarkModeToggle} className="dark-mode-btn">
             {darkMode ? "Light Mode" : "Dark Mode"}
