@@ -27,8 +27,10 @@ public class AnalyticsController {
 
 
     @GetMapping("/{userId}/watch-time-by-hour")
-    public Map<String, Float> getWatchTimeByHour(@PathVariable int userId) {
-        return as.getAggregatedWatchTimeByHour(userId);
-    }
+    public Map<String, Float> getWatchTimeByHour(
+        @PathVariable int userId,
+        @RequestParam(value = "category", required = false) String category) {
+    return as.getAggregatedWatchTimeByHour(userId, category);
+}
 
 }
