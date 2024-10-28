@@ -22,6 +22,10 @@
 
 }
 
+.timeFrameBtnSel {
+    background: #02CCDD !important;
+}
+
 .YouDashBoard td {
     padding: 2%;
     width: 50% !important;
