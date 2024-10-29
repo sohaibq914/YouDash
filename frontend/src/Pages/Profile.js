@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import CaptureImageButton from "../Components/CaptureImageButton";
 
 function Profile() {
   const [editField, setEditField] = useState(null);
@@ -169,6 +170,8 @@ function Profile() {
       >
         View Followers
       </button>
+
+      <CaptureImageButton />
 
       {Object.entries(profile).map(([key, value]) => (
         <div key={key} style={styles.fieldContainer}>
