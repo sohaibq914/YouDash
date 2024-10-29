@@ -7,6 +7,9 @@ function YouDashBoard() {
 
   const [statusRow1, changeStatus1] = useState(0);
 
+  const [timeFrame, changeTimeFrame] = useState(0);
+  const [timeFrameSelection, changeTimeFrameSelection] = useState(1);
+
   const fullLeft1  = (e) => {
     changeStatus1(1);
     console.log("resize");
@@ -14,11 +17,21 @@ function YouDashBoard() {
 
   const fullRight1  = (e) => {
     changeStatus1(2);
+    if (timeFrame == 0) {
+        selDay1();
+    }
+    if (timeFrame == 1) {
+        selWeek1();
+    }
+    if (timeFrame == 2) {
+        selMonth1();
+    }
   }
 
   const split1 = (e) => {
     changeStatus1(0);
   }
+
 
   const [statusRow2, changeStatus2] = useState(0);
 
@@ -33,6 +46,64 @@ function YouDashBoard() {
     const split2 = (e) => {
       changeStatus2(0);
     }
+
+    useEffect(() => {
+        if (timeFrame == 0) {
+            selDay1();
+        }
+        if (timeFrame == 1) {
+            selWeek1();
+        }
+        if (timeFrame == 2) {
+            selMonth1();
+        }
+        sel(timeFrameSelection);
+    }, [statusRow1]);
+
+    const selDay1 = (e) => {
+        changeTimeFrame(0);
+        if (document.getElementById("r1week").classList.contains("timeFrameBtnSel")) {
+            document.getElementById("r1week").classList.remove("timeFrameBtnSel");
+        }
+        if (document.getElementById("r1month").classList.contains("timeFrameBtnSel")) {
+            document.getElementById("r1month").classList.remove("timeFrameBtnSel");
+        }
+        document.getElementById("r1day").classList.add("timeFrameBtnSel");
+    }
+    const selWeek1 = (e) => {
+        changeTimeFrame(1);
+        if (document.getElementById("r1month").classList.contains("timeFrameBtnSel")) {
+            document.getElementById("r1month").classList.remove("timeFrameBtnSel");
+        }
+        if (document.getElementById("r1day").classList.contains("timeFrameBtnSel")) {
+            document.getElementById("r1day").classList.remove("timeFrameBtnSel");
+        }
+        document.getElementById("r1week").classList.add("timeFrameBtnSel");
+    }
+    const selMonth1 = (e) => {
+        changeTimeFrame(2);
+        if (document.getElementById("r1week").classList.contains("timeFrameBtnSel")) {
+            document.getElementById("r1week").classList.remove("timeFrameBtnSel");
+        }
+        if (document.getElementById("r1day").classList.contains("timeFrameBtnSel")) {
+            document.getElementById("r1day").classList.remove("timeFrameBtnSel");
+        }
+        document.getElementById("r1month").classList.add("timeFrameBtnSel");
+    }
+    const sel = (e) => {
+        changeTimeFrameSelection(e);
+        for (var i = 1; i <= 7; i++) {
+            if (i == e) {
+                continue;
+            }
+            if (document.getElementById("r1" + i).classList.contains("timeFrameBtnSel")) {
+                document.getElementById("r1" + i).classList.remove("timeFrameBtnSel");
+            }
+        }
+        document.getElementById("r1" + e).classList.add("timeFrameBtnSel");
+
+    }
+
 
   return (
     <div className="YouDashBoard">
@@ -50,7 +121,28 @@ function YouDashBoard() {
                     </td>
                     <td>
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1right" onClick={fullRight1}>Expand</button>
-                        <p> Placeholder 2</p>
+                        <div className="timeFrame">
+                            <br/>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1day" onClick={selDay1}>Day</button>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1week" onClick={selWeek1}>Week</button>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1month" onClick={selMonth1}>Month</button>
+                            <br/>
+                        </div>
+                        <div className="timeFrameSelection">
+                            <br/>
+                            <br/>
+                            <button type="button" style={{ width: "10%" }} id="r11" onClick={() => sel(1)}>1</button>
+                            <button type="button" style={{ width: "10%" }} id="r12" onClick={() => sel(2)}>2</button>
+                            <button type="button" style={{ width: "10%" }} id="r13" onClick={() => sel(3)}>3</button>
+                            <button type="button" style={{ width: "10%" }} id="r14" onClick={() => sel(4)}>4</button>
+                            <button type="button" style={{ width: "10%" }} id="r15" onClick={() => sel(5)}>5</button>
+                            <button type="button" style={{ width: "10%" }} id="r16" onClick={() => sel(6)}>6</button>
+                            <button type="button" style={{ width: "10%" }} id="r17" onClick={() => sel(7)}>7</button>
+                            <br/>
+                        </div>
                     </td>
                 </tr>
                 </>
@@ -70,7 +162,28 @@ function YouDashBoard() {
                 <tr>
                     <td colSpan="2">
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1right" onClick={split1}>Split</button>
-                        <p> Placeholder 2</p>
+                        <div className="timeFrame">
+                            <br/>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1day" onClick={selDay1}>Day</button>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1week" onClick={selWeek1}>Week</button>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1month" onClick={selMonth1}>Month</button>
+                            <br/>
+                        </div>
+                        <div className="timeFrameSelection">
+                            <br/>
+                            <br/>
+                            <button type="button" style={{ width: "10%" }} id="r11" onClick={() => sel(1)}>1</button>
+                            <button type="button" style={{ width: "10%" }} id="r12" onClick={() => sel(2)}>2</button>
+                            <button type="button" style={{ width: "10%" }} id="r13" onClick={() => sel(3)}>3</button>
+                            <button type="button" style={{ width: "10%" }} id="r14" onClick={() => sel(4)}>4</button>
+                            <button type="button" style={{ width: "10%" }} id="r15" onClick={() => sel(5)}>5</button>
+                            <button type="button" style={{ width: "10%" }} id="r16" onClick={() => sel(6)}>6</button>
+                            <button type="button" style={{ width: "10%" }} id="r17" onClick={() => sel(7)}>7</button>
+                            <br/>
+                        </div>
                     </td>
                 </tr>
 
