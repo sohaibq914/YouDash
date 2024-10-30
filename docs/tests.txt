@@ -1,0 +1,244 @@
+Test Case 3001
+System: Goal Leaderboard
+Phase: 1
+Title: Initial Leaderboard Display
+Severity: 1
+Instructions:
+
+Login to platform
+Navigate to leaderboard page
+
+Expected Result:
+
+Leaderboard displays with user rankings
+Each row shows: Rank, User Name, Goal Name, Goal Description, Progress
+Users are sorted by goal progress (highest to lowest)
+
+Test Case 3002
+System: Goal Leaderboard
+Phase: 1
+Title: Achievement Indicator Display
+Severity: 1
+Instructions:
+
+Login to platform
+Navigate to leaderboard
+Locate users with 100% progress
+Locate users with 50-99% progress
+
+Expected Result:
+
+Users with 100% progress show 🏆 trophy icon
+Users with 50-99% progress show ⭐ star icon
+Users below 50% show no icon
+
+Test Case 3003
+System: Goal Leaderboard
+Phase: 1
+Title: Goal Type Filter
+Severity: 2
+Instructions:
+
+Navigate to leaderboard
+Select "Quality Goal" from filter dropdown
+Select "Watch Time Goal"
+Select "Time of Day Goal"
+
+Expected Result:
+
+Only Quality Goals displayed when selected
+Only Watch Time Goals displayed when selected
+Only Time of Day Goals displayed when selected
+Proper sorting maintained within filtered results
+
+Test Case 3004
+System: Goal Leaderboard
+Phase: 1
+Title: Progress Level Filter
+Severity: 2
+Instructions:
+
+Navigate to leaderboard
+Select "High" progress filter (≥ 75%)
+Select "Medium" progress filter (25-74%)
+Select "Low" progress filter (<25%)
+
+Expected Result:
+
+Only goals with ≥75% progress shown for High
+Only goals with 25-74% progress shown for Medium
+Only goals with <25% progress shown for Low
+Proper ranking maintained within each filter
+
+Test Case 3005
+System: Goal Leaderboard
+Phase: 1
+Title: Multiple Goals Per User Display
+Severity: 2
+Instructions:
+
+Create multiple goals for a test user
+Navigate to leaderboard
+Verify user's goals display
+
+Expected Result:
+
+Each goal displays as separate entry
+User name consistent across entries
+Progress calculated correctly for each goal
+Achievement indicators correct for each entry
+
+
+
+
+------
+
+
+Test Case 4001
+System: Followers Recommendations
+Phase: 1
+Title: People Your Network Follows Display
+Severity: 1
+Instructions:
+
+Login as UserA
+Follow UserB
+UserB follows UserC, UserD
+Navigate to recommendations
+
+Expected Result:
+
+UserC and UserD appear in "People Your Network Follows"
+Each recommended user shows Follow/Unfollow button
+Users already followed not shown
+
+Test Case 4002
+System: Followers Recommendations
+Phase: 1
+Title: Recommendations from Your Followers
+Severity: 1
+Instructions:
+
+Login as UserA
+Have UserB and UserC follow UserA
+UserB and UserC follow UserD, UserE
+Check recommendations
+
+Expected Result:
+
+UserD and UserE appear in recommendations
+Follow buttons active
+UserB and UserC not in recommendations
+
+Test Case 4003
+System: Followers Recommendations
+Phase: 1
+Title: Users with Similar Goal Types
+Severity: 2
+Instructions:
+
+Create WatchTimeGoal for UserA
+UserB creates WatchTimeGoal
+UserC creates QualityGoal
+Check recommendations
+
+Expected Result:
+
+UserB appears in recommendations (same goal type)
+UserC not shown (different goal type)
+Goal types listed under user names
+
+Test Case 4004
+System: Followers Recommendations
+Phase: 1
+Title: Follow/Unfollow Action
+Severity: 1
+Instructions:
+
+Click Follow on recommended user
+Check recommendations refresh
+Click Unfollow
+Verify list update
+
+Expected Result:
+
+Follow changes to Unfollow button
+User removed from recommendations when followed
+User reappears when unfollowed
+No duplicate recommendations
+
+Test Case 4005
+System: Followers Recommendations
+Phase: 2
+Title: Empty State Handling
+Severity: 2
+Instructions:
+
+Create new user with no network
+Check recommendation sections
+
+Expected Result:
+
+"No recommendations available" shown
+UI remains stable
+No error messages
+
+
+---
+
+Test Case 2001: Verify watch time leaderboard for all users
+Severity: 1
+Instructions:
+
+Start the application and log in as a user.
+Navigate to the watch time leaderboard page.
+Verify that the leaderboard is displayed and shows the watch time for all users.
+
+Expected Result:
+
+The watch time leaderboard is displayed, showing the total watch time for each user.
+The users are sorted in descending order by their total watch time.
+The leaderboard includes all users in the system.
+
+Test Case 2002: Verify watch time leaderboard for followers only
+Severity: 2
+Instructions:
+
+Start the application and log in as a user.
+Navigate to the watch time leaderboard page.
+Toggle the "Show Followers Only" option.
+Verify that the leaderboard only displays the current user's followers.
+
+Expected Result:
+
+The watch time leaderboard is displayed, showing the total watch time for each of the current user's followers.
+The users are sorted in descending order by their total watch time.
+The leaderboard only includes the current user's followers.
+
+Test Case 2003: Verify watch time leaderboard by category
+Severity: 2
+Instructions:
+
+Start the application and log in as a user.
+Navigate to the watch time leaderboard page.
+Select a specific category from the "Filter by category" dropdown.
+Verify that the leaderboard is updated to show the watch time for each user in the selected category.
+
+Expected Result:
+
+The watch time leaderboard is displayed, showing the total watch time for each user in the selected category.
+The users are sorted in descending order by their total watch time in the selected category.
+The leaderboard includes all users, but only their watch time for the selected category is shown.
+
+Test Case 2004: Verify empty watch time leaderboard
+Severity: 2
+Instructions:
+
+Start the application and log in as a user.
+Navigate to the watch time leaderboard page.
+Verify that the leaderboard displays a message indicating that no users have any watch time data.
+
+Expected Result:
+
+The watch time leaderboard is displayed, showing a message such as "No users found for the selected category."
+The leaderboard is empty, with no user data shown.

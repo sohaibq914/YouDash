@@ -126,36 +126,56 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/{id}/follow")
-    public ResponseEntity<String> followUser(@PathVariable int id) {
+    @PostMapping("/{targetId}/follow/{currentUserId}")
+    public ResponseEntity<String> followUser(
+            @PathVariable int targetId,
+            @PathVariable int currentUserId) {
         try {
-            userService.followUser(id);  // Call the followUser method in the service
+            userService.followUser(targetId, currentUserId);
             return new ResponseEntity<>("User followed successfully", HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+    
+    @PostMapping("/{targetId}/unfollow/{currentUserId}")
+    public ResponseEntity<String> unfollowUser(
+            @PathVariable int targetId,
+            @PathVariable int currentUserId) {
+        try {
+            userService.unfollowUser(targetId, currentUserId);
+            return new ResponseEntity<>("User unfollowed successfully", HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
-    @PostMapping("/{id}/unfollow")
-public ResponseEntity<String> unfollowUser(@PathVariable int id) {
+
+    @GetMapping("/{id}/recommendations-from-followers")
+public ResponseEntity<List<User>> getRecommendationsFromFollowers(@PathVariable int id) {
     try {
-        userService.unfollowUser(id);  // Call the unfollowUser method in the service
-        return new ResponseEntity<>("User unfollowed successfully", HttpStatus.OK);
+        List<User> recommendations = userService.getRecommendationsFromFollowers(id);
+        return new ResponseEntity<>(recommendations, HttpStatus.OK);
     } catch (NoSuchElementException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
 
 
 @GetMapping("/{id}/followers")
-public ResponseEntity<List<User>> getFollowers(@PathVariable int id) {
+public ResponseEntity<List<User>> getUsersFollowingCurrentUser(@PathVariable int id) {
+    System.out.println(id + "S:LJFL:SDJF");
     try {
-        List<User> followers = userService.getFollowers(id);  // Fetch followers for the given user ID
+        // Call the service method to get users who are following the current user
+        List<User> followers = userService.getUsersFollowingCurrentUser(id);
         return new ResponseEntity<>(followers, HttpStatus.OK);
     } catch (NoSuchElementException e) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+
 
 
 @GetMapping("/{id}/my-followers")
@@ -230,6 +250,52 @@ public ResponseEntity<List<User>> getMyFollowers(@PathVariable int id) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
+
+
+    @GetMapping("/{id}/recommended-followers")
+public ResponseEntity<List<User>> getRecommendedFollowers(@PathVariable int id) {
+    try {
+        List<User> recommendedFollowers = userService.getRecommendedFollowers(id);
+        return new ResponseEntity<>(recommendedFollowers, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+// Endpoint to get followers of a specific follower
+@GetMapping("/{followerId}/followers-of-follower")
+public ResponseEntity<List<User>> getFollowersOfFollower(@PathVariable int followerId) {
+    try {
+        List<User> followersOfFollower = userService.getFollowersOfFollower(followerId);
+        return new ResponseEntity<>(followersOfFollower, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+@GetMapping("/{id}/recommended-followers-of-followers")
+public ResponseEntity<List<User>> getFollowersOfFollowersRecommendations(@PathVariable int id) {
+    try {
+        List<User> recommendedFollowers = userService.getFollowersOfFollowersRecommendations(id);
+        return new ResponseEntity<>(recommendedFollowers, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+
+// Endpoint to get recommendations based on who the user follows
+@GetMapping("/{id}/recommended-following")
+public ResponseEntity<List<User>> getRecommendedBasedOnFollowing(@PathVariable int id) {
+    System.out.println("HIIII");
+    try {
+        List<User> recommendedFollowing = userService.getRecommendedBasedOnFollowing(id);
+        return new ResponseEntity<>(recommendedFollowing, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
 }
 
 class GoogleLoginRequest {
