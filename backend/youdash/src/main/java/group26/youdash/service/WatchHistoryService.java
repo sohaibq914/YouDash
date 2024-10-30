@@ -1,16 +1,21 @@
 package group26.youdash.service;
 
 import group26.youdash.classes.YoutubeAPI.VideoHistory;
+
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import group26.youdash.model.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+
 
 @Service
 public class WatchHistoryService {
@@ -192,4 +197,7 @@ public class WatchHistoryService {
             throw new NoSuchElementException("User with ID " + userID + " not found");
         }
     }
+
+    
+    
 }

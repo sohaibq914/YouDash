@@ -137,6 +137,29 @@ public class GoalController {
         return temp1;
     }
 
+    @GetMapping("/{user}/pie")
+    public float pieGoal(@PathVariable("user") String user)
+    {
+        System.out.println(user);
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
+        updateAllGoalsProgress(userId);
+        int numGoals = temp.size();
+        float progress = 0.0f;
+        for (int i = 0; i < numGoals; i++) {
+            if (temp.get(i) instanceof WatchTimeGoal && ((WatchTimeGoal) temp.get(i)).watchLessThanGoal) {
+                progress += 1 - temp.get(i).getGoalProgress();
+            } else {
+                progress += temp.get(i).getGoalProgress();
+            }
+        }
+        return progress / numGoals;
+    }
+
     private void updateAllGoalsProgress(int userId) {
         for(int i = 0; i < temp.size(); i++) {
             if (temp.get(i) instanceof WatchTimeGoal) {

@@ -71,6 +71,9 @@ export const Navbar = () => {
           <NavLink to={"/" + String(userID) + "/home"}>Home</NavLink>
         </li>
         <li>
+          <NavLink id="youDashBoard" to={"/" + String(userID) + "/youDashBoard"}>YouDashBoard</NavLink>
+        </li>
+        <li>
           <NavLink to={"/" + String(userID) + "/block-categories"}>Block Categories</NavLink>
         </li>
         <li>
@@ -83,13 +86,16 @@ export const Navbar = () => {
           <NavLink id="goalsEdit" to={"/" + String(userID) + "/goalsEdit"}>Edit Goals</NavLink>
         </li>
         <li>
-          <NavLink id="goalsVis" to={"/" + String(userID) + "/goalsVis"}>Visualize Goals</NavLink>
+          <NavLink id="goalsVis" to={"/" + String(userID) + "/goalsVis"}>Visual Goals</NavLink>
         </li>
         <li>
           <NavLink to={"/" + String(userID) + "/profile"}>Profile</NavLink>
         </li>
         <li>
         <NavLink to={"/" + String(userID) + "/watch-history"}>Watch History</NavLink>
+        </li>
+        <li>
+          <NavLink to={"/" + String(userID) + "/analytics"}>Analytics</NavLink>
         </li>
         <li>
           {/* Dark mode toggle button */}
@@ -103,6 +109,9 @@ export const Navbar = () => {
                <li>
                  <NavLink to="/login">Home</NavLink>
                </li>
+                <li>
+                  <NavLink id="youDashBoard" to="/login">YouDashBoard</NavLink>
+                </li>
                <li>
                  <NavLink to="/login">Block Categories</NavLink>
                </li>
@@ -116,7 +125,7 @@ export const Navbar = () => {
                  <NavLink id="goalsEdit" to="/login">Edit Goals</NavLink>
                </li>
                <li>
-                 <NavLink id="goalsVis" to="/login">Visualize Goals</NavLink>
+                 <NavLink id="goalsVis" to="/login">Visual Goals</NavLink>
                </li>
                <li>
                  <NavLink to="/login">Profile</NavLink>

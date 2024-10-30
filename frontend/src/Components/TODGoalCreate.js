@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./TODGoalCreate.css";
+import { ReactNotifications } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+import { Store } from 'react-notifications-component';
+import 'animate.css/animate.min.css';
 // import navbar from "../Components/navbar";
 
 function TODGoalCreate() {
@@ -20,7 +24,19 @@ function TODGoalCreate() {
     const categoryWatch = document.getElementById("categoryWatch").value;
     const categoryAvoid = document.getElementById("categoryAvoid").value;
     if (+data.multiplier <= 0) {
-      alert("Invalid Multiplier! Must be greater than 0.");
+      Store.addNotification({
+                  title: "Goal Creation Error",
+                  message: "Invalid multiplier! Must be greater than 0.",
+                  type: "warning",
+                  insert: "top",
+                  container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                      duration: 5000,
+                      onScreen: true
+                    }
+              });
       return;
     }
     const userData = {
@@ -42,10 +58,37 @@ function TODGoalCreate() {
     console.log(userData);
     axios
       .post("http://localhost:8080/goals/" + getUser() + "/create", userData)
-      .then((response) => console.log(response))
+      .then((response) => {
+        Store.addNotification({
+                                    title: "Goal Creation Success",
+                                    message: "Goal Created!",
+                                    type: "success",
+                                    insert: "top",
+                                    container: "top-right",
+                                      animationIn: ["animate__animated", "animate__fadeIn"],
+                                      animationOut: ["animate__animated", "animate__fadeOut"],
+                                      dismiss: {
+                                        duration: 5000,
+                                        onScreen: true
+                                      }
+                                });
+        console.log(response)
+      })
       .catch((error) => {
         if (error.response.status == "409") {
-          alert("No duplicate goals!");
+          Store.addNotification({
+                                title: "Goal Creation Error",
+                                message: "No duplicate goal names!",
+                                type: "warning",
+                                insert: "top",
+                                container: "top-right",
+                                  animationIn: ["animate__animated", "animate__fadeIn"],
+                                  animationOut: ["animate__animated", "animate__fadeOut"],
+                                  dismiss: {
+                                    duration: 5000,
+                                    onScreen: true
+                                  }
+                            });
         } else {
           console.error(error);
           console.log(error.response.data);
@@ -77,7 +120,7 @@ function TODGoalCreate() {
                 <h3 className="inputLabel">Goal Name:</h3>
               </td>
               <td>
-                <input type="text" id="goalNameQ" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
+                <input type="text" id="goalNameTOD" name="goalName" autoCapitalize="words" required={true} onChange={handleChange} value={data.goalName} />
               </td>
             </tr>
             <tr>
@@ -85,7 +128,7 @@ function TODGoalCreate() {
                 <h3 className="inputLabel">Goal Description:</h3>
               </td>
               <td>
-                <input type="text" id="goalDescriptionQ" name="goalDescription" required={false} onChange={handleChange} value={data.goalDescription} />
+                <input type="text" id="goalDescriptionTOD" name="goalDescription" required={true} onChange={handleChange} value={data.goalDescription} />
               </td>
             </tr>
             <tr>
@@ -229,7 +272,7 @@ function TODGoalCreate() {
                 <h3 className="inputLabel">Multiplier:</h3>
               </td>
               <td>
-                <input type="number" style={{ width: "100%" }} id="multiplier" name="multiplier" required={true} onChange={handleChange} value={data.multiplier} />
+                <input type="number" style={{ width: "100%" }} id="multiplierTOD" name="multiplier" required={true} onChange={handleChange} value={data.multiplier} />
               </td>
             </tr>
             <tr>
@@ -239,7 +282,7 @@ function TODGoalCreate() {
             </tr>
             <tr>
               <td colSpan="2">
-                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmitQ">
+                <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmitTOD">
                   Create Goal
                 </button>
               </td>

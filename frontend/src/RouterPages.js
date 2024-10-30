@@ -14,8 +14,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Routes, Route, Link } from "react-router-dom"; // Remove Router and only import Routes and Route
 import FollowersPage from "./Pages/FollowersPage.js";
+import PromptHistory from "./Pages/PromptHistory.tsx";
 import WatchtimeLeaderboard from "./Pages/WatchtimeLeaderboard.js";
 import GoalLeaderboard from "./Pages/GoalLeaderboard.js";
+import YouDashBoard from "./Pages/YouDashBoard";
+import WatchTimeChart from "./Components/WatchDataChart.jsx";
 
 function RouterPages() {
   return (
@@ -24,6 +27,7 @@ function RouterPages() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/:userId/home" element={<Home />} />
+        <Route path="/:userId/youDashBoard" element={<YouDashBoard />} />
         <Route path="/:userId/block-categories" element={<BlockedPage />} />
         <Route path="/:userId/goalsCreate" element={<GoalCreate />} />
         <Route path="/:userId/goalsView" element={<GoalView />} />
@@ -36,7 +40,9 @@ function RouterPages() {
         <Route path="/:userId/watch-history" element={<WatchHistory />} />
         <Route path="/:userId/followers" element={<FollowersPage />} />
         <Route path="/:userId/goalLeaderboard" element={<GoalLeaderboard />} />
+        <Route path="/ai/:userId/promptHistory" element={<PromptHistory />} />
         <Route path="/:userId/watchtime-leaderboard" element={<WatchtimeLeaderboard />} /> {/* Add new route */}
+        <Route path="/:userId/analytics" element={<WatchTimeChart />} />
       </Routes>
     </div>
   );

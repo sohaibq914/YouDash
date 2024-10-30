@@ -6,6 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Navbar } from "./Components/Navbar.jsx";
 import RouterPages from "./RouterPages.js";
+import 'react-notifications-component/dist/theme.css'
+import { ReactNotifications } from 'react-notifications-component'
 import "./App.css"; // Default light mode styles
 
 function App() {
@@ -72,6 +74,7 @@ function App() {
     <>
       <Navbar darkMode={darkMode} onDarkModeToggle={handleDarkModeToggle} />
       <div className={`App ${darkMode ? "dark" : ""}`} style={{ width: "100%", overflow: "hidden" }}>
+        <ReactNotifications />
         <div style={{ marginTop: "56px" }}>
           <RouterPages />
         </div>
