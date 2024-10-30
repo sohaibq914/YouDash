@@ -36,6 +36,13 @@ public class User {
     private List<VideoHistory> history;
     private List<Map<String, String>> promptHistory;
 
+    private String googleId;          // Google's unique user ID
+    private String googleEmail;       // Email from Google account
+    private String googlePictureUrl;  // Profile picture URL from Google
+    private String authProvider;      // "local" or "google"
+    private String accessToken;       // OAuth access token (optional)
+
+
     @DynamoDBHashKey
     public int getId() {
         return id;
@@ -43,6 +50,50 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+    @DynamoDBAttribute
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    @DynamoDBAttribute
+    public String getGoogleEmail() {
+        return googleEmail;
+    }
+
+    public void setGoogleEmail(String googleEmail) {
+        this.googleEmail = googleEmail;
+    }
+
+    @DynamoDBAttribute
+    public String getGooglePictureUrl() {
+        return googlePictureUrl;
+    }
+
+    public void setGooglePictureUrl(String googlePictureUrl) {
+        this.googlePictureUrl = googlePictureUrl;
+    }
+
+    @DynamoDBAttribute
+    public String getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(String authProvider) {
+        this.authProvider = authProvider;
+    }
+
+    @DynamoDBAttribute
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     /**

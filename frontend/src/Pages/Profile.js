@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import { FileText, FileSpreadsheet } from 'lucide-react';
+import jsPDF from 'jspdf';
 
 function Profile() {
   const [editField, setEditField] = useState(null);
@@ -17,6 +19,236 @@ function Profile() {
   const [isPasswordValid, setIsPasswordValid] = useState(true); // New state to track password validity
   const [isBioValid, setIsBioValid] = useState(true); // New state to track bio validity
   const navigate = useNavigate(); // Initialize the useNavigate hook
+
+  const [isExporting, setIsExporting] = useState({ csv: false, pdf: false });
+
+  const generateCSV = (data) => {
+    const sections = {
+      userInfo: {
+        headers: ['Name', 'Email', 'Bio'],
+        data: [[
+          data.name,
+          data.email,
+          data.bio
+        ]]
+      },
+      watchTimeGoals: {
+        headers: ['Category', 'Target Watch Time', 'Current Progress', 'Status'],
+        data: data.wtgoals?.map(goal => [
+          goal.category,
+          goal.targetWatchTime,
+          goal.currentProgress,
+          goal.status
+        ]) || []
+      },
+      qualityGoals: {
+        headers: ['Category', 'Target Quality', 'Current Progress', 'Status'],
+        data: data.qgoals?.map(goal => [
+          goal.category,
+          goal.targetQuality,
+          goal.currentProgress,
+          goal.status
+        ]) || []
+      },
+      timeOfDayGoals: {
+        headers: ['Category', 'Start Time', 'End Time', 'Status'],
+        data: data.todgoals?.map(goal => [
+          goal.category,
+          goal.startTime,
+          goal.endTime,
+          goal.status
+        ]) || []
+      },
+      blockedCategories: {
+        headers: ['Blocked Category'],
+        data: data.blocked?.map(category => [category]) || []
+      }
+    };
+  
+    let csvContent = '';
+    Object.entries(sections).forEach(([sectionName, section]) => {
+      if (section.data.length > 0) {
+        csvContent += `\n${sectionName.toUpperCase()}\n`;
+        csvContent += `${section.headers.join(',')}\n`;
+        csvContent += section.data.map(row => row.join(',').replace(/,/g, ';')).join('\n');
+        csvContent += '\n';
+      }
+    });
+  
+    return csvContent;
+  };
+  const handleExportCSV = async () => {
+    try {
+      setIsExporting(prev => ({ ...prev, csv: true }));
+      const userID = localStorage.getItem('userId') || '12345'; // Fallback to test ID if needed
+      
+      const response = await axios.get(
+        `http://localhost:8080/profile/${userID}/full`,
+        { withCredentials: true }
+      );
+      const userData = response.data;
+      
+      const csvContent = generateCSV(userData);
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `youdash_data_${userData.username}_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      alert('Your data has been exported to CSV successfully!');
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      if (error.response?.status === 403) {
+        alert('Access denied. Please ensure you are logged in.');
+      } else {
+        alert('Failed to export data. Please try again.');
+      }
+    } finally {
+      setIsExporting(prev => ({ ...prev, csv: false }));
+    }
+  };
+  
+  const handleExportPDF = async () => {
+    try {
+      setIsExporting(prev => ({ ...prev, pdf: true }));
+      const userID = localStorage.getItem('userId') || '12345';
+      
+      const response = await axios.get(
+        `http://localhost:8080/profile/${userID}/full`,
+        { withCredentials: true }
+      );
+      const userData = response.data;
+      
+      // Create PDF document
+      const doc = new jsPDF();
+      let yPos = 20;
+      const lineHeight = 7;
+  
+      // Title
+      doc.setFontSize(16);
+      doc.text('YouDash User Data Export', 20, yPos);
+      yPos += lineHeight * 2;
+  
+      // User Information
+      doc.setFontSize(14);
+      doc.text('User Information', 20, yPos);
+      yPos += lineHeight;
+      doc.setFontSize(12);
+      doc.text(`Name: ${userData.name}`, 20, yPos);
+      yPos += lineHeight;
+      doc.text(`Email: ${userData.email}`, 20, yPos);
+      yPos += lineHeight;
+      doc.text(`Bio: ${userData.bio || 'No bio'}`, 20, yPos);
+      yPos += lineHeight * 2;
+  
+      // Watch Time Goals
+      doc.setFontSize(14);
+      doc.text('Watch Time Goals', 20, yPos);
+      yPos += lineHeight;
+      doc.setFontSize(12);
+      if (userData.wtgoals?.length > 0) {
+        userData.wtgoals.forEach(goal => {
+          doc.text(`Category: ${goal.category}`, 20, yPos);
+          yPos += lineHeight;
+          doc.text(`Target Watch Time: ${goal.targetWatchTime}`, 30, yPos);
+          yPos += lineHeight;
+          doc.text(`Current Progress: ${goal.currentProgress}`, 30, yPos);
+          yPos += lineHeight;
+          doc.text(`Status: ${goal.status}`, 30, yPos);
+          yPos += lineHeight * 1.5;
+        });
+      } else {
+        doc.text('No watch time goals set', 20, yPos);
+        yPos += lineHeight;
+      }
+      yPos += lineHeight;
+  
+      // Quality Goals
+      doc.setFontSize(14);
+      doc.text('Quality Goals', 20, yPos);
+      yPos += lineHeight;
+      doc.setFontSize(12);
+      if (userData.qgoals?.length > 0) {
+        userData.qgoals.forEach(goal => {
+          doc.text(`Category: ${goal.category}`, 20, yPos);
+          yPos += lineHeight;
+          doc.text(`Target Quality: ${goal.targetQuality}`, 30, yPos);
+          yPos += lineHeight;
+          doc.text(`Current Progress: ${goal.currentProgress}`, 30, yPos);
+          yPos += lineHeight;
+          doc.text(`Status: ${goal.status}`, 30, yPos);
+          yPos += lineHeight * 1.5;
+        });
+      } else {
+        doc.text('No quality goals set', 20, yPos);
+        yPos += lineHeight;
+      }
+  
+      // Add new page if needed
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = 20;
+      }
+  
+      // Time of Day Goals
+      doc.setFontSize(14);
+      doc.text('Time of Day Goals', 20, yPos);
+      yPos += lineHeight;
+      doc.setFontSize(12);
+      if (userData.todgoals?.length > 0) {
+        userData.todgoals.forEach(goal => {
+          doc.text(`Category: ${goal.category}`, 20, yPos);
+          yPos += lineHeight;
+          doc.text(`Start Time: ${goal.startTime}`, 30, yPos);
+          yPos += lineHeight;
+          doc.text(`End Time: ${goal.endTime}`, 30, yPos);
+          yPos += lineHeight;
+          doc.text(`Status: ${goal.status}`, 30, yPos);
+          yPos += lineHeight * 1.5;
+        });
+      } else {
+        doc.text('No time of day goals set', 20, yPos);
+        yPos += lineHeight;
+      }
+  
+      // Blocked Categories
+      doc.setFontSize(14);
+      doc.text('Blocked Categories', 20, yPos);
+      yPos += lineHeight;
+      doc.setFontSize(12);
+      if (userData.blocked?.length > 0) {
+        userData.blocked.forEach(category => {
+          doc.text(`• ${category}`, 20, yPos);
+          yPos += lineHeight;
+        });
+      } else {
+        doc.text('No blocked categories', 20, yPos);
+      }
+  
+      // Footer
+      doc.setFontSize(10);
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 280);
+  
+      // Save PDF
+      doc.save(`youdash_data_${userData.username}_${new Date().toISOString().split('T')[0]}.pdf`);
+      alert('Your data has been exported to PDF successfully!');
+      
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      if (error.response?.status === 403) {
+        alert('Access denied. Please ensure you are logged in.');
+      } else {
+        alert('Failed to export data. Please try again.');
+      }
+    } finally {
+      setIsExporting(prev => ({ ...prev, pdf: false }));
+    }
+  };
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -151,6 +383,32 @@ function Profile() {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Profile</h1>
+      <div style={styles.buttonContainer}>
+  <button
+    onClick={() => navigate("/followers")}
+    style={styles.actionButton}
+  >
+    View Followers
+  </button>
+  
+  <button
+    onClick={handleExportCSV}
+    disabled={isExporting.csv}
+    style={styles.actionButton}
+  >
+    <FileSpreadsheet style={styles.buttonIcon} />
+    {isExporting.csv ? 'Exporting...' : 'Export CSV'}
+  </button>
+  
+  <button
+    onClick={handleExportPDF}
+    disabled={isExporting.pdf}
+    style={styles.actionButton}
+  >
+    <FileText style={styles.buttonIcon} />
+    {isExporting.pdf ? 'Exporting...' : 'Export PDF'}
+  </button>
+</div>
       <div style={styles.profilePicContainer}>
         <img
           src={profile.profilePicture || "https://via.placeholder.com/100"} // Display profile picture if available
@@ -205,6 +463,7 @@ function Profile() {
       ))}
     </div>
   );
+
 }
 
 const styles = {
@@ -276,6 +535,29 @@ const styles = {
     fontSize: "12px",
     marginLeft: "10px",
   },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '20px',
+    gap: '10px',
+  },
+  actionButton: {
+    padding: '8px 16px',
+    cursor: 'pointer',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    flex: '1',
+  },
+  buttonIcon: {
+    width: '16px',
+    height: '16px',
+  }
 };
 
 export default Profile;

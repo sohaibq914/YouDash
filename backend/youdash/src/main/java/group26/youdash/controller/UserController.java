@@ -3,6 +3,7 @@ package group26.youdash.controller;
 import group26.youdash.model.LoginRequest;
 import group26.youdash.model.User;
 import group26.youdash.service.EmailService;
+import group26.youdash.service.GoogleAuthService;
 import group26.youdash.service.UserService;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.google.api.client.auth.openidconnect.IdToken.Payload;
+
 /**
  * UserController handles HTTP requests related to user operations.
  * It provides endpoints for user creation, retrieval, deletion,
@@ -20,10 +23,13 @@ import org.springframework.web.bind.annotation.*;
  *
  * Author: Abdul Wajid Arikattayil
  */
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+     @Autowired
+    private GoogleAuthService googleAuthService;
 
     @Autowired
     private UserService userService;
@@ -49,6 +55,46 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userService.save(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    private String getPayloadValue(Payload payload, String key) {
+        Object value = payload.get(key);
+        return value != null ? value.toString() : null;
+    }
+
+    @PostMapping("/google-login")
+    public ResponseEntity<?> googleLogin(@RequestBody GoogleLoginRequest request) {
+        try {
+            Payload payload = googleAuthService.verifyGoogleToken(request.getIdToken());
+            
+            // Check if user exists by Google ID
+            User user = userService.findByGoogleId((String) payload.getSubject());
+            
+            if (user == null) {
+                // Create new user
+                user = new User();
+                user.setGoogleId((String) payload.getSubject());
+                
+                // Use helper method to safely get values
+                String email = getPayloadValue(payload, "email");
+                String name = getPayloadValue(payload, "name");
+                String picture = getPayloadValue(payload, "picture");
+                
+                user.setEmail(email);
+                user.setName(name);
+                user.setUsername(email); // Use email as username
+                user.setAuthProvider("google");
+                if (picture != null) {
+                    user.setProfilePicture(picture);
+                }
+                
+                user = userService.save(user);
+            }
+            
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to authenticate with Google: " + e.getMessage());
+        }
     }
 
     /**
@@ -183,5 +229,17 @@ public ResponseEntity<List<User>> getMyFollowers(@PathVariable int id) {
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+}
+
+class GoogleLoginRequest {
+    private String idToken;
+    
+    public String getIdToken() {
+        return idToken;
+    }
+    
+    public void setIdToken(String idToken) {
+        this.idToken = idToken;
     }
 }
