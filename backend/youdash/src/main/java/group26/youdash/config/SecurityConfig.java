@@ -28,6 +28,7 @@ public class SecurityConfig {
                     "/api/users/login", 
                     "/api/users/signup", 
                     "/api/users/google-login",
+                    "/api/users/followers",
                     "/api/message", 
                     "/profile/darkmode", 
                     "/uploads/**",
