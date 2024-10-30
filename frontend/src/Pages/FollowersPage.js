@@ -91,7 +91,7 @@ const FollowersPage = () => {
       setUsersWithSimilarGoalTypes(updateUserList(similarGoalTypesResponse.data));
     } catch (err) {
       console.error("Error updating follow status:", err);
-      alert(`Failed to ${isFollowing ? "unfollow" : "follow"} user.`);
+      // alert(`Failed to ${isFollowing ? "unfollow" : "follow"} user.`);
     }
   };
 

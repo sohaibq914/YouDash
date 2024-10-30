@@ -64,7 +64,7 @@ function Profile() {
 
   const handleEditClick = (field) => {
     if ((field === "email" || field === "password") && isGmail) {
-      alert("Email and password cannot be edited for Gmail accounts.");
+      // alert("Email and password cannot be edited for Gmail accounts.");
       return;
     }
     setEditField(field);
@@ -96,17 +96,17 @@ function Profile() {
   const handleSave = async () => {
     // Validate email, password, and bio before saving
     if (editField === "email" && !isEmailValid) {
-      alert("Please enter a valid email address.");
+      // alert("Please enter a valid email address.");
       return;
     }
 
     if (editField === "password" && !isPasswordValid) {
-      alert("Password must be at least 5 characters long.");
+      // alert("Password must be at least 5 characters long.");
       return;
     }
 
     if (editField === "bio" && !isBioValid) {
-      alert("Bio cannot be empty.");
+      // alert("Bio cannot be empty.");
       return;
     }
 
@@ -141,10 +141,10 @@ function Profile() {
       console.log("Profile picture uploaded successfully:", response.data.profilePicture);
       setProfile({ ...profile, profilePicture: response.data.profilePicture });
       setSelectedFile(null);
-      alert("Profile picture updated successfully!");
+      // alert("Profile picture updated successfully!");
     } catch (error) {
       console.error("Error uploading profile picture:", error);
-      alert("Failed to upload profile picture.");
+      // alert("Failed to upload profile picture.");
     }
   };
 
