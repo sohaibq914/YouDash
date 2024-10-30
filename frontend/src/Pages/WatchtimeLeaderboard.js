@@ -102,6 +102,8 @@ function WatchTimeDashboard() {
     }
   }, [category, showFollowersOnly]); // Re-fetch when category or toggle changes
 
+  const sortedUsers = userWatchTimes.sort((a, b) => b.watchTime - a.watchTime);
+
   return (
     <div className="WatchTimeDashboard">
       <h1>User Watch Time Leaderboard</h1>
@@ -147,9 +149,9 @@ function WatchTimeDashboard() {
       {hasFetched && (
         <div>
           <h2>Leaderboard</h2>
-          {userWatchTimes.length > 0 ? (
+          {sortedUsers.length > 0 ? (
             <ul>
-              {userWatchTimes.map((user) => (
+              {sortedUsers.map((user) => (
                 <li key={user.id}>
                   {user.name} ({user.username}) - {user.watchTime > 0 ? `Watch Time: ${user.watchTime} hours` : "Not enough data"}
                 </li>
