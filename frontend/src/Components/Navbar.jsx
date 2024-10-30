@@ -11,7 +11,7 @@ export const Navbar = () => {
   // Fetch user's dark mode setting from the backend when component mounts
   useEffect(() => {
     const fetchDarkModeSetting = async () => {
-        console.log(userID);
+      console.log(userID);
       try {
         const response = await axios.get("http://localhost:8080/profile/darkmode"); // Updated API path
         setDarkMode(response.data.darkMode); // Set dark mode state based on fetched data
@@ -38,24 +38,21 @@ export const Navbar = () => {
     }
   };
 
-
-    const getUser = () => {
-        let theUrl = window.location.href;
-        console.log(theUrl);
-        if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
-            setUserID(null);
-            return;
-        }
-        console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
-        setUserID(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
-
-        console.log(userID);
+  const getUser = () => {
+    let theUrl = window.location.href;
+    console.log(theUrl);
+    if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+      setUserID(null);
+      return;
     }
+    console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+    setUserID(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+
+    console.log(userID);
+  };
 
   return (
-
     <nav className={`navbar ${darkMode ? "dark" : ""}`}>
-
       <Link to="/" className="title">
         YouDash
       </Link>
@@ -64,83 +61,114 @@ export const Navbar = () => {
         <span></span>
         <span></span>
       </div>
-      {(userID != null && String(userID).length != 0) ? (
-      <>
-      <ul className={menuOpen ? "open" : ""}>
-        <li>
-          <NavLink to={"/" + String(userID) + "/home"}>Home</NavLink>
-        </li>
-        <li>
-          <NavLink id="youDashBoard" to={"/" + String(userID) + "/youDashBoard"}>YouDashBoard</NavLink>
-        </li>
-        <li>
-          <NavLink to={"/" + String(userID) + "/block-categories"}>Block Categories</NavLink>
-        </li>
-        <li>
-          <NavLink id="goalsCreate" to={"/" + String(userID) + "/goalsCreate"}>Create Goals</NavLink>
-        </li>
-        <li>
-          <NavLink id="goalsView" to={"/" + String(userID) + "/goalsView"}>View Goals</NavLink>
-        </li>
-        <li>
-          <NavLink id="goalsEdit" to={"/" + String(userID) + "/goalsEdit"}>Edit Goals</NavLink>
-        </li>
-        <li>
-          <NavLink id="goalsVis" to={"/" + String(userID) + "/goalsVis"}>Visual Goals</NavLink>
-        </li>
-        <li>
-          <NavLink to={"/" + String(userID) + "/profile"}>Profile</NavLink>
-        </li>
-        <li>
-        <NavLink to={"/" + String(userID) + "/watch-history"}>Watch History</NavLink>
-        </li>
-        <li>
-          <NavLink id="analytics-button"to={"/" + String(userID) + "/analytics"}>Analytics</NavLink>
-        </li>
-        <li>
-          {/* Dark mode toggle button */}
-          <button onClick={handleDarkModeToggle} className="dark-mode-btn">
-            {darkMode ? "Light Mode" : "Dark Mode"}
-          </button>
-        </li>
-      </ul>
-      </>) : (<>
-       <ul className={menuOpen ? "open" : ""}>
-               <li>
-                 <NavLink to="/login">Home</NavLink>
-               </li>
-                <li>
-                  <NavLink id="youDashBoard" to="/login">YouDashBoard</NavLink>
-                </li>
-               <li>
-                 <NavLink to="/login">Block Categories</NavLink>
-               </li>
-               <li>
-                 <NavLink id="goalsCreate" to="/login">Create Goals</NavLink>
-               </li>
-               <li>
-                 <NavLink id="goalsView" to="/login">View Goals</NavLink>
-               </li>
-               <li>
-                 <NavLink id="goalsEdit" to="/login">Edit Goals</NavLink>
-               </li>
-               <li>
-                 <NavLink id="goalsVis" to="/login">Visual Goals</NavLink>
-               </li>
-               <li>
-                 <NavLink to="/login">Profile</NavLink>
-               </li>
-               <li>
-               <NavLink to="/login">Watch History</NavLink>
-               </li>
-               <li>
-                 {/* Dark mode toggle button */}
-                 <button onClick={handleDarkModeToggle} className="dark-mode-btn">
-                   {darkMode ? "Light Mode" : "Dark Mode"}
-                 </button>
-               </li>
-             </ul>
-       </>)}
+      {userID != null && String(userID).length != 0 ? (
+        <>
+          <ul className={menuOpen ? "open" : ""}>
+            <li>
+              <NavLink to={"/" + String(userID) + "/home"}>Home</NavLink>
+            </li>
+            <li>
+              <NavLink id="youDashBoard" to={"/" + String(userID) + "/youDashBoard"}>
+                YouDashBoard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to={"/" + String(userID) + "/block-categories"}>Block Categories</NavLink>
+            </li>
+            <li>
+              <NavLink id="goalsCreate" to={"/" + String(userID) + "/goalsCreate"}>
+                Create Goals
+              </NavLink>
+            </li>
+            <li>
+              <NavLink id="goalsView" to={"/" + String(userID) + "/goalsView"}>
+                View Goals
+              </NavLink>
+            </li>
+            <li>
+              <NavLink id="goalsEdit" to={"/" + String(userID) + "/goalsEdit"}>
+                Edit Goals
+              </NavLink>
+            </li>
+            <li>
+              <NavLink id="goalsVis" to={"/" + String(userID) + "/goalsVis"}>
+                Visual Goals
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to={"/" + String(userID) + "/profile"}>Profile</NavLink>
+            </li>
+            <li>
+              <NavLink to={"/" + String(userID) + "/watch-history"}>Watch History</NavLink>
+            </li>
+            <li>
+              <NavLink id="analytics-button" to={"/" + String(userID) + "/analytics"}>
+                Analytics
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to={"/" + String(userID) + "/goalLeaderboard"}>Top Goal</NavLink>
+            </li>
+            <li>
+              <NavLink to={"/" + String(userID) + "/watchtime-leaderboard"}>Top Watchtime</NavLink>
+            </li>
+            <li>
+              {/* Dark mode toggle button */}
+              <button onClick={handleDarkModeToggle} className="dark-mode-btn">
+                {darkMode ? "Light Mode" : "Dark Mode"}
+              </button>
+            </li>
+          </ul>
+        </>
+      ) : (
+        <>
+          <ul className={menuOpen ? "open" : ""}>
+            <li>
+              <NavLink to="/login">Home</NavLink>
+            </li>
+            <li>
+              <NavLink id="youDashBoard" to="/login">
+                YouDashBoard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/login">Block Categories</NavLink>
+            </li>
+            <li>
+              <NavLink id="goalsCreate" to="/login">
+                Create Goals
+              </NavLink>
+            </li>
+            <li>
+              <NavLink id="goalsView" to="/login">
+                View Goals
+              </NavLink>
+            </li>
+            <li>
+              <NavLink id="goalsEdit" to="/login">
+                Edit Goals
+              </NavLink>
+            </li>
+            <li>
+              <NavLink id="goalsVis" to="/login">
+                Visual Goals
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/login">Profile</NavLink>
+            </li>
+            <li>
+              <NavLink to="/login">Watch History</NavLink>
+            </li>
+            <li>
+              {/* Dark mode toggle button */}
+              <button onClick={handleDarkModeToggle} className="dark-mode-btn">
+                {darkMode ? "Light Mode" : "Dark Mode"}
+              </button>
+            </li>
+          </ul>
+        </>
+      )}
     </nav>
   );
 };

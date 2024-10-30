@@ -36,7 +36,7 @@ function RouterPages() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         {/* <Route path="/navbar" element={<Navbar />} /> */}
-        <Route path="/:userId/profile" element={<Profile />} />
+        <Route path="/:userID/profile" element={<Profile />} />
         <Route path="/:userId/watch-history" element={<WatchHistory />} />
         <Route path="/:userId/followers" element={<FollowersPage />} />
         <Route path="/:userId/goalLeaderboard" element={<GoalLeaderboard />} />
