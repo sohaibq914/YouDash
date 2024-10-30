@@ -22,10 +22,10 @@ const AiWidget = ({ handleAiRequests, aiRecommendations, loading }: any) => {
       )}
 
       {/* Button to trigger the AI recommendation request */}
-      <button onClick={handleAiRequests}>Get AI Recommendations</button>
+      <button onClick={handleAiRequests} id="AI-recommendations">Get AI Recommendations</button>
 
       {/* Button to navigate to Prompt History */}
-      <button onClick={handleViewHistory} style={{ marginTop: "10px" }}>
+      <button onClick={handleViewHistory} id="prompt-history"   style={{ marginTop: "10px" }}>
         View Past Recommendations
       </button>
     </div>
