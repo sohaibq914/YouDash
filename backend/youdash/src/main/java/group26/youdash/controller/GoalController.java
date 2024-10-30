@@ -51,8 +51,12 @@ public class GoalController {
         System.out.println(goal);
         //System.out.println((TimeOfDayGoal)goal);
         //System.out.println((QualityGoal) goal);
-
-        int userId = 12345;
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
         for (int i = 0; i < temp.size(); i++) {
             if (goal.getGoalName().equals(temp.get(i).getGoalName())) {
                 //can't have duplicate names
@@ -118,7 +122,7 @@ public class GoalController {
     @GetMapping("/{user}/view")
     public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
     {
-        System.out.println(user);
+        //System.out.println(user);
         int userId;
         if (user.equals("")) {
             userId = 12345;

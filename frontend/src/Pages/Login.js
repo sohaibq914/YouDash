@@ -50,6 +50,8 @@ function Login() {
         <div className="form-group">
           <label>Username</label>
           <input
+            style={{width: "25%"}}
+            id="loginUsername"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -61,13 +63,14 @@ function Login() {
           <label>Password</label>
           <input
             type="password"
+            id="loginPassword"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
         
-        <button type="submit">Login</button>
+        <button id="loginBtn" type="submit">Login</button>
       </form>
 
       <div className="divider">OR</div>
