@@ -25,13 +25,65 @@ public class SecurityConfig {
             .and()
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(
-                    "/api/users/login", 
-                    "/api/users/signup", 
+                    // User Controller endpoints
+                    "/api/users",
+                    "/api/users/login",
+                    "/api/users/signup",
                     "/api/users/google-login",
-                    "/api/message", 
-                    "/profile/darkmode", 
-                    "/uploads/**",
-                    "/profile/{userId}/full"  // Add this line
+                    "/api/users/{id}",
+                    "/api/users/{id}/recommendations-from-followers",
+                    "/api/users/{id}/followers",
+                    "/api/users/{id}/my-followers",
+                    "/api/users/{id}/recommended-followers",
+                    "/api/users/{followerId}/followers-of-follower",
+                    "/api/users/{id}/recommended-followers-of-followers",
+                    "/api/users/{id}/recommended-following",
+                    "/api/users/{targetId}/follow/{currentUserId}",
+                    "/api/users/{targetId}/unfollow/{currentUserId}",
+
+                    // Goals Controller endpoints
+                    "/goals/{user}/create",
+                    "/goals/{user}/view",
+                    "/goals/{user}/pie",
+                    "/goals/{user}/edit",
+                    "/goals/{user}/delete",
+                    "/goals/{user}/recommended-similar-goals",
+                    "/goals/{userId}/users-with-similar-goal-types",
+
+                    // Profile Controller endpoints
+                    "/profile/{userID}/updateProfile",
+                    "/profile/{userID}/uploadProfilePicture",
+                    "/profile/{userID}",
+                    "/profile/darkmode",
+                    "/profile/{userId}/full",
+
+                    // Analytics Controller endpoints
+                    "/analytics/{userId}/watch-time-by-hour",
+
+                    // Categories Controller endpoints
+                    "/block-categories/{userID}/addCategory",
+                    "/block-categories/{userID}/DeleteCategory",
+                    "/block-categories/{userID}/availableCategories",
+                    "/block-categories/{userID}/blockedCategories",
+                    "/block-categories/{userID}/testGetBlockedCategories",
+                    "/block-categories/{userID}/testAddBlockedCategory/{categoryName}",
+
+                    // OpenAI Controller endpoints
+                    "/ai/{userId}/recommendations",
+                    "/ai/{userId}/prompt-history",
+
+                    // Watch History Controller endpoints
+                    "/watch-history/{userID}/historyList",
+                    "/watch-history/{userID}/addVideo",
+                    "/watch-history/{userID}/totalWatchTime",
+                    "/watch-history/{userID}/watchTimeByCategory/{category}",
+
+                    // YouTube API Controller endpoints
+                    "/youtube/video-category",
+
+                    // Other endpoints
+                    "/api/message",
+                    "/uploads/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

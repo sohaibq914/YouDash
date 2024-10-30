@@ -53,8 +53,12 @@ public class GoalController {
         System.out.println(goal);
         //System.out.println((TimeOfDayGoal)goal);
         //System.out.println((QualityGoal) goal);
-
-        int userId = 11111;
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
         for (int i = 0; i < temp.size(); i++) {
             if (goal.getGoalName().equals(temp.get(i).getGoalName())) {
                 //can't have duplicate names
@@ -117,19 +121,21 @@ public class GoalController {
           "Shows",
           "Trailers"
     ));
+    
     @GetMapping("/{user}/view")
-    public ArrayList<Goal> viewGoal(@PathVariable("user") String user) {
+    public ArrayList<Goal> viewGoal(@PathVariable("user") String user)
+    {
+        //System.out.println(user);
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
         System.out.println(user);
         ArrayList<Goal> temp1 = new ArrayList<>();
-        int userId = user.equals("") ? 12345 : Integer.parseInt(user);
-        System.out.println("YESSS :" + userId);
         
-        // Fetch goals from DynamoDB if temp is empty
-        if (temp1.isEmpty()) {
-            System.out.println("SLDJFL:SDJFLk;SJDFL:FJ:S");
-            temp1.addAll(gs.getGoalsByUserId(userId));  // Directly add to the class-level temp
-            // System.out.println("YOOOO" + temp);
-        }
+        temp1.addAll(gs.getGoalsByUserId(userId));
     
         updateAllGoalsProgress(userId); // Update progress based on user activity
         // System.out.println("TEMP " + temp);
