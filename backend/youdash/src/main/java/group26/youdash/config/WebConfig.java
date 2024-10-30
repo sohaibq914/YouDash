@@ -12,18 +12,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Map URL path /uploads/** to the uploads directory on the filesystem
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:uploads/");  // Note the "file:" prefix
+                .addResourceLocations("file:uploads/");
     }
 
-        @Override
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Apply CORS settings to all endpoints
-                .allowedOrigins("http://localhost:3000") // Allow requests from the frontend
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow specified HTTP methods
-                .allowedHeaders("*") // Allow all headers
-                .allowCredentials(true); // Allow cookies and credentials
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .exposedHeaders("Authorization")
+                .maxAge(3600); // 1 hour
     }
 }
-

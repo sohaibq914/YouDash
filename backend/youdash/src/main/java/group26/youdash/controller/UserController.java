@@ -3,6 +3,7 @@ package group26.youdash.controller;
 import group26.youdash.model.LoginRequest;
 import group26.youdash.model.User;
 import group26.youdash.service.EmailService;
+import group26.youdash.service.GoogleAuthService;
 import group26.youdash.service.UserService;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.google.api.client.auth.openidconnect.IdToken.Payload;
+
 /**
  * UserController handles HTTP requests related to user operations.
  * It provides endpoints for user creation, retrieval, deletion,
@@ -20,10 +23,13 @@ import org.springframework.web.bind.annotation.*;
  *
  * Author: Abdul Wajid Arikattayil
  */
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+     @Autowired
+    private GoogleAuthService googleAuthService;
 
     @Autowired
     private UserService userService;
@@ -49,6 +55,46 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userService.save(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    private String getPayloadValue(Payload payload, String key) {
+        Object value = payload.get(key);
+        return value != null ? value.toString() : null;
+    }
+
+    @PostMapping("/google-login")
+    public ResponseEntity<?> googleLogin(@RequestBody GoogleLoginRequest request) {
+        try {
+            Payload payload = googleAuthService.verifyGoogleToken(request.getIdToken());
+            
+            // Check if user exists by Google ID
+            User user = userService.findByGoogleId((String) payload.getSubject());
+            
+            if (user == null) {
+                // Create new user
+                user = new User();
+                user.setGoogleId((String) payload.getSubject());
+                
+                // Use helper method to safely get values
+                String email = getPayloadValue(payload, "email");
+                String name = getPayloadValue(payload, "name");
+                String picture = getPayloadValue(payload, "picture");
+                
+                user.setEmail(email);
+                user.setName(name);
+                user.setUsername(email); // Use email as username
+                user.setAuthProvider("google");
+                if (picture != null) {
+                    user.setProfilePicture(picture);
+                }
+                
+                user = userService.save(user);
+            }
+            
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to authenticate with Google: " + e.getMessage());
+        }
     }
 
     /**
@@ -80,36 +126,56 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/{id}/follow")
-    public ResponseEntity<String> followUser(@PathVariable int id) {
+    @PostMapping("/{targetId}/follow/{currentUserId}")
+    public ResponseEntity<String> followUser(
+            @PathVariable int targetId,
+            @PathVariable int currentUserId) {
         try {
-            userService.followUser(id);  // Call the followUser method in the service
+            userService.followUser(targetId, currentUserId);
             return new ResponseEntity<>("User followed successfully", HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+    
+    @PostMapping("/{targetId}/unfollow/{currentUserId}")
+    public ResponseEntity<String> unfollowUser(
+            @PathVariable int targetId,
+            @PathVariable int currentUserId) {
+        try {
+            userService.unfollowUser(targetId, currentUserId);
+            return new ResponseEntity<>("User unfollowed successfully", HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
-    @PostMapping("/{id}/unfollow")
-public ResponseEntity<String> unfollowUser(@PathVariable int id) {
+
+    @GetMapping("/{id}/recommendations-from-followers")
+public ResponseEntity<List<User>> getRecommendationsFromFollowers(@PathVariable int id) {
     try {
-        userService.unfollowUser(id);  // Call the unfollowUser method in the service
-        return new ResponseEntity<>("User unfollowed successfully", HttpStatus.OK);
+        List<User> recommendations = userService.getRecommendationsFromFollowers(id);
+        return new ResponseEntity<>(recommendations, HttpStatus.OK);
     } catch (NoSuchElementException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
 
 
 @GetMapping("/{id}/followers")
-public ResponseEntity<List<User>> getFollowers(@PathVariable int id) {
+public ResponseEntity<List<User>> getUsersFollowingCurrentUser(@PathVariable int id) {
+    System.out.println(id + "S:LJFL:SDJF");
     try {
-        List<User> followers = userService.getFollowers(id);  // Fetch followers for the given user ID
+        // Call the service method to get users who are following the current user
+        List<User> followers = userService.getUsersFollowingCurrentUser(id);
         return new ResponseEntity<>(followers, HttpStatus.OK);
     } catch (NoSuchElementException e) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+
 
 
 @GetMapping("/{id}/my-followers")
@@ -183,5 +249,63 @@ public ResponseEntity<List<User>> getMyFollowers(@PathVariable int id) {
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+
+    @GetMapping("/{id}/recommended-followers")
+public ResponseEntity<List<User>> getRecommendedFollowers(@PathVariable int id) {
+    try {
+        List<User> recommendedFollowers = userService.getRecommendedFollowers(id);
+        return new ResponseEntity<>(recommendedFollowers, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+// Endpoint to get followers of a specific follower
+@GetMapping("/{followerId}/followers-of-follower")
+public ResponseEntity<List<User>> getFollowersOfFollower(@PathVariable int followerId) {
+    try {
+        List<User> followersOfFollower = userService.getFollowersOfFollower(followerId);
+        return new ResponseEntity<>(followersOfFollower, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+@GetMapping("/{id}/recommended-followers-of-followers")
+public ResponseEntity<List<User>> getFollowersOfFollowersRecommendations(@PathVariable int id) {
+    try {
+        List<User> recommendedFollowers = userService.getFollowersOfFollowersRecommendations(id);
+        return new ResponseEntity<>(recommendedFollowers, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+
+// Endpoint to get recommendations based on who the user follows
+@GetMapping("/{id}/recommended-following")
+public ResponseEntity<List<User>> getRecommendedBasedOnFollowing(@PathVariable int id) {
+    System.out.println("HIIII");
+    try {
+        List<User> recommendedFollowing = userService.getRecommendedBasedOnFollowing(id);
+        return new ResponseEntity<>(recommendedFollowing, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+}
+
+class GoogleLoginRequest {
+    private String idToken;
+    
+    public String getIdToken() {
+        return idToken;
+    }
+    
+    public void setIdToken(String idToken) {
+        this.idToken = idToken;
     }
 }

@@ -31,10 +31,19 @@ public class User {
     private String profilePicture; // New field for storing profile picture URL
     private boolean darkMode;
     private List<Integer> followers; // New followers attribute to store a list of follower IDs
+    private List<Integer> following; // New field for storing IDs of users this user follows
+
     private String profilePictureKey; // New field to store S3 key of profile picture
 
     private List<VideoHistory> history;
     private List<Map<String, String>> promptHistory;
+
+    private String googleId;          // Google's unique user ID
+    private String googleEmail;       // Email from Google account
+    private String googlePictureUrl;  // Profile picture URL from Google
+    private String authProvider;      // "local" or "google"
+    private String accessToken;       // OAuth access token (optional)
+
 
     @DynamoDBHashKey
     public int getId() {
@@ -43,6 +52,50 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+    @DynamoDBAttribute
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    @DynamoDBAttribute
+    public String getGoogleEmail() {
+        return googleEmail;
+    }
+
+    public void setGoogleEmail(String googleEmail) {
+        this.googleEmail = googleEmail;
+    }
+
+    @DynamoDBAttribute
+    public String getGooglePictureUrl() {
+        return googlePictureUrl;
+    }
+
+    public void setGooglePictureUrl(String googlePictureUrl) {
+        this.googlePictureUrl = googlePictureUrl;
+    }
+
+    @DynamoDBAttribute
+    public String getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(String authProvider) {
+        this.authProvider = authProvider;
+    }
+
+    @DynamoDBAttribute
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     /**
@@ -214,6 +267,16 @@ public class User {
 
     public void setFollowers(List<Integer> followers) {
         this.followers = followers;
+    }
+
+    // New attribute for storing the users this user follows
+    @DynamoDBAttribute(attributeName = "following")
+    public List<Integer> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<Integer> following) {
+        this.following = following;
     }
 
     // New attribute to store the S3 key of the profile picture

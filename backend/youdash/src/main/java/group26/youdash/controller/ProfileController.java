@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -93,6 +94,36 @@ public class ProfileController {
             return new ResponseEntity<>("Dark mode updated successfully", HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/{userId}/full")
+    public ResponseEntity<?> getFullUserData(@PathVariable int userId) {
+        try {
+            User user = userService.findById(userId);
+            
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Create a response object with all necessary data
+            Map<String, Object> fullUserData = new HashMap<>();
+            fullUserData.put("name", user.getName());
+            fullUserData.put("email", user.getEmail());
+            fullUserData.put("bio", user.getBio());
+            fullUserData.put("username", user.getUsername());
+            fullUserData.put("wtgoals", user.getWtgoals());
+            fullUserData.put("qgoals", user.getQgoals());
+            fullUserData.put("todgoals", user.getTodgoals());
+            fullUserData.put("blocked", user.getBlocked());
+            fullUserData.put("availableCategories", user.getAvailableCategories());
+            fullUserData.put("history", user.getHistory());
+            
+            return ResponseEntity.ok(fullUserData);
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body("Error retrieving user data: " + e.getMessage());
         }
     }
 

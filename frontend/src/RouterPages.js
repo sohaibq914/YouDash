@@ -16,7 +16,8 @@ import { Routes, Route, Link } from "react-router-dom"; // Remove Router and onl
 import FollowersPage from "./Pages/FollowersPage.js";
 import PromptHistory from "./Pages/PromptHistory.tsx";
 import WatchtimeLeaderboard from "./Pages/WatchtimeLeaderboard.js";
-import YouDashBoard from "./Pages/YouDashBoard"
+import GoalLeaderboard from "./Pages/GoalLeaderboard.js";
+import YouDashBoard from "./Pages/YouDashBoard";
 import WatchTimeChart from "./Components/WatchDataChart.jsx";
 
 function RouterPages() {
@@ -38,9 +39,10 @@ function RouterPages() {
         <Route path="/:userId/profile" element={<Profile />} />
         <Route path="/:userId/watch-history" element={<WatchHistory />} />
         <Route path="/:userId/followers" element={<FollowersPage />} />
+        <Route path="/:userId/goalLeaderboard" element={<GoalLeaderboard />} />
         <Route path="/ai/:userId/promptHistory" element={<PromptHistory />} />
         <Route path="/:userId/watchtime-leaderboard" element={<WatchtimeLeaderboard />} /> {/* Add new route */}
-        <Route path="/:userId/analytics" element={<WatchTimeChart />}/>
+        <Route path="/:userId/analytics" element={<WatchTimeChart />} />
       </Routes>
     </div>
   );

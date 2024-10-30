@@ -8,11 +8,19 @@ import { Navbar } from "./Components/Navbar.jsx";
 import RouterPages from "./RouterPages.js";
 import 'react-notifications-component/dist/theme.css'
 import { ReactNotifications } from 'react-notifications-component'
-import "./App.css"; // Default light mode styles
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import "./App.css";
+
+// Add this at the top of App.js, after imports
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://localhost:8080'; // Optional but recommended
 
 function App() {
   const [message, setMessage] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+
+  // Google Client ID
+  const googleClientId = "100708680067-lo35ieok973sub71he44sjtsmqmg73i1.apps.googleusercontent.com"; // Replace with your actual client ID
 
   // Fetch dark mode setting on component mount
   useEffect(() => {
@@ -71,15 +79,17 @@ function App() {
   }, []);
 
   return (
-    <>
-      <Navbar darkMode={darkMode} onDarkModeToggle={handleDarkModeToggle} />
-      <div className={`App ${darkMode ? "dark" : ""}`} style={{ width: "100%", overflow: "hidden" }}>
-        <ReactNotifications />
-        <div style={{ marginTop: "56px" }}>
-          <RouterPages />
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <>
+        <Navbar darkMode={darkMode} onDarkModeToggle={handleDarkModeToggle} />
+        <div className={`App ${darkMode ? "dark" : ""}`} style={{ width: "100%", overflow: "hidden" }}>
+          <ReactNotifications />
+          <div style={{ marginTop: "56px" }}>
+            <RouterPages />
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    </GoogleOAuthProvider>
   );
 }
 
