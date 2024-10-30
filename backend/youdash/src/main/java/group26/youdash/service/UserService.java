@@ -84,6 +84,17 @@ public void unfollowUser(int targetUserId, int currentUserId) {
     }
 }
 
+    public User findByGoogleId(String googleId) {
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+        PaginatedScanList<User> scanResult = dynamoDBMapper.scan(User.class, scanExpression);
+        
+        for (User user : scanResult) {
+            if (googleId.equals(user.getGoogleId())) {
+                return user;
+            }
+        }
+        return null;
+    }
 
 public List<User> getRecommendationsFromFollowers(int userId) {
     // Scan all users to find who has current user in their followers list
@@ -367,12 +378,26 @@ public List<User> getRecommendedBasedOnFollowing(int userId) {
      * @return The saved user object.
      */
     @Override
-    public User save(User user) {
-        // Set a unique ID for the user
-        user.setId(userIdCounter.getAndIncrement());
 
-        dynamoDBMapper.save(user); // Save the user to the DynamoDB table
-        return user; // Return the saved user object
+    public User save(User user) {
+        // If new user (no ID set)
+        if (user.getId() == 0) {
+            user.setId(userIdCounter.getAndIncrement());
+        }
+        
+        // If Google user, handle special case
+        if ("google".equals(user.getAuthProvider())) {
+            User existingUser = findByGoogleId(user.getGoogleId());
+            if (existingUser != null) {
+                // Update existing user's information
+                existingUser.setEmail(user.getEmail());
+                existingUser.setName(user.getName());
+                user = existingUser;
+            }
+        }
+        
+        dynamoDBMapper.save(user);
+        return user;
     }
 
     /**
