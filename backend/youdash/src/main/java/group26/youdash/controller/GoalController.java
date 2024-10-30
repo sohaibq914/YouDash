@@ -14,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import group26.youdash.model.User;  // Import User model
+
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -52,7 +54,7 @@ public class GoalController {
         //System.out.println((TimeOfDayGoal)goal);
         //System.out.println((QualityGoal) goal);
 
-        int userId = 12345;
+        int userId = 11111;
         for (int i = 0; i < temp.size(); i++) {
             if (goal.getGoalName().equals(temp.get(i).getGoalName())) {
                 //can't have duplicate names
@@ -118,18 +120,21 @@ public class GoalController {
     @GetMapping("/{user}/view")
     public ArrayList<Goal> viewGoal(@PathVariable("user") String user) {
         System.out.println(user);
+        ArrayList<Goal> temp1 = new ArrayList<>();
         int userId = user.equals("") ? 12345 : Integer.parseInt(user);
-    
+        System.out.println("YESSS :" + userId);
+        
         // Fetch goals from DynamoDB if temp is empty
-        if (temp.isEmpty()) {
-            temp.addAll(gs.getGoalsByUserId(userId));  // Directly add to the class-level temp
-            System.out.println("YOOOO" + temp);
+        if (temp1.isEmpty()) {
+            System.out.println("SLDJFL:SDJFLk;SJDFL:FJ:S");
+            temp1.addAll(gs.getGoalsByUserId(userId));  // Directly add to the class-level temp
+            // System.out.println("YOOOO" + temp);
         }
     
         updateAllGoalsProgress(userId); // Update progress based on user activity
-        System.out.println("TEMP " + temp);
+        // System.out.println("TEMP " + temp);
     
-        return temp;
+        return temp1;
     }
 
     private void updateAllGoalsProgress(int userId) {
@@ -276,6 +281,32 @@ public class GoalController {
         gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
+
+
+    @GetMapping("/{user}/recommended-similar-goals")
+public ResponseEntity<List<User>> getUsersWithSimilarCategoryGoals(@PathVariable("user") int userId) {
+    try {
+        List<User> recommendedUsers = gs.getUsersWithSimilarCategoryGoals(userId);
+        return new ResponseEntity<>(recommendedUsers, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+
+@GetMapping("/{userId}/users-with-similar-goal-types")
+public ResponseEntity<List<User>> getUsersWithSimilarGoalTypes(@PathVariable int userId) {
+    try {
+        List<User> recommendedUsers = gs.getUsersWithSimilarGoalTypes(userId);
+        return new ResponseEntity<>(recommendedUsers, HttpStatus.OK);
+    } catch (NoSuchElementException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+
+
+
 
 
 }

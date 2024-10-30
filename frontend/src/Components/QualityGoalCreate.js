@@ -47,17 +47,15 @@ function QualityGoalCreate() {
       });
   };
 
-
   const getUser = () => {
-              let theUrl = window.location.href;
-              console.log(theUrl);
-              if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
-                  return null;
-              }
-              console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
-              return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
-
-          }
+    let theUrl = window.location.href;
+    console.log(theUrl);
+    if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+      return null;
+    }
+    console.log("YEEE " + theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+    return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
+  };
 
   return (
     <div className="QualityGoalCreate">
@@ -87,38 +85,38 @@ function QualityGoalCreate() {
               <td>
                 <select id="categoryToWatch" defaultValue="ALL" name="categoryToWatch">
                   <option value="ALL">All Categories</option>
-                                  <option value="Film & Animation">Film & Animation</option>
-                                  <option value="Autos & Vehicles">Autos & Vehicles</option>
-                                  <option value="Music">Music</option>
-                                  <option value="Pets & Animals">Pets & Animals</option>
-                                  <option value="Sports">Sports</option>
-                                  <option value="Short Movies">Short Movies</option>
-                                  <option value="Travel & Events">Travel & Events</option>
-                                  <option value="Gaming">Gaming</option>
-                                  <option value="Videoblogging">Videoblogging</option>
-                                  <option value="People & Blogs">People & Blogs</option>
-                                  <option value="Comedy">Comedy</option>
-                                  <option value="Entertainment">Entertainment</option>
-                                  <option value="News & Politics">News & Politics</option>
-                                  <option value="Howto & Style">Howto & Style</option>
-                                  <option value="Education">Education</option>
-                                  <option value="Science & Technology">Science & Technology</option>
-                                  <option value="Nonprofits & Activism">Nonprofits & Activism</option>
-                                  <option value="Movies">Movies</option>
-                                  <option value="Anime/Animation">Anime/Animation</option>
-                                  <option value="Action/Adventure">Action/Adventure</option>
-                                  <option value="Classics">Classics</option>
-                                  <option value="Comedy">Comedy</option>
-                                  <option value="Documentary">Documentary</option>
-                                  <option value="Drama">Drama</option>
-                                  <option value="Family">Family</option>
-                                  <option value="Foreign">Foreign</option>
-                                  <option value="Horror">Horror</option>
-                                  <option value="Sci-Fi/Fantasy">Sci-Fi/Fantasy</option>
-                                  <option value="Thriller">Thriller</option>
-                                  <option value="Shorts">Shorts</option>
-                                  <option value="Shows">Shows</option>
-                                  <option value="Trailers">Trailers</option>
+                  <option value="Film & Animation">Film & Animation</option>
+                  <option value="Autos & Vehicles">Autos & Vehicles</option>
+                  <option value="Music">Music</option>
+                  <option value="Pets & Animals">Pets & Animals</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Short Movies">Short Movies</option>
+                  <option value="Travel & Events">Travel & Events</option>
+                  <option value="Gaming">Gaming</option>
+                  <option value="Videoblogging">Videoblogging</option>
+                  <option value="People & Blogs">People & Blogs</option>
+                  <option value="Comedy">Comedy</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="News & Politics">News & Politics</option>
+                  <option value="Howto & Style">Howto & Style</option>
+                  <option value="Education">Education</option>
+                  <option value="Science & Technology">Science & Technology</option>
+                  <option value="Nonprofits & Activism">Nonprofits & Activism</option>
+                  <option value="Movies">Movies</option>
+                  <option value="Anime/Animation">Anime/Animation</option>
+                  <option value="Action/Adventure">Action/Adventure</option>
+                  <option value="Classics">Classics</option>
+                  <option value="Comedy">Comedy</option>
+                  <option value="Documentary">Documentary</option>
+                  <option value="Drama">Drama</option>
+                  <option value="Family">Family</option>
+                  <option value="Foreign">Foreign</option>
+                  <option value="Horror">Horror</option>
+                  <option value="Sci-Fi/Fantasy">Sci-Fi/Fantasy</option>
+                  <option value="Thriller">Thriller</option>
+                  <option value="Shorts">Shorts</option>
+                  <option value="Shows">Shows</option>
+                  <option value="Trailers">Trailers</option>
                 </select>
               </td>
             </tr>
@@ -129,38 +127,38 @@ function QualityGoalCreate() {
               <td>
                 <select id="categoryToAvoid" defaultValue="ALL" name="categoryToAvoid">
                   <option value="ALL">All Categories</option>
-                                  <option value="Film & Animation">Film & Animation</option>
-                                  <option value="Autos & Vehicles">Autos & Vehicles</option>
-                                  <option value="Music">Music</option>
-                                  <option value="Pets & Animals">Pets & Animals</option>
-                                  <option value="Sports">Sports</option>
-                                  <option value="Short Movies">Short Movies</option>
-                                  <option value="Travel & Events">Travel & Events</option>
-                                  <option value="Gaming">Gaming</option>
-                                  <option value="Videoblogging">Videoblogging</option>
-                                  <option value="People & Blogs">People & Blogs</option>
-                                  <option value="Comedy">Comedy</option>
-                                  <option value="Entertainment">Entertainment</option>
-                                  <option value="News & Politics">News & Politics</option>
-                                  <option value="Howto & Style">Howto & Style</option>
-                                  <option value="Education">Education</option>
-                                  <option value="Science & Technology">Science & Technology</option>
-                                  <option value="Nonprofits & Activism">Nonprofits & Activism</option>
-                                  <option value="Movies">Movies</option>
-                                  <option value="Anime/Animation">Anime/Animation</option>
-                                  <option value="Action/Adventure">Action/Adventure</option>
-                                  <option value="Classics">Classics</option>
-                                  <option value="Comedy">Comedy</option>
-                                  <option value="Documentary">Documentary</option>
-                                  <option value="Drama">Drama</option>
-                                  <option value="Family">Family</option>
-                                  <option value="Foreign">Foreign</option>
-                                  <option value="Horror">Horror</option>
-                                  <option value="Sci-Fi/Fantasy">Sci-Fi/Fantasy</option>
-                                  <option value="Thriller">Thriller</option>
-                                  <option value="Shorts">Shorts</option>
-                                  <option value="Shows">Shows</option>
-                                  <option value="Trailers">Trailers</option>
+                  <option value="Film & Animation">Film & Animation</option>
+                  <option value="Autos & Vehicles">Autos & Vehicles</option>
+                  <option value="Music">Music</option>
+                  <option value="Pets & Animals">Pets & Animals</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Short Movies">Short Movies</option>
+                  <option value="Travel & Events">Travel & Events</option>
+                  <option value="Gaming">Gaming</option>
+                  <option value="Videoblogging">Videoblogging</option>
+                  <option value="People & Blogs">People & Blogs</option>
+                  <option value="Comedy">Comedy</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="News & Politics">News & Politics</option>
+                  <option value="Howto & Style">Howto & Style</option>
+                  <option value="Education">Education</option>
+                  <option value="Science & Technology">Science & Technology</option>
+                  <option value="Nonprofits & Activism">Nonprofits & Activism</option>
+                  <option value="Movies">Movies</option>
+                  <option value="Anime/Animation">Anime/Animation</option>
+                  <option value="Action/Adventure">Action/Adventure</option>
+                  <option value="Classics">Classics</option>
+                  <option value="Comedy">Comedy</option>
+                  <option value="Documentary">Documentary</option>
+                  <option value="Drama">Drama</option>
+                  <option value="Family">Family</option>
+                  <option value="Foreign">Foreign</option>
+                  <option value="Horror">Horror</option>
+                  <option value="Sci-Fi/Fantasy">Sci-Fi/Fantasy</option>
+                  <option value="Thriller">Thriller</option>
+                  <option value="Shorts">Shorts</option>
+                  <option value="Shows">Shows</option>
+                  <option value="Trailers">Trailers</option>
                 </select>
               </td>
             </tr>

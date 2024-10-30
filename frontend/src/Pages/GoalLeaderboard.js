@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
 const GoalLeaderboard = () => {
   const [users, setUsers] = useState([]);
-  const [userGoalsMap, setUserGoalsMap] = useState({});
+  const [allGoals, setAllGoals] = useState([]);
   const [goalTypeFilter, setGoalTypeFilter] = useState("All");
   const [progressFilter, setProgressFilter] = useState("All");
   const [rankedGoals, setRankedGoals] = useState([]);
+  const mountedRef = useRef(false);
 
   // Achievement indicator component
   const AchievementIndicator = ({ progress }) => {
@@ -30,105 +31,111 @@ const GoalLeaderboard = () => {
     try {
       const response = await axios.get("http://localhost:8080/api/users");
       setUsers(response.data);
+      console.log("USERS IN DB:::" + response.data);
+      return response.data;
     } catch (error) {
       console.error("Error fetching users:", error);
+      return [];
     }
   };
 
-  const fetchGoalsForAllUsers = async () => {
+  const fetchAllGoals = async () => {
     try {
-      const goalsMap = {};
-      const responses = await Promise.all(
-        users.map(async (user) => {
-          try {
-            const response = await axios.get(`http://localhost:8080/goals/${user.id}/view`);
-            return {
-              userId: user.id,
-              goals: response.data,
-            };
-          } catch (error) {
-            console.error(`Error fetching goals for user ${user.id}:`, error);
-            return {
-              userId: user.id,
-              goals: [],
-            };
+      const fetchedUsers = await fetchUsers();
+      let allUserGoals = [];
+
+      // Fetch goals for each user
+      for (const user of fetchedUsers) {
+        try {
+          console.log(`Fetching goals for user ${user.id}`);
+          const response = await axios.get(`http://localhost:8080/goals/${user.id}/view`);
+
+          if (response.data) {
+            console.log("HI");
+            // Get unique goals for this user
+            const uniqueUserGoals = [];
+            const seenGoals = new Set();
+
+            response.data.forEach((goal) => {
+              console.log("GOAL:", { ...goal });
+              const goalKey = `${goal.goalName}-${goal.goalDescription}`;
+              if (!seenGoals.has(goalKey)) {
+                seenGoals.add(goalKey);
+                uniqueUserGoals.push({
+                  ...goal,
+                  userId: user.id, // Ensure userId is set
+                  userName: user.name,
+                });
+              }
+            });
+
+            allUserGoals = [...allUserGoals, ...uniqueUserGoals];
           }
-        })
-      );
-
-      responses.forEach(({ userId, goals }) => {
-        const uniqueGoals = goals.filter((goal) => {
-          const goalKey = `${goal.goalName}-${goal.goalDescription}`;
-          const isUnique = !Object.values(goalsMap)
-            .flat()
-            .some((existingGoal) => `${existingGoal.goalName}-${existingGoal.goalDescription}` === goalKey);
-          return isUnique;
-        });
-
-        if (uniqueGoals.length > 0) {
-          goalsMap[userId] = uniqueGoals;
+        } catch (error) {
+          console.error(`Error fetching goals for user ${user.id}:`, error);
         }
-      });
+      }
 
-      setUserGoalsMap(goalsMap);
+      console.log("All unique goals:", allUserGoals);
+      setAllGoals(allUserGoals);
     } catch (error) {
-      console.error("Error fetching goals:", error);
+      console.error("Error fetching all goals:", error);
     }
   };
 
   const applyFiltersAndRank = () => {
     let filteredGoals = [];
+    const seenGoals = new Set();
 
-    Object.entries(userGoalsMap).forEach(([userId, goals]) => {
-      const user = users.find((u) => u.id.toString() === userId.toString());
+    // First pass: collect unique goals
+    allGoals.forEach((goal) => {
+      const goalKey = `${goal.goalName}-${goal.goalDescription}`;
+      if (!seenGoals.has(goalKey)) {
+        seenGoals.add(goalKey);
 
-      const validGoals = goals.filter((goal) => {
+        // Apply filters
+        let includeGoal = true;
+
         if (goalTypeFilter !== "All") {
           if (goalTypeFilter === "QualityGoal" && !(goal.categoryToWatch && goal.categoryToAvoid)) {
-            return false;
+            includeGoal = false;
           }
           if (goalTypeFilter === "WatchTimeGoal" && !goal.currentWatchTime) {
-            return false;
+            includeGoal = false;
           }
           if (goalTypeFilter === "TimeOfDayGoal" && !(goal.startWatchHour && goal.startAvoidHour)) {
-            return false;
+            includeGoal = false;
           }
         }
 
         const progress = goal.goalProgress || 0;
-        if (progressFilter === "High" && progress < 0.75) return false;
-        if (progressFilter === "Medium" && (progress < 0.25 || progress >= 0.75)) return false;
-        if (progressFilter === "Low" && progress >= 0.25) return false;
+        if (progressFilter === "High" && progress < 0.75) includeGoal = false;
+        if (progressFilter === "Medium" && (progress < 0.25 || progress >= 0.75)) includeGoal = false;
+        if (progressFilter === "Low" && progress >= 0.25) includeGoal = false;
 
-        return true;
-      });
-
-      validGoals.forEach((goal) => {
-        filteredGoals.push({
-          userId: userId,
-          userName: user ? user.name : "Unknown",
-          ...goal,
-        });
-      });
+        if (includeGoal) {
+          filteredGoals.push(goal);
+        }
+      }
     });
 
+    // Sort by progress
     filteredGoals.sort((a, b) => (b.goalProgress || 0) - (a.goalProgress || 0));
+
+    console.log("Final filtered and ranked goals:", filteredGoals);
     setRankedGoals(filteredGoals);
   };
 
   useEffect(() => {
-    fetchUsers();
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      fetchAllGoals();
+    }
   }, []);
 
   useEffect(() => {
-    if (users.length > 0) {
-      fetchGoalsForAllUsers();
-    }
-  }, [users]);
-
-  useEffect(() => {
     applyFiltersAndRank();
-  }, [userGoalsMap, goalTypeFilter, progressFilter]);
+  }, [allGoals, goalTypeFilter, progressFilter]);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
