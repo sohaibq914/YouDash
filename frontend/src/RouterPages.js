@@ -31,7 +31,7 @@ function RouterPages() {
         {/* User-specific routes */}
         <Route path="/:userId/home" element={<Home />} />
         <Route path="/:userId/youDashBoard" element={<YouDashBoard />} />
-        <Route path="/dashboard/:userId" element={<YouDashBoard />} /> {/* New route for viewing other users' dashboards */}
+        <Route path="/:userId/dashboard/:userID" element={<YouDashBoard />} /> {/* New route for viewing other users' dashboards */}
         <Route path="/:userId/block-categories" element={<BlockedPage />} />
         <Route path="/:userId/goalsCreate" element={<GoalCreate />} />
         <Route path="/:userId/goalsView" element={<GoalView />} />

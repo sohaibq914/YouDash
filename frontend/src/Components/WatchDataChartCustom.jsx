@@ -7,7 +7,7 @@ import "./WatchTimeChart.css"; // Import the CSS file
 function WatchTimeChartCustom(props) {
     const timeFrame = props.timeFrame;
     const timeFrameSelection = props.timeFrameSelection;
-  const { userId } = useParams();
+  const { userId } = props.userId;
   const [watchTimeData, setWatchTimeData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
@@ -15,8 +15,9 @@ function WatchTimeChartCustom(props) {
   useEffect(() => {
     const fetchAvailableCategories = async () => {
       try {
+        console.log(props.userId);
         const response = await axios.get(
-          `http://localhost:8080/block-categories/${userId}/availableCategories`
+          `http://localhost:8080/block-categories/${props.userId}/availableCategories`
         );
         setAvailableCategories(response.data.availableCategories);
       } catch (error) {
@@ -28,12 +29,12 @@ function WatchTimeChartCustom(props) {
   }, [userId, timeFrame, timeFrameSelection]);
 
   useEffect(() => {
-    if (userId) {
+    if (props.userId) {
       const fetchWatchTimeData = async () => {
         try {
           const url = selectedCategory
-            ? `http://localhost:8080/analytics/${userId}/watch-time-by-hour-custom?category=${selectedCategory}&timeFrame=${timeFrame}&timeFrameSelection=${timeFrameSelection}`
-            : `http://localhost:8080/analytics/${userId}/watch-time-by-hour-custom?timeFrame=${timeFrame}&timeFrameSelection=${timeFrameSelection}`;
+            ? `http://localhost:8080/analytics/${props.userId}/watch-time-by-hour-custom?category=${selectedCategory}&timeFrame=${timeFrame}&timeFrameSelection=${timeFrameSelection}`
+            : `http://localhost:8080/analytics/${props.userId}/watch-time-by-hour-custom?timeFrame=${timeFrame}&timeFrameSelection=${timeFrameSelection}`;
 
           const response = await axios.get(url);
           const formattedData = Object.keys(response.data).map(hour => ({

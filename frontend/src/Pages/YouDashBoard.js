@@ -6,8 +6,10 @@ import PieChart from "../Components/PieChart";
 
 import WatchTimeChart from "../Components/WatchDataChartCustom.jsx";
 
+import GoalBarCustom from "../Components/BarChartGoals";
+
 function YouDashBoard() {
-  const { userId } = useParams();
+  const [userId, setUserId] = useState(0);
   const [userData, setUserData] = useState(null);
   const [statusRow1, changeStatus1] = useState(0);
 
@@ -19,25 +21,36 @@ function YouDashBoard() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (userId) {
-        try {
-          const response = await axios.get(`http://localhost:8080/api/users/${userId}`);
-          setUserData(response.data);
-          setLoading(false);
-        } catch (err) {
-          console.error("Error fetching user data:", err);
-          setError("Failed to fetch user data");
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
+    try {
+      const response = await axios.get('http://localhost:8080/api/users/' + getUser());
+      setUserData(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      setError("Failed to fetch user data");
+      setLoading(false);
+    }
     };
     fetchUserData();
-  }, [userId]);
+  }, []);
 
 
 
+
+    const getUser = () => {
+            let theUrl = window.location.href;
+            console.log(theUrl);
+            if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+                return null;
+            }
+            if (theUrl.indexOf("/", theUrl.length-7) != -1) {
+                console.log(theUrl.substring(theUrl.indexOf("/", theUrl.length-7) + 1, theUrl.length));
+                return theUrl.substring(theUrl.indexOf("/", theUrl.length-7) + 1, theUrl.length);
+            }
+            console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
+
+        }
 
   const fullLeft1  = (e) => {
     changeStatus1(1);
@@ -146,8 +159,8 @@ function YouDashBoard() {
 
   return (
     <div className="YouDashBoard">
-        <h3 className="titleDash"> YouDashBoard </h3>
-        {userData ? "${userData.name}'s Dashboard" : 'YouDashBoard'}
+        <h3 className="titleDash"> {userData ? userData.name + "'s Dashboard" : 'YouDashBoard'} </h3>
+
         <table>
             <tbody>
                 {(statusRow1 == 0) ? (
@@ -156,7 +169,7 @@ function YouDashBoard() {
                     <td>
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1left" onClick={fullLeft1}>Expand</button>
                         <div className="halfPie">
-                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} />
+                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} />
                         </div>
                     </td>
                     <td>
@@ -164,23 +177,23 @@ function YouDashBoard() {
                         <div className="timeFrame">
                             <br/>
                             <br/>
-                            <button type="button" style={{ width: "80%" }} id="r1day" onClick={selDay1}>Day</button>
+                            <button type="button" style={{ width: "100%" }} id="r1day" onClick={selDay1}>Day</button>
                             <br/>
-                            <button type="button" style={{ width: "80%" }} id="r1week" onClick={selWeek1}>Week</button>
+                            <button type="button" style={{ width: "100%" }} id="r1week" onClick={selWeek1}>Week</button>
                             <br/>
-                            <button type="button" style={{ width: "80%" }} id="r1month" onClick={selMonth1}>Month</button>
+                            <button type="button" style={{ width: "100%" }} id="r1month" onClick={selMonth1}>Month</button>
                             <br/>
                         </div>
                         <div className="timeFrameSelection">
                             <br/>
                             <br/>
-                            <button type="button" style={{ width: "10%" }} id="r11" onClick={() => sel(1)}>1</button>
-                            <button type="button" style={{ width: "10%" }} id="r12" onClick={() => sel(2)}>2</button>
-                            <button type="button" style={{ width: "10%" }} id="r13" onClick={() => sel(3)}>3</button>
-                            <button type="button" style={{ width: "10%" }} id="r14" onClick={() => sel(4)}>4</button>
-                            <button type="button" style={{ width: "10%" }} id="r15" onClick={() => sel(5)}>5</button>
-                            <button type="button" style={{ width: "10%" }} id="r16" onClick={() => sel(6)}>6</button>
-                            <button type="button" style={{ width: "10%" }} id="r17" onClick={() => sel(7)}>7</button>
+                            <button type="button" style={{ width: "14%" }} id="r11" onClick={() => sel(1)}>1</button>
+                            <button type="button" style={{ width: "14%" }} id="r12" onClick={() => sel(2)}>2</button>
+                            <button type="button" style={{ width: "14%" }} id="r13" onClick={() => sel(3)}>3</button>
+                            <button type="button" style={{ width: "14%" }} id="r14" onClick={() => sel(4)}>4</button>
+                            <button type="button" style={{ width: "14%" }} id="r15" onClick={() => sel(5)}>5</button>
+                            <button type="button" style={{ width: "14%" }} id="r16" onClick={() => sel(6)}>6</button>
+                            <button type="button" style={{ width: "14%" }} id="r17" onClick={() => sel(7)}>7</button>
                             <br/>
                         </div>
                     </td>
@@ -192,7 +205,7 @@ function YouDashBoard() {
                     <td colSpan="2">
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1left" onClick={split1}>Split</button>
                         <div className="fullPie">
-                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} />
+                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} />
                         </div>
                     </td>
                 </tr>
@@ -205,23 +218,23 @@ function YouDashBoard() {
                         <div className="timeFrame">
                             <br/>
                             <br/>
-                            <button type="button" style={{ width: "80%" }} id="r1day" onClick={selDay1}>Day</button>
+                            <button type="button" style={{ width: "100%" }} id="r1day" onClick={selDay1}>Day</button>
                             <br/>
-                            <button type="button" style={{ width: "80%" }} id="r1week" onClick={selWeek1}>Week</button>
+                            <button type="button" style={{ width: "100%" }} id="r1week" onClick={selWeek1}>Week</button>
                             <br/>
-                            <button type="button" style={{ width: "80%" }} id="r1month" onClick={selMonth1}>Month</button>
+                            <button type="button" style={{ width: "100%" }} id="r1month" onClick={selMonth1}>Month</button>
                             <br/>
                         </div>
                         <div className="timeFrameSelection">
                             <br/>
                             <br/>
-                            <button type="button" style={{ width: "10%" }} id="r11" onClick={() => sel(1)}>1</button>
-                            <button type="button" style={{ width: "10%" }} id="r12" onClick={() => sel(2)}>2</button>
-                            <button type="button" style={{ width: "10%" }} id="r13" onClick={() => sel(3)}>3</button>
-                            <button type="button" style={{ width: "10%" }} id="r14" onClick={() => sel(4)}>4</button>
-                            <button type="button" style={{ width: "10%" }} id="r15" onClick={() => sel(5)}>5</button>
-                            <button type="button" style={{ width: "10%" }} id="r16" onClick={() => sel(6)}>6</button>
-                            <button type="button" style={{ width: "10%" }} id="r17" onClick={() => sel(7)}>7</button>
+                            <button type="button" style={{ width: "14%" }} id="r11" onClick={() => sel(1)}>1</button>
+                            <button type="button" style={{ width: "14%" }} id="r12" onClick={() => sel(2)}>2</button>
+                            <button type="button" style={{ width: "14%" }} id="r13" onClick={() => sel(3)}>3</button>
+                            <button type="button" style={{ width: "14%" }} id="r14" onClick={() => sel(4)}>4</button>
+                            <button type="button" style={{ width: "14%" }} id="r15" onClick={() => sel(5)}>5</button>
+                            <button type="button" style={{ width: "14%" }} id="r16" onClick={() => sel(6)}>6</button>
+                            <button type="button" style={{ width: "14%" }} id="r17" onClick={() => sel(7)}>7</button>
                             <br/>
                         </div>
                     </td>
@@ -236,11 +249,11 @@ function YouDashBoard() {
                         <tr>
                             <td>
                                 <button type="button" style={{ width: "100%", padding: "0%" }} id="r2left" onClick={fullLeft2}>Expand</button>
-                                <WatchTimeChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} />
+                                <WatchTimeChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} />
                             </td>
                             <td>
                                 <button type="button" style={{ width: "100%", padding: "0%" }} id="r2right" onClick={fullRight2}>Expand</button>
-                                <p> More Analytics Coming Soon!</p>
+                                <GoalBarCustom timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} />
                             </td>
                         </tr>
                         </>
@@ -249,7 +262,7 @@ function YouDashBoard() {
                         <tr>
                             <td colSpan="2">
                                 <button type="button" style={{ width: "100%", padding: "0%" }} id="r2left" onClick={split2}>Split</button>
-                                <WatchTimeChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} />
+                                <WatchTimeChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} />
                             </td>
                         </tr>
 
@@ -258,7 +271,7 @@ function YouDashBoard() {
                         <tr>
                             <td colSpan="2">
                                 <button type="button" style={{ width: "100%", padding: "0%" }} id="r2right" onClick={split2}>Split</button>
-                                <p> More Analytics Coming Soon!</p>
+                                <GoalBarCustom timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} />
                             </td>
                         </tr>
 

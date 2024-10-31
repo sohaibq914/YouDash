@@ -64,6 +64,18 @@ const FollowersPage = () => {
     }
   }, [userId]);
 
+    const getUser = () => {
+            let theUrl = window.location.href;
+            console.log(theUrl, userId);
+            if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+                return null;
+            }
+            console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
+
+        }
+
+
   const handleFollowUnfollow = async (targetUserId, isFollowing) => {
     try {
       if (isFollowing) {
@@ -116,7 +128,7 @@ const FollowersPage = () => {
       <div className="flex flex-col">
         {user.isFollowing ? (
           <>
-            <Link to={`/dashboard/${user.id}`} className="hover:text-blue-500">
+            <Link to={`http://localhost:3000/${getUser()}/dashboard/${user.id}`} className="hover:text-blue-500">
               <span>{user.name}</span>
             </Link>
             {user.wtgoals && (

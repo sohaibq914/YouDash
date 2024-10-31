@@ -27,10 +27,14 @@ function PieChart(props) {
 
     const getData = () => {
             axios
-                .get("http://localhost:8080/goals/" + getUser() + "/" + timeFrame + "/" + timeFrameSelection + "/pie")
+                .get("http://localhost:8080/goals/" + props.userId + "/" + timeFrame + "/" + timeFrameSelection + "/pie")
                 .then(function (response) {
 
                 console.log(timeFrame, timeFrameSelection);
+                console.log(response.data);
+                    if (Number.isNaN(response.data)) {
+                        setPercent(0);
+                    }
                     if (response.data > 1) {
                         setPercent(1);
                     } else {
@@ -40,16 +44,6 @@ function PieChart(props) {
                 .catch((error) => console.error(error));
     }
 
-    const getUser = () => {
-                let theUrl = window.location.href;
-                console.log(theUrl);
-                if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
-                    return null;
-                }
-                console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
-                return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
-
-            }
 
     const data = {
                        labels: ["Progress", "To Go"],
