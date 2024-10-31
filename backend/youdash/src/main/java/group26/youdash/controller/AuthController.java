@@ -1,5 +1,8 @@
 package group26.youdash.controller;
 
+import group26.youdash.classes.QualityGoal;
+import group26.youdash.classes.TimeOfDayGoal;
+import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.model.User;
 import group26.youdash.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +54,9 @@ public class AuthController {
                     user.setEmail(email);
                     user.setName(name);
                     user.setBio("");
+                    user.setQgoals(new ArrayList<QualityGoal> ());
+                    user.setWtgoals(new ArrayList<WatchTimeGoal> ());
+                    user.setTodgoals(new ArrayList<TimeOfDayGoal>());
                     user.setAvailableCategories(defaultCategories);
                     user.setBlocked(new ArrayList<>());
                     user.setDarkMode(false);
