@@ -89,3 +89,25 @@ nav .menu span {
     margin: 0.2rem 0.5rem;
   }
 }
+
+nav .title {
+  font-size: 1.5rem; /* Slightly smaller than your current 1.5rem */
+  margin: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+nav ul li a {
+  display: block;
+  text-decoration: none;
+  color: black;
+  padding: 0.5rem;
+  margin: 0 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem; /* Add this line to make link text smaller */
+}
+
+.dark-mode-btn {
+  font-size: 0.8rem; /* Match the link text size */
+}
