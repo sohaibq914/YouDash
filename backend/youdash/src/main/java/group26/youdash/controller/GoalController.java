@@ -184,6 +184,46 @@ public class GoalController {
         return progress / numGoals;
     }
 
+    @GetMapping("/{user}/{timeFrame}/{timeFrameSelection}/bar")
+    public Map<String, Float> barGoal(@PathVariable("user") String user, @PathVariable("timeFrame") int timeFrame, @PathVariable("timeFrameSelection") int timeFrameSelection)
+    {
+        //System.out.println(user);
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
+        temp = new ArrayList<>();
+        temp.addAll(gs.getGoalsByUserId(userId));
+        LocalDateTime st = LocalDateTime.now();
+        LocalDateTime en = LocalDateTime.now();
+        if (timeFrame == 0) { //day
+            st = st.minusDays(timeFrameSelection);
+            en = en.minusDays(timeFrameSelection-1);
+        } else if (timeFrame == 1) { //week
+            st = st.minusWeeks(timeFrameSelection);
+            en = en.minusWeeks(timeFrameSelection-1);
+        } else if (timeFrame == 2) {//month
+            st = st.minusMonths(timeFrameSelection);
+            en = en.minusMonths(timeFrameSelection-1);
+        }
+        ArrayList<Goal> temp1 = updateAllGoalsProgressTimeFrame(userId, st, en);
+        //updateAllGoalsProgress(userId);
+        int numGoals = temp1.size();
+        float progress = 0.0f;
+        Map <String, Float> retVal = new HashMap<>();
+        for (int i = 0; i < numGoals; i++) {
+            //System.out.println(temp1.get(i));
+            if (temp1.get(i) instanceof WatchTimeGoal && ((WatchTimeGoal) temp1.get(i)).watchLessThanGoal) {
+                retVal.put(temp1.get(i).getGoalName(), 1-temp1.get(i).getGoalProgress());
+            } else {
+                retVal.put(temp1.get(i).getGoalName(), temp1.get(i).getGoalProgress());
+            }
+        }
+        return retVal;
+    }
+
     private void updateAllGoalsProgress(int userId) {
         for(int i = 0; i < temp.size(); i++) {
             if (temp.get(i) instanceof WatchTimeGoal) {

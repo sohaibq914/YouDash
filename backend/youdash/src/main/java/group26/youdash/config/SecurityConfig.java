@@ -45,6 +45,7 @@ public class SecurityConfig {
                     "/goals/{user}/create",
                     "/goals/{user}/view",
                     "/goals/{user}/{timeFrame}/{timeFrameSelection}/pie",
+                    "/goals/{user}/{timeFrame}/{timeFrameSelection}/bar",
                     "/goals/{user}/edit",
                     "/goals/{user}/delete",
                     "/goals/{user}/recommended-similar-goals",
