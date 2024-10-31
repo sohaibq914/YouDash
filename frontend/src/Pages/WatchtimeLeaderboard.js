@@ -11,6 +11,15 @@ function WatchTimeDashboard() {
   const [showFollowersOnly, setShowFollowersOnly] = useState(false); // Toggle to show followers only
   const { userId: currentUser } = useParams(); // Get current user from URL params
 
+  // Reload page every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      window.location.reload();
+    }, 60000); // Reload every 60 seconds
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []);
+
   // Fetch all users
   const getAllUsers = async () => {
     try {
