@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import GoogleLoginButton from '../Components/GoogleLogin';
 
 function Login() {
 
@@ -30,17 +31,6 @@ function Login() {
     }
   };
 
-   // Your login component code using the configured axios instance
-   const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const response = await axios.post('/api/users/google-login', {
-        idToken: credentialResponse.credential
-      });
-      // Rest of your code
-    } catch (error) {
-      console.error('Google login failed:', error);
-    }
-  };
 
   return (
     <div className="login-container">
@@ -76,13 +66,7 @@ function Login() {
       <div className="divider">OR</div>
 
       <div className="google-login">
-        <GoogleLogin
-          onSuccess={handleGoogleSuccess}
-          onError={() => {
-            console.error('Login Failed');
-          }}
-          useOneTap
-        />
+        <GoogleLoginButton />
       </div>
 
       <button onClick={handleSignup}>Sign Up</button>
