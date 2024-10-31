@@ -31,6 +31,7 @@ public class AuthController {
 
     @PostMapping("/google-login")
     public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> payload) {
+        System.out.println("Auth received");
         String tokenId = payload.get("tokenId");
         try {
             GoogleIdToken idToken = userService.verifyGoogleToken(tokenId);

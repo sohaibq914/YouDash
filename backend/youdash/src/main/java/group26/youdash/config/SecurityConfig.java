@@ -59,6 +59,7 @@ public class SecurityConfig {
 
                     // Analytics Controller endpoints
                     "/analytics/{userId}/watch-time-by-hour",
+                    "/analytics/{userId}/watch-time-by-hour-custom",
 
                     // Categories Controller endpoints
                     "/block-categories/{userID}/addCategory",
@@ -81,7 +82,7 @@ public class SecurityConfig {
                     // YouTube API Controller endpoints
                     "/youtube/video-category",
 
-                    "auth/google-login",
+                    "/auth/google-login",
 
                     // Other endpoints
                     "/api/message",

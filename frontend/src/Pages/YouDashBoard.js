@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./YouDashBoard.css";
 import PieChart from "../Components/PieChart";
-import WatchTimeChart from "../Components/WatchDataChart.jsx";
+
+import WatchTimeChart from "../Components/WatchDataChartCustom.jsx";
 
 function YouDashBoard() {
   const { userId } = useParams();
@@ -334,68 +335,75 @@ function YouDashBoard() {
             </>
           )}
 
-          {statusRow2 == 0 ? (
-            <>
-              <tr>
-                <td>
-                  <button
-                    type="button"
-                    style={{ width: "100%", padding: "0%" }}
-                    id="r2left"
-                    onClick={fullLeft2}
-                  >
-                    Expand
-                  </button>
-                  <WatchTimeChart userId={userId} />
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    style={{ width: "100%", padding: "0%" }}
-                    id="r2right"
-                    onClick={fullRight2}
-                  >
-                    Expand
-                  </button>
-                  <p> More Analytics Coming Soon!</p>
-                </td>
-              </tr>
-            </>
-          ) : statusRow2 == 1 ? (
-            <>
-              <tr>
-                <td colSpan="2">
-                  <button
-                    type="button"
-                    style={{ width: "100%", padding: "0%" }}
-                    id="r2left"
-                    onClick={split2}
-                  >
-                    Split
-                  </button>
-                  <WatchTimeChart userId={userId} />
-                </td>
-              </tr>
-            </>
-          ) : (
-            <>
-              <tr>
-                <td colSpan="2">
-                  <button
-                    type="button"
-                    style={{ width: "100%", padding: "0%" }}
-                    id="r2right"
-                    onClick={split2}
-                  >
-                    Split
-                  </button>
-                  <p> More Analytics Coming Soon!</p>
-                </td>
-              </tr>
-            </>
-          )}
-        </tbody>
-      </table>
+                </>) : ( <>
+
+                <tr>
+                    <td colSpan="2">
+                        <button type="button" style={{ width: "100%", padding: "0%" }} id="r1right" onClick={split1}>Split</button>
+                        <div className="timeFrame">
+                            <br/>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1day" onClick={selDay1}>Day</button>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1week" onClick={selWeek1}>Week</button>
+                            <br/>
+                            <button type="button" style={{ width: "80%" }} id="r1month" onClick={selMonth1}>Month</button>
+                            <br/>
+                        </div>
+                        <div className="timeFrameSelection">
+                            <br/>
+                            <br/>
+                            <button type="button" style={{ width: "10%" }} id="r11" onClick={() => sel(1)}>1</button>
+                            <button type="button" style={{ width: "10%" }} id="r12" onClick={() => sel(2)}>2</button>
+                            <button type="button" style={{ width: "10%" }} id="r13" onClick={() => sel(3)}>3</button>
+                            <button type="button" style={{ width: "10%" }} id="r14" onClick={() => sel(4)}>4</button>
+                            <button type="button" style={{ width: "10%" }} id="r15" onClick={() => sel(5)}>5</button>
+                            <button type="button" style={{ width: "10%" }} id="r16" onClick={() => sel(6)}>6</button>
+                            <button type="button" style={{ width: "10%" }} id="r17" onClick={() => sel(7)}>7</button>
+                            <br/>
+                        </div>
+                    </td>
+                </tr>
+
+                </>)}
+                </>)}
+
+
+                {(statusRow2 == 0) ? (
+                        <>
+                        <tr>
+                            <td>
+                                <button type="button" style={{ width: "100%", padding: "0%" }} id="r2left" onClick={fullLeft2}>Expand</button>
+                                <WatchTimeChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} />
+                            </td>
+                            <td>
+                                <button type="button" style={{ width: "100%", padding: "0%" }} id="r2right" onClick={fullRight2}>Expand</button>
+                                <p> More Analytics Coming Soon!</p>
+                            </td>
+                        </tr>
+                        </>
+                        ) : ( <>
+                        {(statusRow2 == 1) ? (<>
+                        <tr>
+                            <td colSpan="2">
+                                <button type="button" style={{ width: "100%", padding: "0%" }} id="r2left" onClick={split2}>Split</button>
+                                <WatchTimeChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} />
+                            </td>
+                        </tr>
+
+                        </>) : ( <>
+
+                        <tr>
+                            <td colSpan="2">
+                                <button type="button" style={{ width: "100%", padding: "0%" }} id="r2right" onClick={split2}>Split</button>
+                                <p> More Analytics Coming Soon!</p>
+                            </td>
+                        </tr>
+
+                        </>)}
+                        </>)}
+            </tbody>
+        </table>
     </div>
   );
 }
