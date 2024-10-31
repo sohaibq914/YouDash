@@ -23,7 +23,7 @@ function WatchTimeChart(props) {
             for (const [key, value] of Object.entries(response.data)) {
               hourData.push({goalName: key, progress: (value*100)});
             }
-            console.log(hourData);
+            //console.log(hourData);
             setWatchTimeData(hourData);
         } catch (error) {
           console.error("Error fetching watch time data:", error);

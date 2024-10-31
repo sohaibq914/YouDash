@@ -145,6 +145,20 @@ public class GoalController {
         return temp;
     }
 
+    @GetMapping("/{user}/{timeFrame}/{timeFrameSelection}")
+    public float goalTimeFrame(@PathVariable("user") String user, @PathVariable("timeFrame") int timeFrame, @PathVariable("timeFrameSelection") int timeFrameSelection)
+    {
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
+        gs.uploadTimeFrame(userId, timeFrame, timeFrameSelection);
+        System.out.println("uploaded");
+        return 0.0f;
+    }
+
     @GetMapping("/{user}/{timeFrame}/{timeFrameSelection}/pie")
     public float pieGoal(@PathVariable("user") String user, @PathVariable("timeFrame") int timeFrame, @PathVariable("timeFrameSelection") int timeFrameSelection)
     {

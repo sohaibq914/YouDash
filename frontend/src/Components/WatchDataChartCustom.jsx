@@ -15,7 +15,7 @@ function WatchTimeChartCustom(props) {
   useEffect(() => {
     const fetchAvailableCategories = async () => {
       try {
-        console.log(props.userId);
+        //console.log(props.userId);
         const response = await axios.get(
           `http://localhost:8080/block-categories/${props.userId}/availableCategories`
         );
@@ -41,7 +41,7 @@ function WatchTimeChartCustom(props) {
             hour: response.data[hour],
             watchTime: response.data[hour]
           }));
-          console.log(response.data)
+          //console.log(response.data)
           const hourData = [];
           let has0 = false;
           for (const [key, value] of Object.entries(response.data)) {
@@ -63,14 +63,14 @@ function WatchTimeChartCustom(props) {
           if (!has23) {
               hourData.push({hour: 23, watchTime: 0});
             }
-          console.log(hourData);
+          //console.log(hourData);
           setWatchTimeData(hourData);
         } catch (error) {
           console.error("Error fetching watch time data:", error);
         }
       };
       fetchWatchTimeData();
-      console.log(watchTimeData);
+      //console.log(watchTimeData);
     }
   }, [userId, selectedCategory, timeFrame, timeFrameSelection]);
 

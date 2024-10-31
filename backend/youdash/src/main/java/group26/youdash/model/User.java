@@ -45,6 +45,9 @@ public class User {
     private String accessToken;       // OAuth access token (optional)
 
 
+    private int timeFrame;
+    private int timeFrameSelection;
+
     @DynamoDBHashKey
     public int getId() {
         return id;
@@ -53,6 +56,25 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
+
+    @DynamoDBAttribute
+    public int getTimeFrame() {
+        return timeFrame;
+    }
+
+    public void setTimeFrame(int timeFrame) {
+        this.timeFrame = timeFrame;
+    }
+
+    @DynamoDBAttribute
+    public int getTimeFrameSelection() {
+        return timeFrameSelection;
+    }
+
+    public void setTimeFrameSelection(int timeFrameSelection) {
+        this.timeFrameSelection = timeFrameSelection;
+    }
+
     @DynamoDBAttribute
     public String getGoogleId() {
         return googleId;

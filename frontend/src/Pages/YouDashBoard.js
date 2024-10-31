@@ -12,12 +12,45 @@ function YouDashBoard() {
   const [userId, setUserId] = useState(0);
   const [userData, setUserData] = useState(null);
   const [statusRow1, changeStatus1] = useState(0);
+  let changeableFrame = true;
 
   const [timeFrame, changeTimeFrame] = useState(0);
   const [timeFrameSelection, changeTimeFrameSelection] = useState(1);
   const [statusRow2, changeStatus2] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const weekElement = document.getElementById("r1week");
+          const dayElement = document.getElementById("r1day");
+          const monthElement = document.getElementById("r1month");
+          if (!weekElement || !monthElement || !dayElement) {
+            //console.error("One or more elements not found");
+            return;
+          }
+          if (statusRow1 != 1) {
+              if (timeFrame == 0) {
+                  selDay1();
+              }
+              if (timeFrame == 1) {
+                  selWeek1();
+              }
+              if (timeFrame == 2) {
+                  selMonth1();
+              }
+              sel(timeFrameSelection);
+          }
+          if (changeableFrame) {
+            axios
+                .get("http://localhost:8080/goals/" + getUser() + "/" + timeFrame + "/" + (timeFrameSelection-1))
+                .then(function (response) {
+                console.log("uploaded");
+                console.log(timeFrame, timeFrameSelection);
+                console.log(response.data);
+                })
+                .catch((error) => console.error(error));
+            }
+    }, [timeFrame, timeFrameSelection]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -34,20 +67,61 @@ function YouDashBoard() {
     fetchUserData();
   }, []);
 
+    useEffect(() => {
+        if (userData != null && changeableFrame) {
+              console.log(userData, userData.timeFrame, userData.timeFrameSelection);
+              changeTimeFrame(userData.timeFrame);
+              changeTimeFrameSelection((userData.timeFrameSelection+1));
+              console.log(timeFrame, timeFrameSelection);
+              const weekElement = document.getElementById("r1week");
+              const dayElement = document.getElementById("r1day");
+              const monthElement = document.getElementById("r1month");
+              if (!weekElement || !monthElement || !dayElement) {
+                //console.error("One or more elements not found");
+                return;
+              }
+              if (statusRow1 != 1) {
+                  if (userData.timeFrame == 0) {
+                      selDay1();
+                  }
+                  if (userData.timeFrame == 1) {
+                      selWeek1();
+                  }
+                  if (userData.timeFrame == 2) {
+                      selMonth1();
+                  }
+                  sel(userData.timeFrameSelection+1);
+              }
+        } else {
+            changeTimeFrame(0);
+              changeTimeFrameSelection(1);
+              const weekElement = document.getElementById("r1week");
+              const dayElement = document.getElementById("r1day");
+              const monthElement = document.getElementById("r1month");
+              if (!weekElement || !monthElement || !dayElement) {
+                //console.error("One or more elements not found");
+                return;
+              }
+              selWeek1();
+              sel(1);
+        }
+    }, [userData]);
 
 
 
     const getUser = () => {
             let theUrl = window.location.href;
-            console.log(theUrl);
+            //console.log(theUrl);
             if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
                 return null;
             }
             if (theUrl.indexOf("/", theUrl.length-7) != -1) {
-                console.log(theUrl.substring(theUrl.indexOf("/", theUrl.length-7) + 1, theUrl.length));
+                //console.log(theUrl.substring(theUrl.indexOf("/", theUrl.length-7) + 1, theUrl.length));
+                changeableFrame = false;
                 return theUrl.substring(theUrl.indexOf("/", theUrl.length-7) + 1, theUrl.length);
             }
-            console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            //console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            changeableFrame = true;
             return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
 
         }
@@ -93,7 +167,7 @@ function YouDashBoard() {
         const dayElement = document.getElementById("r1day");
         const monthElement = document.getElementById("r1month");
         if (!weekElement || !monthElement || !dayElement) {
-          console.error("One or more elements not found");
+          //console.error("One or more elements not found");
           return;
         }
         if (statusRow1 != 1) {

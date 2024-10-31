@@ -30,8 +30,8 @@ function PieChart(props) {
                 .get("http://localhost:8080/goals/" + props.userId + "/" + timeFrame + "/" + timeFrameSelection + "/pie")
                 .then(function (response) {
 
-                console.log(timeFrame, timeFrameSelection);
-                console.log(response.data);
+                //console.log(timeFrame, timeFrameSelection);
+                //console.log(response.data);
                     if (Number.isNaN(response.data)) {
                         setPercent(0);
                     }
