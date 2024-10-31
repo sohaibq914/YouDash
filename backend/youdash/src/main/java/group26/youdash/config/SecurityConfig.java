@@ -81,6 +81,8 @@ public class SecurityConfig {
                     // YouTube API Controller endpoints
                     "/youtube/video-category",
 
+                    "auth/google-login",
+
                     // Other endpoints
                     "/api/message",
                     "/uploads/**"
