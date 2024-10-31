@@ -9,23 +9,36 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 import "./PieChart.css";
 ChartJS.register(ArcElement, Tooltip, Legend);
-function PieChart() {
+function PieChart(props) {
+    const timeFrame = props.timeFrame;
+    const timeFrameSelection = props.timeFrameSelection;
+
     const [percent, setPercent] = useState(0);
     const width = window.innerWidth;
     const height = window.innerHeight;
 
+    useEffect(() => {
+        getData();
+    }, [props.timeFrame, props.timeFrameSelection]);
+
     useEffect (() => {
-        axios
-            .get("http://localhost:8080/goals/" + getUser() + "/pie")
-            .then(function (response) {
-                if (response.data > 1) {
-                    setPercent(1);
-                } else {
-                    setPercent(response.data);
-                }
-            })
-            .catch((error) => console.error(error));
+        getData();
     }, []);
+
+    const getData = () => {
+            axios
+                .get("http://localhost:8080/goals/" + getUser() + "/" + timeFrame + "/" + timeFrameSelection + "/pie")
+                .then(function (response) {
+
+                console.log(timeFrame, timeFrameSelection);
+                    if (response.data > 1) {
+                        setPercent(1);
+                    } else {
+                        setPercent(response.data);
+                    }
+                })
+                .catch((error) => console.error(error));
+    }
 
     const getUser = () => {
                 let theUrl = window.location.href;
@@ -52,11 +65,6 @@ function PieChart() {
                        ],
                      };
 
-    useEffect (() => {
-        console.log("Load data here");
-        //change colors depending on aim above or below
-        //update percentages
-    }, []);
     return (
     <div className="PieChart">
     {(percent >= 1) ? (

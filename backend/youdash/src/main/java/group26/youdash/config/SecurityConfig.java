@@ -44,7 +44,7 @@ public class SecurityConfig {
                     // Goals Controller endpoints
                     "/goals/{user}/create",
                     "/goals/{user}/view",
-                    "/goals/{user}/pie",
+                    "/goals/{user}/{timeFrame}/{timeFrameSelection}/pie",
                     "/goals/{user}/edit",
                     "/goals/{user}/delete",
                     "/goals/{user}/recommended-similar-goals",
@@ -81,9 +81,13 @@ public class SecurityConfig {
                     // YouTube API Controller endpoints
                     "/youtube/video-category",
 
+                    "auth/google-login",
+
                     // Other endpoints
                     "/api/message",
-                    "/uploads/**"
+                    "/uploads/**",
+
+                    "api/users/signup"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

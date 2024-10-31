@@ -49,8 +49,8 @@ public class GoalController {
     //mapping for "/goals/user/create" that creates a goal based on json
     @PostMapping(path = "/{user}/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createGoal(@PathVariable("user") String user, @RequestBody Goal goal) {
-        System.out.println(user);
-        System.out.println(goal);
+        //System.out.println(user);
+        //System.out.println(goal);
         //System.out.println((TimeOfDayGoal)goal);
         //System.out.println((QualityGoal) goal);
         int userId;
@@ -62,7 +62,7 @@ public class GoalController {
         for (int i = 0; i < temp.size(); i++) {
             if (goal.getGoalName().equals(temp.get(i).getGoalName())) {
                 //can't have duplicate names
-                System.out.println("Error: Duplicate Goal Name");
+                //System.out.println("Error: Duplicate Goal Name");
                 HttpHeaders header = new HttpHeaders();
                 header.add("Duplicate", "Duplicate goal");
                 return new ResponseEntity<>(header, HttpStatus.CONFLICT);
@@ -70,7 +70,7 @@ public class GoalController {
         }
         HttpHeaders header = new HttpHeaders();
         header.add("200", "uno");
-        System.out.println("Received New Goal");
+        //System.out.println("Received New Goal");
         temp.add(goal);
         gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
@@ -132,35 +132,53 @@ public class GoalController {
         } else {
             userId = Integer.parseInt(user);
         }
-        System.out.println(user);
-        ArrayList<Goal> temp1 = new ArrayList<>();
-        
-        temp1.addAll(gs.getGoalsByUserId(userId));
-    
-        updateAllGoalsProgress(userId); // Update progress based on user activity
+        //System.out.println(user);
+        temp = new ArrayList<>();
+        temp.addAll(gs.getGoalsByUserId(userId));
+
+        updateAllGoalsProgress(userId);
+        //temp1.addAll(gs.getGoalsByUserId(userId));
+        //System.out.println(temp1); // Update progress based on user activity
         // System.out.println("TEMP " + temp);
     
-        return temp1;
+        //return temp1;
+        return temp;
     }
 
-    @GetMapping("/{user}/pie")
-    public float pieGoal(@PathVariable("user") String user)
+    @GetMapping("/{user}/{timeFrame}/{timeFrameSelection}/pie")
+    public float pieGoal(@PathVariable("user") String user, @PathVariable("timeFrame") int timeFrame, @PathVariable("timeFrameSelection") int timeFrameSelection)
     {
-        System.out.println(user);
+        //System.out.println(user);
         int userId;
         if (user.equals("")) {
             userId = 12345;
         } else {
             userId = Integer.parseInt(user);
         }
-        updateAllGoalsProgress(userId);
-        int numGoals = temp.size();
+        temp = new ArrayList<>();
+        temp.addAll(gs.getGoalsByUserId(userId));
+        LocalDateTime st = LocalDateTime.now();
+        LocalDateTime en = LocalDateTime.now();
+        if (timeFrame == 0) { //day
+            st = st.minusDays(timeFrameSelection);
+            en = en.minusDays(timeFrameSelection-1);
+        } else if (timeFrame == 1) { //week
+            st = st.minusWeeks(timeFrameSelection);
+            en = en.minusWeeks(timeFrameSelection-1);
+        } else if (timeFrame == 2) {//month
+            st = st.minusMonths(timeFrameSelection);
+            en = en.minusMonths(timeFrameSelection-1);
+        }
+        ArrayList<Goal> temp1 = updateAllGoalsProgressTimeFrame(userId, st, en);
+        //updateAllGoalsProgress(userId);
+        int numGoals = temp1.size();
         float progress = 0.0f;
         for (int i = 0; i < numGoals; i++) {
-            if (temp.get(i) instanceof WatchTimeGoal && ((WatchTimeGoal) temp.get(i)).watchLessThanGoal) {
-                progress += 1 - temp.get(i).getGoalProgress();
+            //System.out.println(temp1.get(i));
+            if (temp1.get(i) instanceof WatchTimeGoal && ((WatchTimeGoal) temp1.get(i)).watchLessThanGoal) {
+                progress += 1 - temp1.get(i).getGoalProgress();
             } else {
-                progress += temp.get(i).getGoalProgress();
+                progress += temp1.get(i).getGoalProgress();
             }
         }
         return progress / numGoals;
@@ -171,6 +189,7 @@ public class GoalController {
             if (temp.get(i) instanceof WatchTimeGoal) {
                 try {
                     if (((WatchTimeGoal) temp.get(i)).getTheCategory().equals("ALL")) {
+                        //System.out.println(whs.getWatchTimeTotal(userId));
                         ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(whs.getWatchTimeTotal(userId));
                     } else {
                         ((WatchTimeGoal) temp.get(i)).setCurrentWatchTime(whs.getWatchTimeByCategory(userId, matches.indexOf((String)((WatchTimeGoal) temp.get(i)).getTheCategory())+1));
@@ -197,7 +216,7 @@ public class GoalController {
             }
             if (temp.get(i) instanceof TimeOfDayGoal) {
                 try {
-                    System.out.println("Time of day goal!");
+                    //System.out.println("Time of day goal!");
                     float goodTime =0.0f;
                     float badTime = 0.0f;
                     for (int d = 1; d <= 7; d++) {
@@ -234,7 +253,7 @@ public class GoalController {
                         enda = enda.withMinute(((TimeOfDayGoal) temp.get(i)).endAvoidMinute);
                         enda = enda.withHour(((TimeOfDayGoal) temp.get(i)).endAvoidHour);
                         enda = enda.withSecond(0);
-                        System.out.println(start + "\n" + end);
+                        //System.out.println(start + "\n" + end);
                         if (((TimeOfDayGoal) temp.get(i)).getCategoryWatch().equals("ALL")) {
                             goodTime += whs.getWatchTimeByCustomTime(userId, start, end);
                         } else {
@@ -258,6 +277,102 @@ public class GoalController {
         }
     }
 
+    private ArrayList<Goal> updateAllGoalsProgressTimeFrame(int userId, LocalDateTime st, LocalDateTime en) {
+
+        ArrayList<Goal> temp1 = new ArrayList<>(temp);
+        for(int i = 0; i < temp1.size(); i++) {
+            if (temp1.get(i) instanceof WatchTimeGoal) {
+                try {
+                    if (((WatchTimeGoal) temp1.get(i)).getTheCategory().equals("ALL")) {
+                        //System.out.println(whs.getWatchTimeTotal(userId));
+                        ((WatchTimeGoal) temp1.get(i)).setCurrentWatchTime(whs.getWatchTimeByCustomTime(userId, st, en));
+                    } else {
+                        ((WatchTimeGoal) temp1.get(i)).setCurrentWatchTime(whs.getWatchTimeByCategoryAndCustomTime(userId, matches.indexOf((String)((WatchTimeGoal) temp1.get(i)).getTheCategory())+1, st, en));
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            if (temp1.get(i) instanceof QualityGoal) {
+                try {
+                    if (((QualityGoal) temp1.get(i)).getCategoryToAvoid().equals("ALL")) {
+                        ((QualityGoal) temp1.get(i)).setProgressAvoid(whs.getWatchTimeByCustomTime(userId, st, en));
+                    } else {
+                        ((QualityGoal) temp1.get(i)).setProgressAvoid(whs.getWatchTimeByCategoryAndCustomTime(userId, matches.indexOf(((QualityGoal) temp1.get(i)).getCategoryToAvoid())+1, st, en));
+                    }
+                    if (((QualityGoal) temp1.get(i)).getCategoryToWatch().equals("ALL")) {
+                        ((QualityGoal) temp1.get(i)).setProgressWatch(whs.getWatchTimeByCustomTime(userId, st, en));
+                    } else {
+                        ((QualityGoal) temp1.get(i)).setProgressWatch(whs.getWatchTimeByCategoryAndCustomTime(userId, matches.indexOf(((QualityGoal) temp1.get(i)).getCategoryToWatch())+1, st, en));
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            if (temp1.get(i) instanceof TimeOfDayGoal) {
+                try {
+                    //System.out.println("Time of day goal!");
+                    float goodTime = 0.0f;
+                    float badTime = 0.0f;
+                    for (int d = 1; d <= en.getDayOfYear() - st.getDayOfYear(); d++) {
+                        LocalDateTime start = st;
+                        LocalDateTime end = en;
+                        if (start.getMinute() > ((TimeOfDayGoal) temp1.get(i)).getStartWatchMinute() && start.getHour() > ((TimeOfDayGoal) temp1.get(i)).getStartWatchHour()) {
+                            start = start.minusDays(d-1);
+                            end = end.minusDays(d-1);
+                        } else {
+                            start = start.minusDays(d);
+                            end = end.minusDays(d);
+                        }
+                        start = start.withMinute(((TimeOfDayGoal) temp1.get(i)).startWatchMinute);
+                        start = start.withHour(((TimeOfDayGoal) temp1.get(i)).startWatchHour);
+                        start = start.withSecond(0);
+
+                        end = end.withMinute(((TimeOfDayGoal) temp1.get(i)).endWatchMinute);
+                        end = end.withHour(((TimeOfDayGoal) temp1.get(i)).endWatchHour);
+                        end = end.withSecond(0);
+
+                        LocalDateTime starta = LocalDateTime.now();
+                        LocalDateTime enda = LocalDateTime.now();
+                        if (starta.getMinute() > ((TimeOfDayGoal) temp1.get(i)).getStartAvoidMinute() && starta.getHour() > ((TimeOfDayGoal) temp1.get(i)).getStartAvoidHour()) {
+                            starta = starta.minusDays(d-1);
+                            enda = enda.minusDays(d-1);
+                        } else {
+                            starta = starta.minusDays(d);
+                            enda = enda.minusDays(d);
+                        }
+                        starta = starta.withMinute(((TimeOfDayGoal) temp1.get(i)).startAvoidMinute);
+                        starta = starta.withHour(((TimeOfDayGoal) temp1.get(i)).startAvoidHour);
+                        starta = starta.withSecond(0);
+
+                        enda = enda.withMinute(((TimeOfDayGoal) temp1.get(i)).endAvoidMinute);
+                        enda = enda.withHour(((TimeOfDayGoal) temp1.get(i)).endAvoidHour);
+                        enda = enda.withSecond(0);
+                        //System.out.println(start + "\n" + end);
+                        if (((TimeOfDayGoal) temp1.get(i)).getCategoryWatch().equals("ALL")) {
+                            goodTime += whs.getWatchTimeByCustomTime(userId, start, end);
+                        } else {
+                            goodTime += whs.getWatchTimeByCategoryAndCustomTime(userId, matches.indexOf(((TimeOfDayGoal) temp1.get(i)).getCategoryWatch()) + 1, start, end);
+                        }
+                        if (((TimeOfDayGoal) temp1.get(i)).getCategoryAvoid().equals("ALL")) {
+                            badTime += whs.getWatchTimeByCustomTime(userId, starta, enda);
+                        } else {
+                            badTime += whs.getWatchTimeByCategoryAndCustomTime(userId, matches.indexOf(((TimeOfDayGoal) temp1.get(i)).getCategoryAvoid()) + 1, starta, enda);
+                        }
+
+                    }
+
+                    ((TimeOfDayGoal) temp1.get(i)).setBadTime(badTime);
+                    ((TimeOfDayGoal) temp1.get(i)).setGoodTime(goodTime);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            temp1.get(i).computeProgress();
+        }
+        return temp1;
+    }
+
     private static class updateGoalPackage {
         public String originalName;
         public Goal g;
@@ -272,7 +387,7 @@ public class GoalController {
     @PostMapping(path = "/{user}/edit", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> editGoal(@PathVariable("user") String user, @RequestBody updateGoalPackage goalPkg) {
         int userId = 12345;
-        System.out.println(goalPkg.g);
+        //System.out.println(goalPkg.g);
         //Update goal based on name
         for (int i = 0; i < temp.size(); i++) {
             if (temp.get(i).getGoalName().equals(goalPkg.originalName)) {
@@ -284,8 +399,8 @@ public class GoalController {
 
         HttpHeaders header = new HttpHeaders();
         header.add("200", "uno");
-        System.out.println("Updated New Goal");
-        System.out.println(temp);
+        //System.out.println("Updated New Goal");
+        //System.out.println(temp);
         gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
@@ -306,7 +421,7 @@ public class GoalController {
         }
         HttpHeaders header = new HttpHeaders();
         header.add("200", "Removed Goal");
-        System.out.println("Removed Goal" + goalToDelete.getGoalName());
+        //System.out.println("Removed Goal" + goalToDelete.getGoalName());
         gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
