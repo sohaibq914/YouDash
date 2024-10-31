@@ -44,7 +44,7 @@ public class SecurityConfig {
                     // Goals Controller endpoints
                     "/goals/{user}/create",
                     "/goals/{user}/view",
-                    "/goals/{user}/pie",
+                    "/goals/{user}/{timeFrame}/{timeFrameSelection}/pie",
                     "/goals/{user}/edit",
                     "/goals/{user}/delete",
                     "/goals/{user}/recommended-similar-goals",

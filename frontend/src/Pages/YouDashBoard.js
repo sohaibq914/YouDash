@@ -3,6 +3,8 @@ import axios from "axios";
 import "./YouDashBoard.css";
 import PieChart from "../Components/PieChart";
 
+import WatchTimeChart from "../Components/WatchDataChart.jsx";
+
 function YouDashBoard() {
 
   const [statusRow1, changeStatus1] = useState(0);
@@ -48,16 +50,18 @@ function YouDashBoard() {
     }
 
     useEffect(() => {
-        if (timeFrame == 0) {
-            selDay1();
+        if (statusRow1 != 1) {
+            if (timeFrame == 0) {
+                selDay1();
+            }
+            if (timeFrame == 1) {
+                selWeek1();
+            }
+            if (timeFrame == 2) {
+                selMonth1();
+            }
+            sel(timeFrameSelection);
         }
-        if (timeFrame == 1) {
-            selWeek1();
-        }
-        if (timeFrame == 2) {
-            selMonth1();
-        }
-        sel(timeFrameSelection);
     }, [statusRow1]);
 
     const selDay1 = (e) => {
@@ -116,7 +120,7 @@ function YouDashBoard() {
                     <td>
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1left" onClick={fullLeft1}>Expand</button>
                         <div className="halfPie">
-                            <PieChart />
+                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} />
                         </div>
                     </td>
                     <td>
@@ -152,7 +156,7 @@ function YouDashBoard() {
                     <td colSpan="2">
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1left" onClick={split1}>Split</button>
                         <div className="fullPie">
-                            <PieChart />
+                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} />
                         </div>
                     </td>
                 </tr>
@@ -196,11 +200,11 @@ function YouDashBoard() {
                         <tr>
                             <td>
                                 <button type="button" style={{ width: "100%", padding: "0%" }} id="r2left" onClick={fullLeft2}>Expand</button>
-                                <p> Coming Soon!</p>
+                                <WatchTimeChart />
                             </td>
                             <td>
                                 <button type="button" style={{ width: "100%", padding: "0%" }} id="r2right" onClick={fullRight2}>Expand</button>
-                                <p> Coming Soon!</p>
+                                <p> More Analytics Coming Soon!</p>
                             </td>
                         </tr>
                         </>
@@ -209,7 +213,7 @@ function YouDashBoard() {
                         <tr>
                             <td colSpan="2">
                                 <button type="button" style={{ width: "100%", padding: "0%" }} id="r2left" onClick={split2}>Split</button>
-                                <p> Coming Soon!</p>
+                                <WatchTimeChart />
                             </td>
                         </tr>
 
@@ -218,7 +222,7 @@ function YouDashBoard() {
                         <tr>
                             <td colSpan="2">
                                 <button type="button" style={{ width: "100%", padding: "0%" }} id="r2right" onClick={split2}>Split</button>
-                                <p> Coming Soon!</p>
+                                <p> More Analytics Coming Soon!</p>
                             </td>
                         </tr>
 
