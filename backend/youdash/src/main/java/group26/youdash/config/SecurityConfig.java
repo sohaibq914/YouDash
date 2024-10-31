@@ -85,7 +85,9 @@ public class SecurityConfig {
 
                     // Other endpoints
                     "/api/message",
-                    "/uploads/**"
+                    "/uploads/**",
+
+                    "api/users/signup"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

@@ -19,6 +19,8 @@ const GoogleLoginButton = () => {
       console.log(userId);
       // Redirect to main page
       navigate(`/${userId}/home`); 
+      window.location.reload();
+
     } catch (error) {
       console.error("Request failed:", error);
     }
