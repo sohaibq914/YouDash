@@ -109,7 +109,7 @@ class GoalTests(unittest.TestCase):
 
     #AC 1
     #Test Case 2001
-    #System: YouDash
+    #System: YouDash Goals
     #Test Create and view Time of day goal
     #Severity: 2
     def test_create_and_view_tod_goal(self):
@@ -130,7 +130,7 @@ class GoalTests(unittest.TestCase):
 
     #AC 2 - test you can view progress as percentage
     #Test Case 2002
-    #System: YouDash
+    #System: YouDash Goals
     #Test View progress Time of day goal
     #Severity: 2
     def test_view_tod_progress(self):
@@ -146,7 +146,7 @@ class GoalTests(unittest.TestCase):
 
     #AC 3 - basic editing of all fields
     #Test Case 2003
-    #System: YouDash
+    #System: YouDash Goals
     #Test Edit Time of day goal
     #Severity: 2
     def test_edit_tod_goal(self):
@@ -209,7 +209,7 @@ class GoalTests(unittest.TestCase):
 
     #AC 4 - checks that corresponding image is displayed
     #Test Case 2004
-    #System: YouDash
+    #System: YouDash Goals
     #Test Visualize Time of day goal
     #Severity: 3
     def test_visualize_tod_goal(self):
@@ -220,7 +220,7 @@ class GoalTests(unittest.TestCase):
 
     #AC 5 - "regresses" by shifting time frame to not include certain videos
     #Test Case 2005
-    #System: YouDash
+    #System: YouDash Goals
     #Test dynamic Time of Day Goal
     #Severity: 2
     def test_different_time_frames(self):

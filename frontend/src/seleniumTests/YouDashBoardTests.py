@@ -9,6 +9,25 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
+
+
+
+
+
+
+
+# these test cases were converted to manual test cases after changes were made and due to the visual nature of elements
+
+
+
+
+
+
+
+
+
+
+
 # inherit TestCase Class and create a new test class
 class GoalTests(unittest.TestCase):
 
