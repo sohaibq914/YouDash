@@ -176,14 +176,19 @@ public class TimeOfDayGoal extends Goal{
 
     @Override
     public float computeProgress() {
-
+        if (badTime == 0 && goodTime == 0) {
+            return 0;
+        }
+        if (badTime == 0) {
+            return 1;
+        }
         setGoalProgress((goodTime * multiplier)/badTime);
         return (goodTime * multiplier)/badTime;
     }
 
     @Override
     public String toString() {
-        return "TimeOfDayGoal{" +
+        return super.toString() + "TimeOfDayGoal{" +
                 "startWatchHour=" + startWatchHour +
                 ", startWatchMinute=" + startWatchMinute +
                 ", endWatchHour=" + endWatchHour +

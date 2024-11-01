@@ -19,6 +19,7 @@ function YouDashBoard() {
   const [statusRow2, changeStatus2] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [percentVal, setPercentVal] = useState(0);
 
     useEffect(() => {
         const weekElement = document.getElementById("r1week");
@@ -46,6 +47,7 @@ function YouDashBoard() {
                 .then(function (response) {
                 console.log("uploaded");
                 console.log(timeFrame, timeFrameSelection);
+                calcPie(timeFrame, timeFrameSelection, true);
                 console.log(response.data);
                 })
                 .catch((error) => console.error(error));
@@ -92,6 +94,7 @@ function YouDashBoard() {
                   }
                   sel(userData.timeFrameSelection+1);
               }
+            calcPie(userData.timeFrame, userData.timeFrameSelection, true);
         } else {
             changeTimeFrame(0);
               changeTimeFrameSelection(1);
@@ -104,6 +107,7 @@ function YouDashBoard() {
               }
               selWeek1();
               sel(1);
+            calcPie(1, 1, true);
         }
     }, [userData]);
 
@@ -182,6 +186,7 @@ function YouDashBoard() {
             }
             sel(timeFrameSelection);
         }
+        calcPie(timeFrame, timeFrameSelection, true);
     }, [statusRow1]);
 
     const selDay1 = (e) => {
@@ -228,6 +233,37 @@ function YouDashBoard() {
 
     }
 
+    const calcPie = (theTimeFrame, theTimeFrameSelection, retry) => {
+        console.log("CALC pie data");
+            axios
+                .get("http://localhost:8080/goals/" + getUser() + "/" + theTimeFrame + "/" + theTimeFrameSelection + "/pie")
+                .then(function (response) {
+
+                console.log(response.data, theTimeFrame, theTimeFrameSelection, getUser());
+                //console.log(response.data, props.userId, timeFrameSelection, timeFrame, props.timeFrame, props.timeFrameSelection);
+                    /*if ("" + response.data == "NaN") {
+                        setTimeout(function() {
+                        console.log("timeout)");
+                        calcPie(timeFrame, timeFrameSelection, true);
+                        }, 500);
+                        return;
+                    }
+                    if (retry) {
+                        setTimeout(function() {
+                        console.log("retry");
+                        calcPie(timeFrame, timeFrameSelection, false);
+                        }, 1000);
+                        return;
+                    }*/
+                    if (response.data > 1) {
+                        setPercentVal(1);
+                    } else {
+                        setPercentVal(response.data);
+                    }
+                })
+                .catch((error) => console.error(error));
+    }
+
   if (loading) return <div className="p-4">Loading...</div>;
   if (error) return <div className="p-4 text-red-500">{error}</div>;
 
@@ -243,7 +279,7 @@ function YouDashBoard() {
                     <td>
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1left" onClick={fullLeft1}>Expand</button>
                         <div className="halfPie">
-                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} />
+                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} percentVal={percentVal} />
                         </div>
                     </td>
                     <td>
@@ -258,9 +294,10 @@ function YouDashBoard() {
                             <button type="button" style={{ width: "100%" }} id="r1month" onClick={selMonth1}>Month</button>
                             <br/>
                         </div>
+                            <br/>
+                            <br/>
+                        <p style={{color: "white"}}>Units of time in the past:</p>
                         <div className="timeFrameSelection">
-                            <br/>
-                            <br/>
                             <button type="button" style={{ width: "14%" }} id="r11" onClick={() => sel(1)}>1</button>
                             <button type="button" style={{ width: "14%" }} id="r12" onClick={() => sel(2)}>2</button>
                             <button type="button" style={{ width: "14%" }} id="r13" onClick={() => sel(3)}>3</button>
@@ -299,9 +336,10 @@ function YouDashBoard() {
                             <button type="button" style={{ width: "100%" }} id="r1month" onClick={selMonth1}>Month</button>
                             <br/>
                         </div>
+                            <br/>
+                            <br/>
+                        <p style={{color: "white"}}>Units of time in the past:</p>
                         <div className="timeFrameSelection">
-                            <br/>
-                            <br/>
                             <button type="button" style={{ width: "14%" }} id="r11" onClick={() => sel(1)}>1</button>
                             <button type="button" style={{ width: "14%" }} id="r12" onClick={() => sel(2)}>2</button>
                             <button type="button" style={{ width: "14%" }} id="r13" onClick={() => sel(3)}>3</button>
