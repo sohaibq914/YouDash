@@ -51,7 +51,6 @@ const FollowersPage = () => {
             )
           }));
 
-        setPendingRequests(pendingRequestsResponse.data);
         setUsers(updateUserList(usersResponse.data));
         setFollowingCurrentUser(followingCurrentUserResponse.data);
         setRecommendations(updateUserList(recommendationsResponse.data));

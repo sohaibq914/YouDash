@@ -61,7 +61,7 @@ public class User {
     }
 
     @DynamoDBAttribute(attributeName = "isPrivate")
-    public boolean privateAccount() {
+    public boolean isPrivate() {
         return isPrivate;
     }
 
