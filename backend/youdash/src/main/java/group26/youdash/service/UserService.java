@@ -9,6 +9,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import group26.youdash.classes.YoutubeAPI.VideoHistory;
+import group26.youdash.model.FollowRequest;
 import group26.youdash.model.User;
 import group26.youdash.repository.UserRepository;
 
@@ -56,6 +57,173 @@ public class UserService  {
         System.out.println(tokenId);
         return verifier.verify(tokenId);
     }
+    // Add these methods to your existing UserService.java class
+
+public void updatePrivacySettings(int userId, boolean isPrivate) {
+    User user = dynamoDBMapper.load(User.class, userId);
+    if (user == null) {
+        throw new NoSuchElementException("User not found");
+    }
+    user.setPrivate(isPrivate);
+    dynamoDBMapper.save(user);
+}
+
+public boolean handleFollowRequest(int targetUserId, int requesterId) {
+    User targetUser = dynamoDBMapper.load(User.class, targetUserId);
+    User requester = dynamoDBMapper.load(User.class, requesterId);
+    
+    if (targetUser == null || requester == null) {
+        throw new NoSuchElementException("User not found");
+    }
+
+    // Don't allow self-following
+    if (targetUserId == requesterId) {
+        throw new IllegalArgumentException("Users cannot follow themselves");
+    }
+    
+    // Check if already following
+    List<Integer> currentUserFollowers = requester.getFollowers();
+    if (currentUserFollowers != null && currentUserFollowers.contains(targetUserId)) {
+        throw new IllegalStateException("Already following this user");
+    }
+    
+    // If account is public, follow directly
+    if (!targetUser.isPrivate()) {
+        followUser(targetUserId, requesterId);
+        return true;
+    }
+    
+    // If account is private, create follow request
+    List<FollowRequest> requests = targetUser.getPendingFollowRequests();
+    if (requests == null) {
+        requests = new ArrayList<>();
+    }
+    
+    // Check if request already exists
+    boolean requestExists = requests.stream()
+        .anyMatch(request -> request.getRequesterId() == requesterId && 
+                 "PENDING".equals(request.getStatus()));
+    
+    if (!requestExists) {
+        requests.add(new FollowRequest(requesterId, requester.getName()));
+        targetUser.setPendingFollowRequests(requests);
+        dynamoDBMapper.save(targetUser);
+    } else {
+        throw new IllegalStateException("Follow request already pending");
+    }
+    
+    return false;
+}
+
+public List<FollowRequest> getPendingFollowRequests(int userId) {
+    User user = dynamoDBMapper.load(User.class, userId);
+    if (user == null) {
+        throw new NoSuchElementException("User not found");
+    }
+    
+    List<FollowRequest> allRequests = user.getPendingFollowRequests();
+    if (allRequests == null) {
+        return new ArrayList<>();
+    }
+    
+    // Filter to only return PENDING requests
+    return allRequests.stream()
+        .filter(request -> "PENDING".equals(request.getStatus()))
+        .collect(Collectors.toList());
+}
+
+public void acceptFollowRequest(int userId, int requesterId) {
+    User user = dynamoDBMapper.load(User.class, userId);
+    if (user == null) {
+        throw new NoSuchElementException("User not found");
+    }
+    
+    List<FollowRequest> requests = user.getPendingFollowRequests();
+    if (requests == null) {
+        throw new IllegalStateException("No pending follow requests");
+    }
+    
+    // Find and update the specific request
+    Optional<FollowRequest> requestOpt = requests.stream()
+        .filter(request -> request.getRequesterId() == requesterId && 
+                "PENDING".equals(request.getStatus()))
+        .findFirst();
+        
+    if (requestOpt.isPresent()) {
+        FollowRequest request = requestOpt.get();
+        request.setStatus("ACCEPTED");
+        dynamoDBMapper.save(user);
+        
+        // Create the follow relationship
+        followUser(userId, requesterId);
+    } else {
+        throw new NoSuchElementException("No pending follow request found from this user");
+    }
+}
+
+public void rejectFollowRequest(int userId, int requesterId) {
+    User user = dynamoDBMapper.load(User.class, userId);
+    if (user == null) {
+        throw new NoSuchElementException("User not found");
+    }
+    
+    List<FollowRequest> requests = user.getPendingFollowRequests();
+    if (requests == null) {
+        throw new IllegalStateException("No pending follow requests");
+    }
+    
+    // Find and update the specific request
+    Optional<FollowRequest> requestOpt = requests.stream()
+        .filter(request -> request.getRequesterId() == requesterId && 
+                "PENDING".equals(request.getStatus()))
+        .findFirst();
+        
+    if (requestOpt.isPresent()) {
+        FollowRequest request = requestOpt.get();
+        request.setStatus("REJECTED");
+        dynamoDBMapper.save(user);
+    } else {
+        throw new NoSuchElementException("No pending follow request found from this user");
+    }
+}
+
+// Helper method to check if a user can view another user's profile
+public boolean canViewProfile(int viewerId, int profileId) {
+    if (viewerId == profileId) {
+        return true; // Users can always view their own profile
+    }
+
+    User profileUser = dynamoDBMapper.load(User.class, profileId);
+    if (profileUser == null) {
+        throw new NoSuchElementException("Profile user not found");
+    }
+
+    // If account is public, anyone can view
+    if (!profileUser.isPrivate()) {
+        return true;
+    }
+
+    // If account is private, check if viewer is a follower
+    List<Integer> followers = profileUser.getFollowers();
+    return followers != null && followers.contains(viewerId);
+}
+
+// Helper method to check if a follow request exists
+public boolean hasExistingFollowRequest(int targetUserId, int requesterId) {
+    User targetUser = dynamoDBMapper.load(User.class, targetUserId);
+    if (targetUser == null) {
+        throw new NoSuchElementException("Target user not found");
+    }
+
+    List<FollowRequest> requests = targetUser.getPendingFollowRequests();
+    if (requests == null) {
+        return false;
+    }
+
+    return requests.stream()
+        .anyMatch(request -> request.getRequesterId() == requesterId && 
+                 "PENDING".equals(request.getStatus()));
+}
     
 
     // In UserService.java

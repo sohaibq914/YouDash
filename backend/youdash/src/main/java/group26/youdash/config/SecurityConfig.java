@@ -90,7 +90,13 @@ public class SecurityConfig {
                     "/api/message",
                     "/uploads/**",
 
-                    "api/users/signup"
+                    "api/users/signup",
+                    "/api/privacy/{userId}/pending-requests",
+"/api/privacy/{userId}/handle-request",
+"/api/privacy/{targetId}/follow-request",
+                    "/api/privacy/{userID}/toggle"
+
+                    
                 ).permitAll()
                 .anyRequest().authenticated()
             )
@@ -116,3 +122,4 @@ public class SecurityConfig {
         return source;
     }
 }
+
