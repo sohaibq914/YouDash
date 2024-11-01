@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import html2canvas from "html2canvas";
-import BlockedPages from "../Pages/BlockedPages.tsx";
+import VisualizeGoal from "../Pages/VisualizeGoal";
 import Notification from "./Notification.js";
 
 const CaptureComponent = () => {
@@ -66,7 +66,7 @@ const CaptureComponent = () => {
         }}
       >
         {/* Content of the page you want to capture */}
-       <BlockedPages />
+       <VisualizeGoal />
       </div>
     </div>
   );

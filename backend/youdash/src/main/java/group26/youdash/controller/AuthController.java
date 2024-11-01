@@ -54,6 +54,7 @@ public class AuthController {
                     user.setEmail(email);
                     user.setName(name);
                     user.setBio("");
+                    user.setPromptHistory(new ArrayList<>());
                     user.setQgoals(new ArrayList<QualityGoal> ());
                     user.setWtgoals(new ArrayList<WatchTimeGoal> ());
                     user.setTodgoals(new ArrayList<TimeOfDayGoal>());
