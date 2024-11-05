@@ -44,7 +44,9 @@ public class SecurityConfig {
                     // Goals Controller endpoints
                     "/goals/{user}/create",
                     "/goals/{user}/view",
+                    "/goals/{user}/{timeFrame}/{timeFrameSelection}",
                     "/goals/{user}/{timeFrame}/{timeFrameSelection}/pie",
+                    "/goals/{user}/{timeFrame}/{timeFrameSelection}/bar",
                     "/goals/{user}/edit",
                     "/goals/{user}/delete",
                     "/goals/{user}/recommended-similar-goals",
@@ -59,6 +61,7 @@ public class SecurityConfig {
 
                     // Analytics Controller endpoints
                     "/analytics/{userId}/watch-time-by-hour",
+                    "/analytics/{userId}/watch-time-by-hour-custom",
 
                     // Categories Controller endpoints
                     "/block-categories/{userID}/addCategory",
@@ -81,13 +84,19 @@ public class SecurityConfig {
                     // YouTube API Controller endpoints
                     "/youtube/video-category",
 
-                    "auth/google-login",
+                    "/auth/google-login",
 
                     // Other endpoints
                     "/api/message",
                     "/uploads/**",
 
-                    "api/users/signup"
+                    "api/users/signup",
+                    "/api/privacy/{userId}/pending-requests",
+"/api/privacy/{userId}/handle-request",
+"/api/privacy/{targetId}/follow-request",
+                    "/api/privacy/{userID}/toggle"
+
+                    
                 ).permitAll()
                 .anyRequest().authenticated()
             )
@@ -113,3 +122,4 @@ public class SecurityConfig {
         return source;
     }
 }
+

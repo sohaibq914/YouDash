@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import VisualizeGoal from "../Pages/VisualizeGoal";
 import Notification from "./Notification.js";
+import VisualizeGoal from "../Pages/VisualizeGoal";
 
 const CaptureComponent = () => {
   const captureAreaRef = useRef(null);

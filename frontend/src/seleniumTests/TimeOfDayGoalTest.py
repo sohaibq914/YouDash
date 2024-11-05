@@ -93,6 +93,7 @@ class GoalTests(unittest.TestCase):
         self.selectInput("categoryAvoid", "ALL")
         self.writeInput("multiplierTOD", 2)
         self.clickById("goalSubmitTOD")
+        time.sleep(2)
 
     def navigate_view_goals(self):
         driver = self.driver
@@ -107,6 +108,10 @@ class GoalTests(unittest.TestCase):
         self.clickById("goalsVis")
 
     #AC 1
+    #Test Case 2001
+    #System: YouDash Goals
+    #Test Create and view Time of day goal
+    #Severity: 2
     def test_create_and_view_tod_goal(self):
         driver = self.driver
         self.navigate_view_goals()
@@ -124,6 +129,10 @@ class GoalTests(unittest.TestCase):
 
 
     #AC 2 - test you can view progress as percentage
+    #Test Case 2002
+    #System: YouDash Goals
+    #Test View progress Time of day goal
+    #Severity: 2
     def test_view_tod_progress(self):
         driver = self.driver
         self.navigate_view_goals()
@@ -136,6 +145,10 @@ class GoalTests(unittest.TestCase):
 
 
     #AC 3 - basic editing of all fields
+    #Test Case 2003
+    #System: YouDash Goals
+    #Test Edit Time of day goal
+    #Severity: 2
     def test_edit_tod_goal(self):
         driver = self.driver
         self.navigate_edit_goals()
@@ -195,6 +208,10 @@ class GoalTests(unittest.TestCase):
 
 
     #AC 4 - checks that corresponding image is displayed
+    #Test Case 2004
+    #System: YouDash Goals
+    #Test Visualize Time of day goal
+    #Severity: 3
     def test_visualize_tod_goal(self):
         driver = self.driver
         self.navigate_vis_goals()
@@ -202,6 +219,10 @@ class GoalTests(unittest.TestCase):
         assert "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAACACAYAAAC7gW9qAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAJtSURBVHhe7Zo9TsQwFIQDR6DfCiHBAajp6KDmDhyBmiNwB2ro6Kg5AEiIip4rAF5NJG+0dpzEz3Ey80nWuGHRTuY9/2QPfv9piDmE0iIDoLTIACgtZqvA8dMVZvv5un7GbF5UAlBaZACUlmxN8Gdzgtku5w+nmO2iJlgJMgBKy2wGuJ7RjjlRAqC0LNoAv4z8MQQlAEoLvQGz3Qe83X5g1jRH35+YDSNU70M+z/xa3OpixH2ub6JPe/5I+Wz1ACgtyQa4yIXGktEqkNoEY0861mz6EjKlCfaxiCbYllHKF7IgiwGlvoTF/zFPwNiIl2KVTdCZnmp81QZMOeamssoEDIHegFGHob4u7NdfKLr7Xph067b7t6GXLF2GNF6VADSI34TaYYW/zudc62MoAVBaqjbANT1/WLC6BAxZARwqAWhWSnXwHNAnoHcnuG/dT2lIfi2WTET2HuBeMnTHmjA5CzgsEzD0KcdQD7BKgCVKQEaqTkDOJx2CPgEqgTElECJnaZSIv0MJqCkBoV98WO4+F5EAy3vIrAmIkZKOUAIcVinQMgilpYgBc58dYigB0CqwuvqOUWQVGFMC2gkWQgZAacnWA/q2q0MbnHpAIWQAtDpK7R6VACgtMgBKiwyA0lLtadChV2MFKGJAqX39GJQAKC0yAEqLDIDSQm9A8k7w5e4Gs2Vwef+IWRyVAJQWGQClRQZAaZEBUFroDZh0J1jT7jB159cliwGv799bnYOLs81WxxqgHgClRQZAaZEBUFpkAJQWGQClRQZAaZEBUFpkAJQW+hshJWBKAtaAmiCUFhkApUUGQGmRAVBSmuYPkqMFYLmaKYoAAAAASUVORK5CYII=" in driver.page_source
 
     #AC 5 - "regresses" by shifting time frame to not include certain videos
+    #Test Case 2005
+    #System: YouDash Goals
+    #Test dynamic Time of Day Goal
+    #Severity: 2
     def test_different_time_frames(self):
         driver = self.driver
         self.navigate_view_goals()

@@ -72,6 +72,8 @@ public class GoalController {
         header.add("200", "uno");
         //System.out.println("Received New Goal");
         temp.add(goal);
+        updateAllGoalsProgress(userId);
+        System.out.println(temp);
         gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
@@ -145,6 +147,20 @@ public class GoalController {
         return temp;
     }
 
+    @GetMapping("/{user}/{timeFrame}/{timeFrameSelection}")
+    public float goalTimeFrame(@PathVariable("user") String user, @PathVariable("timeFrame") int timeFrame, @PathVariable("timeFrameSelection") int timeFrameSelection)
+    {
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
+        gs.uploadTimeFrame(userId, timeFrame, timeFrameSelection);
+        System.out.println("uploaded");
+        return 0.0f;
+    }
+
     @GetMapping("/{user}/{timeFrame}/{timeFrameSelection}/pie")
     public float pieGoal(@PathVariable("user") String user, @PathVariable("timeFrame") int timeFrame, @PathVariable("timeFrameSelection") int timeFrameSelection)
     {
@@ -182,6 +198,46 @@ public class GoalController {
             }
         }
         return progress / numGoals;
+    }
+
+    @GetMapping("/{user}/{timeFrame}/{timeFrameSelection}/bar")
+    public Map<String, Float> barGoal(@PathVariable("user") String user, @PathVariable("timeFrame") int timeFrame, @PathVariable("timeFrameSelection") int timeFrameSelection)
+    {
+        //System.out.println(user);
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
+        temp = new ArrayList<>();
+        temp.addAll(gs.getGoalsByUserId(userId));
+        LocalDateTime st = LocalDateTime.now();
+        LocalDateTime en = LocalDateTime.now();
+        if (timeFrame == 0) { //day
+            st = st.minusDays(timeFrameSelection);
+            en = en.minusDays(timeFrameSelection-1);
+        } else if (timeFrame == 1) { //week
+            st = st.minusWeeks(timeFrameSelection);
+            en = en.minusWeeks(timeFrameSelection-1);
+        } else if (timeFrame == 2) {//month
+            st = st.minusMonths(timeFrameSelection);
+            en = en.minusMonths(timeFrameSelection-1);
+        }
+        ArrayList<Goal> temp1 = updateAllGoalsProgressTimeFrame(userId, st, en);
+        //updateAllGoalsProgress(userId);
+        int numGoals = temp1.size();
+        float progress = 0.0f;
+        Map <String, Float> retVal = new HashMap<>();
+        for (int i = 0; i < numGoals; i++) {
+            //System.out.println(temp1.get(i));
+            if (temp1.get(i) instanceof WatchTimeGoal && ((WatchTimeGoal) temp1.get(i)).watchLessThanGoal) {
+                retVal.put(temp1.get(i).getGoalName(), 1-temp1.get(i).getGoalProgress());
+            } else {
+                retVal.put(temp1.get(i).getGoalName(), temp1.get(i).getGoalProgress());
+            }
+        }
+        return retVal;
     }
 
     private void updateAllGoalsProgress(int userId) {
@@ -222,6 +278,7 @@ public class GoalController {
                     for (int d = 1; d <= 7; d++) {
                         LocalDateTime start = LocalDateTime.now();
                         LocalDateTime end = LocalDateTime.now();
+
                         if (start.getMinute() > ((TimeOfDayGoal) temp.get(i)).getStartWatchMinute() && start.getHour() > ((TimeOfDayGoal) temp.get(i)).getStartWatchHour()) {
                             start = start.minusDays(d-1);
                             end = end.minusDays(d-1);
@@ -386,7 +443,12 @@ public class GoalController {
     //mapping for "/goals/user/create" that creates a goal based on json
     @PostMapping(path = "/{user}/edit", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> editGoal(@PathVariable("user") String user, @RequestBody updateGoalPackage goalPkg) {
-        int userId = 12345;
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
         //System.out.println(goalPkg.g);
         //Update goal based on name
         for (int i = 0; i < temp.size(); i++) {
@@ -400,7 +462,8 @@ public class GoalController {
         HttpHeaders header = new HttpHeaders();
         header.add("200", "uno");
         //System.out.println("Updated New Goal");
-        //System.out.println(temp);
+        System.out.println(temp);
+        updateAllGoalsProgress(userId);
         gs.uploadGoalList(userId, temp);
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
@@ -409,7 +472,12 @@ public class GoalController {
     public ResponseEntity<String> deleteGoal(@PathVariable("user") String user, @RequestBody Goal goalToDelete)
     {
         //Add goal to database
-        int userId = 12345;
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
 
         for (int i = 0; i < temp.size(); i++) {
             if (temp.get(i).getGoalName().equals(goalToDelete.getGoalName())) {

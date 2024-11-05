@@ -51,7 +51,12 @@ public class GoalsService {
         }
     }
 
-
+    public void uploadTimeFrame(int userId, int timeFrame, int timeFrameSelection) {
+        User user = dynamoDBMapper.load(User.class, userId);
+        user.setTimeFrame(timeFrame);
+        user.setTimeFrameSelection(timeFrameSelection);
+        dynamoDBMapper.save(user);
+    }
 
     public List<WatchTimeGoal> getUserGoals(int userId) {
         User user = dynamoDBMapper.load(User.class, userId);

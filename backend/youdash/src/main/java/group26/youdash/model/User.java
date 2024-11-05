@@ -45,6 +45,12 @@ public class User {
     private String accessToken;       // OAuth access token (optional)
 
 
+    private int timeFrame;
+    private int timeFrameSelection;
+
+    private boolean isPrivate;
+    private List<FollowRequest> pendingFollowRequests;
+
     @DynamoDBHashKey
     public int getId() {
         return id;
@@ -53,6 +59,43 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
+
+    @DynamoDBAttribute(attributeName = "isPrivate")
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
+    @DynamoDBAttribute(attributeName = "pendingFollowRequests")
+    public List<FollowRequest> getPendingFollowRequests() {
+        return pendingFollowRequests;
+    }
+
+    public void setPendingFollowRequests(List<FollowRequest> pendingFollowRequests) {
+        this.pendingFollowRequests = pendingFollowRequests;
+    }
+
+    @DynamoDBAttribute
+    public int getTimeFrame() {
+        return timeFrame;
+    }
+
+    public void setTimeFrame(int timeFrame) {
+        this.timeFrame = timeFrame;
+    }
+
+    @DynamoDBAttribute
+    public int getTimeFrameSelection() {
+        return timeFrameSelection;
+    }
+
+    public void setTimeFrameSelection(int timeFrameSelection) {
+        this.timeFrameSelection = timeFrameSelection;
+    }
+
     @DynamoDBAttribute
     public String getGoogleId() {
         return googleId;

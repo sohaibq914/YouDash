@@ -18,19 +18,27 @@ function PieChart(props) {
     const height = window.innerHeight;
 
     useEffect(() => {
-        getData();
-    }, [props.timeFrame, props.timeFrameSelection]);
+        //getData();
+    }, [props.timeFrame, props.timeFrameSelection, timeFrame, timeFrameSelection]);
 
     useEffect (() => {
-        getData();
+        //getData();
     }, []);
 
     const getData = () => {
+        console.log("getting pie data");
             axios
-                .get("http://localhost:8080/goals/" + getUser() + "/" + timeFrame + "/" + timeFrameSelection + "/pie")
+                .get("http://localhost:8080/goals/" + props.userId + "/" + timeFrame + "/" + timeFrameSelection + "/pie")
                 .then(function (response) {
 
-                console.log(timeFrame, timeFrameSelection);
+                //console.log(timeFrame, timeFrameSelection);
+                console.log(response.data, props.userId, timeFrameSelection, timeFrame, props.timeFrame, props.timeFrameSelection);
+                    if ("" + response.data == "NaN") {
+                        setTimeout(function() {
+                        console.log("timeout)");
+                        getData();
+                        }, 500);
+                    }
                     if (response.data > 1) {
                         setPercent(1);
                     } else {
@@ -40,22 +48,12 @@ function PieChart(props) {
                 .catch((error) => console.error(error));
     }
 
-    const getUser = () => {
-                let theUrl = window.location.href;
-                console.log(theUrl);
-                if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
-                    return null;
-                }
-                console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
-                return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
-
-            }
 
     const data = {
                        labels: ["Progress", "To Go"],
                        datasets: [
                          {
-                           data: [100*percent, 100*(1 - percent)],
+                           data: [100*props.percentVal, 100*(1 - props.percentVal)],
                            backgroundColor: [
                              'rgba(255, 99, 132, 0.8)',
                              'rgba(54, 162, 235, 0.8)'
@@ -67,7 +65,7 @@ function PieChart(props) {
 
     return (
     <div className="PieChart">
-    {(percent >= 1) ? (
+    {(props.percentVal >= 1) ? (
     <>
         <Confetti width={width} height={height} />
     </>

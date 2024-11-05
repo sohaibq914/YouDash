@@ -1,5 +1,6 @@
 package group26.youdash.service;
 
+import com.amazonaws.services.dynamodbv2.xspec.L;
 import group26.youdash.classes.YoutubeAPI.VideoHistory;
 import group26.youdash.classes.YoutubeAPI.VideoHistory;
 
@@ -85,6 +86,40 @@ public class AnalyticsService {
         }
         return watchTimeByHour;
     }
-    
+
+
+    public Map<Integer, Float> getAggregatedWatchTimeByHourCustom(int userId, String categoryName, LocalDateTime st, LocalDateTime en) {
+        User user = dynamoDBMapper.load(User.class, userId);
+        if (user == null || user.getHistory() == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<Integer, Float> watchTimeByHour = new HashMap<>();
+        DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("HH");
+
+        Integer categoryId = null;
+
+        // Only retrieve a specific category ID if it's not "All Categories"
+        if (categoryName != null && !"All Categories".equalsIgnoreCase(categoryName)) {
+            categoryId = CATEGORY_MAP.get(categoryName);
+
+            // Handle case where category does not exist in CATEGORY_MAP
+            if (categoryId == null) {
+                throw new IllegalArgumentException("Invalid category name: " + categoryName);
+            }
+        }
+
+        for (VideoHistory video : user.getHistory()) {
+            // If categoryId is null, we skip category filtering (show all categories)
+            if ((categoryId == null || video.getCategory() == categoryId)
+                    && LocalDateTime.parse(video.getTimeStamp()).isAfter(st)
+                    && LocalDateTime.parse(video.getTimeStamp()).isBefore(en)) {
+                LocalDateTime watchDateTime = LocalDateTime.parse(video.getTimeStamp());
+                String hour = watchDateTime.format(hourFormatter);
+                watchTimeByHour.put(Integer.parseInt(hour), watchTimeByHour.getOrDefault(Integer.parseInt(hour), 0f) + video.getDuration());
+            }
+        }
+        return watchTimeByHour;
+    }
 
 }

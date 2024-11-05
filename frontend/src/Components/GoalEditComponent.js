@@ -151,7 +151,7 @@ function GoalEditComponent(props) {
         originalGoalName = goal.goalName;
         console.log(originalGoalName);
         axios
-          .post("http://localhost:8080/goals/thename/edit", goalUpdate)
+          .post("http://localhost:8080/goals/" + getUser() + "/edit", goalUpdate)
           .then((response) => console.log(response))
           .catch((error) => console.error(error));
       };
@@ -168,12 +168,21 @@ function GoalEditComponent(props) {
             }
         }
         axios
-                  .post("http://localhost:8080/goals/thename/delete", goal)
+                  .post("http://localhost:8080/goals/" + getUser() + "/delete", goal)
                   .then((response) => console.log(response))
                   .catch((error) => console.error(error));
         window.location.reload();
     };
+const getUser = () => {
+            let theUrl = window.location.href;
+            //console.log(theUrl);
+            if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+                return null;
+            }
+            //console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
 
+        }
   return (
     <div className="GoalEditComponent goalEditField">
         <div style={{display: 'flex', justifyContent: 'center'}}>
