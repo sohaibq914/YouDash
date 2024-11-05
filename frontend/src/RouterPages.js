@@ -18,6 +18,7 @@ import WatchtimeLeaderboard from "./Pages/WatchtimeLeaderboard.js";
 import GoalLeaderboard from "./Pages/GoalLeaderboard.js";
 import YouDashBoard from "./Pages/YouDashBoard";
 import WatchTimeChart from "./Components/WatchDataChart.jsx";
+import CreateGroup from "./Pages/CreateGroup";
 
 function RouterPages() {
   return (
@@ -44,6 +45,7 @@ function RouterPages() {
         <Route path="/ai/:userId/promptHistory" element={<PromptHistory />} />
         <Route path="/:userId/watchtime-leaderboard" element={<WatchtimeLeaderboard />} />
         <Route path="/:userId/analytics" element={<WatchTimeChart />} />
+        <Route path="/:userId/groupCreate" element={<CreateGroup />} />
       </Routes>
     </div>
   );
