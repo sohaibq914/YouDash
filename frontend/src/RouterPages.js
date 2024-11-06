@@ -19,7 +19,7 @@ import GoalLeaderboard from "./Pages/GoalLeaderboard.js";
 import YouDashBoard from "./Pages/YouDashBoard";
 import WatchTimeChart from "./Components/WatchDataChart.jsx";
 import CreateGroup from "./Pages/CreateGroup";
-
+import InterestGroups from "./Pages/InterestGroups";
 function RouterPages() {
   return (
     <div className="RouterPages">
@@ -39,6 +39,7 @@ function RouterPages() {
         <Route path="/:userId/goalsEdit" element={<GoalEdit />} />
         <Route path="/:userId/goalsVis" element={<VisualizeGoal />} />
         <Route path="/:userID/profile" element={<Profile />} />
+        <Route path="/:userId/interest-groups" element={<InterestGroups />} />
         <Route path="/:userId/watch-history" element={<WatchHistory />} />
         <Route path="/:userId/followers" element={<FollowersPage />} />
         <Route path="/:userId/goalLeaderboard" element={<GoalLeaderboard />} />

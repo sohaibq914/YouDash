@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import { Link, NavLink } from "react-router-dom";
-import axios from "axios"; // Import axios to communicate with backend
+import axios from "axios";
 
 export const Navbar = () => {
   const [userID, setUserID] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false); // State to track if the menu is open
-  const [darkMode, setDarkMode] = useState(false); // State to track dark mode
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
-  // Fetch user's dark mode setting from the backend when component mounts
   useEffect(() => {
     const fetchDarkModeSetting = async () => {
       console.log(userID);
       try {
-        const response = await axios.get("http://localhost:8080/profile/darkmode"); // Updated API path
-        setDarkMode(response.data.darkMode); // Set dark mode state based on fetched data
-        document.body.classList.toggle("dark", response.data.darkMode); // Apply initial theme based on fetched setting
+        const response = await axios.get("http://localhost:8080/profile/darkmode");
+        setDarkMode(response.data.darkMode);
+        document.body.classList.toggle("dark", response.data.darkMode);
       } catch (error) {
         console.error("Failed to fetch dark mode setting:", error);
       }
@@ -24,15 +23,13 @@ export const Navbar = () => {
     getUser();
   }, [window.location.href]);
 
-  // Handle dark mode toggle button click
   const handleDarkModeToggle = async () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-    document.body.classList.toggle("dark", newDarkMode); // Toggle dark mode class on body
+    document.body.classList.toggle("dark", newDarkMode);
 
     try {
-      // Save dark mode setting in the backend
-      await axios.post("http://localhost:8080/profile/darkmode", { darkMode: newDarkMode }); // Updated API path
+      await axios.post("http://localhost:8080/profile/darkmode", { darkMode: newDarkMode });
     } catch (error) {
       console.error("Failed to save dark mode setting:", error);
     }
@@ -47,7 +44,6 @@ export const Navbar = () => {
     }
     console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
     setUserID(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
-
     console.log(userID);
   };
 
@@ -81,6 +77,9 @@ export const Navbar = () => {
               </NavLink>
             </li>
             <li>
+              <NavLink to={"/" + String(userID) + "/interest-groups"}>Interest Groups</NavLink>
+            </li>
+            <li>
               <NavLink id="goalsCreate" to={"/" + String(userID) + "/goalsCreate"}>
                 Create Goals
               </NavLink>
@@ -112,7 +111,6 @@ export const Navbar = () => {
               <NavLink to={"/" + String(userID) + "/watchtime-leaderboard"}>Top Watchtime</NavLink>
             </li>
             <li>
-              {/* Dark mode toggle button */}
               <button onClick={handleDarkModeToggle} className="dark-mode-btn">
                 {darkMode ? "Light Mode" : "Dark Mode"}
               </button>
@@ -139,6 +137,9 @@ export const Navbar = () => {
               </NavLink>
             </li>
             <li>
+              <NavLink to="/login">Interest Groups</NavLink>
+            </li>
+            <li>
               <NavLink id="goalsCreate" to="/login">
                 Create Goals
               </NavLink>
@@ -161,7 +162,6 @@ export const Navbar = () => {
               <NavLink to="/login">Watch History</NavLink>
             </li>
             <li>
-              {/* Dark mode toggle button */}
               <button onClick={handleDarkModeToggle} className="dark-mode-btn">
                 {darkMode ? "Light Mode" : "Dark Mode"}
               </button>
@@ -172,3 +172,5 @@ export const Navbar = () => {
     </nav>
   );
 };
+
+export default Navbar;
