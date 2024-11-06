@@ -96,6 +96,23 @@ input[type=text] {
     width: 20em;
 }
 
+.profilePicContainer {
+    display: flex;
+    flexDirection: column;
+    alignItems: center;
+    gap: 1rem;
+    marginBottom: 2rem;
+  }
+
+.profilePic {
+    width: 128px;
+    height: 128px;
+    borderRadius: 50%;
+    objectFit: cover;
+    border: 2px solid #E5E7EB;
+    margin: auto;
+  }
+
 
 input[type=number] {
 

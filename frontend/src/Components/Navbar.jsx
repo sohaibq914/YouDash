@@ -76,11 +76,14 @@ export const Navbar = () => {
               <NavLink to={"/" + String(userID) + "/block-categories"}>Block Categories</NavLink>
             </li>
             <li>
-              <NavLink id="goalsCreate" to={"/" + String(userID) + "/goalsCreate"}>
-                Create Goals
+              <NavLink id="groupCreate" to={"/" + String(userID) + "/groupCreate"}>
+                Create Group
               </NavLink>
             </li>
             <li>
+              <NavLink id="goalsCreate" to={"/" + String(userID) + "/goalsCreate"}>
+                Create Goals
+              </NavLink>
               <NavLink id="goalsView" to={"/" + String(userID) + "/goalsView"}>
                 View Goals
               </NavLink>
@@ -89,8 +92,6 @@ export const Navbar = () => {
               <NavLink id="goalsEdit" to={"/" + String(userID) + "/goalsEdit"}>
                 Edit Goals
               </NavLink>
-            </li>
-            <li>
               <NavLink id="goalsVis" to={"/" + String(userID) + "/goalsVis"}>
                 Visual Goals
               </NavLink>
@@ -108,8 +109,6 @@ export const Navbar = () => {
             </li>
             <li>
               <NavLink to={"/" + String(userID) + "/goalLeaderboard"}>Top Goal</NavLink>
-            </li>
-            <li>
               <NavLink to={"/" + String(userID) + "/watchtime-leaderboard"}>Top Watchtime</NavLink>
             </li>
             <li>
@@ -135,11 +134,14 @@ export const Navbar = () => {
               <NavLink to="/login">Block Categories</NavLink>
             </li>
             <li>
-              <NavLink id="goalsCreate" to="/login">
-                Create Goals
+              <NavLink id="groupCreate" to="/login">
+                Create Group
               </NavLink>
             </li>
             <li>
+              <NavLink id="goalsCreate" to="/login">
+                Create Goals
+              </NavLink>
               <NavLink id="goalsView" to="/login">
                 View Goals
               </NavLink>
@@ -148,8 +150,6 @@ export const Navbar = () => {
               <NavLink id="goalsEdit" to="/login">
                 Edit Goals
               </NavLink>
-            </li>
-            <li>
               <NavLink id="goalsVis" to="/login">
                 Visual Goals
               </NavLink>

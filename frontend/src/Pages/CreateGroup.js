@@ -4,11 +4,13 @@ import "./CreateGroup.css";
 import { ReactNotifications } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import { Store } from 'react-notifications-component';
+import CaptureImageButton from "../Components/CaptureImageButton";
 
 function CreateGroup() {
 
   const [data, setData] = useState({ groupName: "", groupDescription: "", managers: "", users: "" });
   const [users, setUsers] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
 
 const handleChange = (e) => {
     const value = e.target.value;
@@ -95,6 +97,26 @@ const handleSubmit = (e) => {
           .catch((error) => console.error(error));
   }
 
+  const handleProfilePictureUpload = async () => {
+    if (!selectedFile) return;
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      //const response = await axios.post(`http://localhost:8080/profile/${userID}/uploadProfilePicture`, formData, {
+        //headers: { "Content-Type": "multipart/form-data" },
+      //});
+
+      //console.log("Profile picture uploaded successfully:", response.data.profilePicture);
+      //setProfile({ ...profile, profilePicture: response.data.profilePicture });
+      setSelectedFile(null);
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+    }
+  };
+
+
+
   return (
     <div className="CreateGroup">
         <h3 style={{textAlign: "center"}}>Create a Group</h3>
@@ -146,11 +168,51 @@ const handleSubmit = (e) => {
 
                         </td>
                     </tr>
+                    <tr>
+                        <td colSpan="2">
+                            <div className="profilePicContainer">
+                                <img
+                                  src={"https://via.placeholder.com/100"}
+                                  alt="Profile"
+                                  className="profilePic"
+                                />
+                              </div>
+                              </td>
+                      </tr>
+                      <tr>
+                        <td>
+                            <div style={{marginLeft: "50%"}}>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setSelectedFile(e.target.files[0])}
+
+                              />
+                              </div>
+                        </td>
+                        <td>
+                              <button onClick={handleProfilePictureUpload}>
+                                Upload Profile Picture
+                              </button>
+                        </td>
+                    </tr>
                   </tbody>
             </table>
+            <br/>
+            <br/>
+            <button style={{ width: "100%" }} className="responsiveGoalButton" type="submit" id="goalSubmit">
+                              Create Group
+                            </button>
+
+            <br/>
+            <br/>
+            <br/>
+            <br/>
         </form>
     </div>
   );
 }
+
+
 
 export default CreateGroup;
