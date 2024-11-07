@@ -21,19 +21,48 @@ const handleChange = (e) => {
     });
   };
 
+const getGroupManagers = () => {
+    console.log(document.getElementById("managersSelect").selectedOptions);
+    const result = document.getElementById("managersSelect").selectedOptions;
+    if (result.length == 0) {
+        return "Empty";
+    }
+    var values  = result[0].value;
+    for (let i = 1; i < result.length; i++) {
+        values += "," + result[i].value;
+
+    }
+    return values;
+};
+
+const getGroupUsers = () => {
+    console.log(document.getElementById("usersSelect").selectedOptions);
+    const result = document.getElementById("usersSelect").selectedOptions;
+    if (result.length == 0) {
+        return "Empty";
+    }
+    var values  = result[0].value;
+    for (let i = 1; i < result.length; i++) {
+        values += "," + result[i].value;
+
+    }
+    return values;
+};
 
 const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
       groupName: data.groupName,
       groupDescription: data.groupDescription,
-      managers: data.managers,
-      users: data.users,
+      managers: getGroupManagers(),
+      users: getGroupUsers(),
+      userCreating: getUser()
     };
     console.log(userData);
     axios
       .post("http://localhost:8080/groups/" + getUser() + "/create", userData)
       .then((response) => {
+            //TODO try to add picture here before success message
           Store.addNotification({
                                       title: "Goal Creation Success",
                                       message: "Group Created!",
@@ -48,6 +77,7 @@ const handleSubmit = (e) => {
                                         }
                                   });
           console.log(response)
+
         })
       .catch((error) => {
         if (error.response.status == "409") {
@@ -85,18 +115,30 @@ const handleSubmit = (e) => {
           }
 
 
-//get users from db:
-//exclude getUser()
+
+    useEffect (() => {
+        getAllUsers();
+
+    }, []);
+
+
   const getAllUsers = () => {
 
           axios.get("http://localhost:8080/api/users")
           .then(function (response) {
+              for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].id == getUser()) {
+                    response.data.splice(i, 1);
+                    break;
+                }
+
+              }
               setUsers(response.data);
-              console.log()
           })
           .catch((error) => console.error(error));
   }
 
+//TODO do picture upload
   const handleProfilePictureUpload = async () => {
     if (!selectedFile) return;
     const formData = new FormData();
@@ -140,9 +182,10 @@ const handleSubmit = (e) => {
                         </td>
                         <td>
                         <select id="managersSelect" name="managers" multiple>
-                                                      <option value="Empty"></option>
-                                                      <option value="12345">Test Name</option>
-                                                      <option value="54321">Test Name 2</option>
+                                <option value="Empty"></option>
+                                {users ? users.map((u, index) => (
+                                            <option key={"m" + index} value={u.id}>{u.username}</option>
+                                        )) : (console.log("no users"))}
                                                     </select>
                         </td>
                     </tr>
@@ -154,8 +197,9 @@ const handleSubmit = (e) => {
                         <td>
                             <select id="usersSelect" name="users" multiple size="5" style={{height:"5em"}}>
                               <option value="Empty"></option>
-                              <option value="12345">Test Name</option>
-                              <option value="54321">Test Name 2</option>
+                              {users ? users.map((u, index) => (
+                                 <option key={"u" + index} value={u.id}>{u.username}</option>
+                             )) : (console.log("no users"))}
                             </select>
                         </td>
                     </tr>

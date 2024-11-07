@@ -14,7 +14,19 @@ public class Groups {
     private List<Integer> managers;
     private List<Integer> users;
     private List<Messages> messages;
+    private String groupDescription;
 
+    public Groups() {};
+
+    public Groups(String groupId, String groupName, List<Integer> managers, List<Integer> users,
+                  List<Messages> messages, String groupDescription) {
+        this.groupId = groupId;
+        this.groupName = groupName;
+        this.managers = managers;
+        this.users = users;
+        this.messages = messages;
+        this.groupDescription = groupDescription;
+    }
 
     // Partition key
     @DynamoDBHashKey(attributeName = "group_id")
@@ -60,5 +72,13 @@ public class Groups {
 
     public void setMessages(List<Messages> messages) {
         this.messages = messages;
+    }
+
+    @DynamoDBAttribute(attributeName = "group_description")
+    public String getGroupDescription() {
+        return groupDescription;
+    }
+    public void setGroupDescription(String groupDescription) {
+        this.groupDescription = groupDescription;
     }
  }
