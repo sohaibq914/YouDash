@@ -8,6 +8,7 @@ import group26.youdash.classes.Goal;
 import group26.youdash.model.Groups;
 import group26.youdash.model.User;
 import group26.youdash.service.GoalsService;
+import group26.youdash.service.GroupsService;
 import group26.youdash.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,9 @@ public class GroupsController {
 
     @Autowired
     private UserService us;
+
+    @Autowired
+    private GroupsService gs;
 
     ArrayList<Groups> groups = new ArrayList<>();
 
@@ -59,8 +63,7 @@ public class GroupsController {
             userId = Integer.parseInt(user);
         }
         //Todo, check for duplicates and create groupservice
-        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-        PaginatedScanList<Groups> allGroups = dynamoDBMapper.scan(Groups.class, scanExpression);
+        List<Groups> allGroups = gs.getAllGroups();
         for (Groups g : allGroups) {
             if (g.getGroupName().equalsIgnoreCase(group.groupName)) {
                 HttpHeaders header = new HttpHeaders();
@@ -95,8 +98,8 @@ public class GroupsController {
 
         targetGroup.setGroupDescription(group.groupDescription);
 
-        targetGroup.setGroupId(UUID.randomUUID().toString());
-        dynamoDBMapper.save(targetGroup);
+        //targetGroup.setGroupId(UUID.randomUUID().toString());
+        gs.save(targetGroup);
 
         HttpHeaders header = new HttpHeaders();
         header.add("200", "uno");
