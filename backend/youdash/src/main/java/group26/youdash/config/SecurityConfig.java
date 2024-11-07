@@ -24,6 +24,7 @@ public class SecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/ws/**").permitAll()
                 .requestMatchers(
                     // User Controller endpoints
                     "/api/users",
@@ -89,6 +90,10 @@ public class SecurityConfig {
                     // Other endpoints
                     "/api/message",
                     "/uploads/**",
+
+                    // Messages
+                    "/group-chat/groups/{groupId}/messages",
+
 
                     "api/users/signup",
                     "/api/privacy/{userId}/pending-requests",

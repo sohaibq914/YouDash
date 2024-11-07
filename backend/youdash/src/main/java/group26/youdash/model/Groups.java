@@ -1,10 +1,14 @@
 package group26.youdash.model;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import group26.youdash.classes.Messages;
+import group26.youdash.classes.MessagesListConverter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 @DynamoDBTable(tableName = "Groups")
 public class Groups {
@@ -15,12 +19,11 @@ public class Groups {
     private List<Integer> users;
     private List<Messages> messages;
 
-
     // Partition key
     @DynamoDBHashKey(attributeName = "group_id")
     public String getGroupId() {
         return groupId;
-    }    
+    }
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
@@ -53,12 +56,18 @@ public class Groups {
         this.users = users;
     }
 
+    @DynamoDBTypeConverted(converter = MessagesListConverter.class)
     @DynamoDBAttribute(attributeName = "messages")
     public List<Messages> getMessages() {
+        if (messages == null) {
+            messages = new ArrayList<>();
+        }
         return messages;
     }
-
+    
     public void setMessages(List<Messages> messages) {
         this.messages = messages;
     }
- }
+
+
+}

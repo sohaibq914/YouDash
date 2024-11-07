@@ -1,6 +1,8 @@
 package group26.youdash.classes;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
+@DynamoDBTable(tableName = "messages")
 public class Messages {
     private String messageId;
     private String userId;
