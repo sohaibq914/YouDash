@@ -8,7 +8,7 @@ import CaptureImageButton from "../Components/CaptureImageButton";
 
 function CreateGroup() {
 
-  const [data, setData] = useState({ groupName: "", groupDescription: "", managers: "", users: "" });
+  const [data, setData] = useState({ groupName: "", groupDescription: "", managers: "", users: "", picturePath: "" });
   const [users, setUsers] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -51,16 +51,29 @@ const getGroupUsers = () => {
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = {
+    const formData = new FormData();
+    const formDataFull = new FormData();
+    if (selectedFile) {
+    console.log ("exists");
+        formData.append("file", selectedFile);
+        setSelectedFile(null);
+    }
+    console.log(selectedFile);
+    console.log(formData.get("file"));
+    const groupData = {
       groupName: data.groupName,
       groupDescription: data.groupDescription,
       managers: getGroupManagers(),
       users: getGroupUsers(),
-      userCreating: getUser()
+      userCreating: getUser(),
     };
-    console.log(userData);
+    console.log(groupData);
+    formDataFull.append("group", new Blob([JSON.stringify(groupData)], {type: "application/json" } ));
+    if (selectedFile) {
+        formDataFull.append("image", selectedFile);
+    }
     axios
-      .post("http://localhost:8080/groups/" + getUser() + "/create", userData)
+      .post("http://localhost:8080/groups/" + getUser() + "/create", formDataFull)
       .then((response) => {
             //TODO try to add picture here before success message
           Store.addNotification({
@@ -138,24 +151,6 @@ const handleSubmit = (e) => {
           .catch((error) => console.error(error));
   }
 
-//TODO do picture upload
-  const handleProfilePictureUpload = async () => {
-    if (!selectedFile) return;
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    try {
-      //const response = await axios.post(`http://localhost:8080/profile/${userID}/uploadProfilePicture`, formData, {
-        //headers: { "Content-Type": "multipart/form-data" },
-      //});
-
-      //console.log("Profile picture uploaded successfully:", response.data.profilePicture);
-      //setProfile({ ...profile, profilePicture: response.data.profilePicture });
-      setSelectedFile(null);
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-    }
-  };
 
 
 
@@ -212,20 +207,10 @@ const handleSubmit = (e) => {
 
                         </td>
                     </tr>
-                    <tr>
-                        <td colSpan="2">
-                            <div className="profilePicContainer">
-                                <img
-                                  src={"https://via.placeholder.com/100"}
-                                  alt="Profile"
-                                  className="profilePic"
-                                />
-                              </div>
-                              </td>
-                      </tr>
                       <tr>
-                        <td>
-                            <div style={{marginLeft: "50%"}}>
+                        <td colSpan="2">
+                        <h3 style={{textAlign: "center"}}>Upload Group Picture</h3>
+                            <div style={{marginLeft: "40%"}}>
                               <input
                                 type="file"
                                 accept="image/*"
@@ -233,11 +218,6 @@ const handleSubmit = (e) => {
 
                               />
                               </div>
-                        </td>
-                        <td>
-                              <button onClick={handleProfilePictureUpload}>
-                                Upload Profile Picture
-                              </button>
                         </td>
                     </tr>
                   </tbody>

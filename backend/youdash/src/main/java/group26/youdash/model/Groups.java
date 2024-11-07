@@ -16,6 +16,8 @@ public class Groups {
     private List<Messages> messages;
     private String groupDescription;
 
+    private String profilePictureKey;
+
     public Groups() {};
 
     public Groups(String groupId, String groupName, List<Integer> managers, List<Integer> users,
@@ -80,5 +82,13 @@ public class Groups {
     }
     public void setGroupDescription(String groupDescription) {
         this.groupDescription = groupDescription;
+    }
+
+    @DynamoDBAttribute(attributeName = "profilePictureKey")
+    public String getProfilePictureKey() {
+        return profilePictureKey;
+    }
+    public void setProfilePictureKey(String profilePictureKey) {
+        this.profilePictureKey = profilePictureKey;
     }
  }
