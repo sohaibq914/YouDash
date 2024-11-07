@@ -3,7 +3,11 @@ package group26.youdash.controller;
 import group26.youdash.classes.Messages;
 import group26.youdash.model.Groups;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMappingException;
 
+import ch.qos.logback.core.util.DynamicClassLoadingException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -59,7 +63,11 @@ public class MessageController {
     @GetMapping("/groups/{groupId}/messages")
     public ResponseEntity<List<Messages>> getMessageHistory(@PathVariable String groupId) {
         // Load the group from DynamoDB
+      //  try {
         Groups group = dynamoDBMapper.load(Groups.class, groupId);
+       // } catch(DynamoDBMappingException e) {
+            //System.out.println(e);
+        //}
 
         if (group == null) {
             System.out.println("Group not found for ID: " + groupId);
