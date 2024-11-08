@@ -18,9 +18,7 @@ public class YoudashApplication {
 		SpringApplication.run(YoudashApplication.class, args);
 	}
 
-
 	
-
 	@Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();

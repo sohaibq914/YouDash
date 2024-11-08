@@ -8,7 +8,7 @@ import CaptureImageButton from "../Components/CaptureImageButton";
 
 function CreateGroup() {
 
-  const [data, setData] = useState({ groupName: "", groupDescription: "", managers: "", users: "" });
+  const [data, setData] = useState({ groupName: "", groupDescription: "", managers: "", users: "", picturePath: "" });
   const [users, setUsers] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -21,19 +21,61 @@ const handleChange = (e) => {
     });
   };
 
+const getGroupManagers = () => {
+    console.log(document.getElementById("managersSelect").selectedOptions);
+    const result = document.getElementById("managersSelect").selectedOptions;
+    if (result.length == 0) {
+        return "Empty";
+    }
+    var values  = result[0].value;
+    for (let i = 1; i < result.length; i++) {
+        values += "," + result[i].value;
+
+    }
+    return values;
+};
+
+const getGroupUsers = () => {
+    console.log(document.getElementById("usersSelect").selectedOptions);
+    const result = document.getElementById("usersSelect").selectedOptions;
+    if (result.length == 0) {
+        return "Empty";
+    }
+    var values  = result[0].value;
+    for (let i = 1; i < result.length; i++) {
+        values += "," + result[i].value;
+
+    }
+    return values;
+};
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = {
+    const formData = new FormData();
+    const formDataFull = new FormData();
+    if (selectedFile) {
+    console.log ("exists");
+        formData.append("file", selectedFile);
+        setSelectedFile(null);
+    }
+    console.log(selectedFile);
+    console.log(formData.get("file"));
+    const groupData = {
       groupName: data.groupName,
       groupDescription: data.groupDescription,
-      managers: data.managers,
-      users: data.users,
+      managers: getGroupManagers(),
+      users: getGroupUsers(),
+      userCreating: getUser(),
     };
-    console.log(userData);
+    console.log(groupData);
+    formDataFull.append("group", new Blob([JSON.stringify(groupData)], {type: "application/json" } ));
+    if (selectedFile) {
+        formDataFull.append("image", selectedFile);
+    }
     axios
-      .post("http://localhost:8080/groups/" + getUser() + "/create", userData)
+      .post("http://localhost:8080/groups/" + getUser() + "/create", formDataFull)
       .then((response) => {
+            //TODO try to add picture here before success message
           Store.addNotification({
                                       title: "Goal Creation Success",
                                       message: "Group Created!",
@@ -48,6 +90,7 @@ const handleSubmit = (e) => {
                                         }
                                   });
           console.log(response)
+
         })
       .catch((error) => {
         if (error.response.status == "409") {
@@ -85,35 +128,29 @@ const handleSubmit = (e) => {
           }
 
 
-//get users from db:
-//exclude getUser()
+
+    useEffect (() => {
+        getAllUsers();
+
+    }, []);
+
+
   const getAllUsers = () => {
 
           axios.get("http://localhost:8080/api/users")
           .then(function (response) {
+              for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].id == getUser()) {
+                    response.data.splice(i, 1);
+                    break;
+                }
+
+              }
               setUsers(response.data);
-              console.log()
           })
           .catch((error) => console.error(error));
   }
 
-  const handleProfilePictureUpload = async () => {
-    if (!selectedFile) return;
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    try {
-      //const response = await axios.post(`http://localhost:8080/profile/${userID}/uploadProfilePicture`, formData, {
-        //headers: { "Content-Type": "multipart/form-data" },
-      //});
-
-      //console.log("Profile picture uploaded successfully:", response.data.profilePicture);
-      //setProfile({ ...profile, profilePicture: response.data.profilePicture });
-      setSelectedFile(null);
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-    }
-  };
 
 
 
@@ -140,9 +177,10 @@ const handleSubmit = (e) => {
                         </td>
                         <td>
                         <select id="managersSelect" name="managers" multiple>
-                                                      <option value="Empty"></option>
-                                                      <option value="12345">Test Name</option>
-                                                      <option value="54321">Test Name 2</option>
+                                <option value="Empty"></option>
+                                {users ? users.map((u, index) => (
+                                            <option key={"m" + index} value={u.id}>{u.username}</option>
+                                        )) : (console.log("no users"))}
                                                     </select>
                         </td>
                     </tr>
@@ -154,8 +192,9 @@ const handleSubmit = (e) => {
                         <td>
                             <select id="usersSelect" name="users" multiple size="5" style={{height:"5em"}}>
                               <option value="Empty"></option>
-                              <option value="12345">Test Name</option>
-                              <option value="54321">Test Name 2</option>
+                              {users ? users.map((u, index) => (
+                                 <option key={"u" + index} value={u.id}>{u.username}</option>
+                             )) : (console.log("no users"))}
                             </select>
                         </td>
                     </tr>
@@ -168,20 +207,10 @@ const handleSubmit = (e) => {
 
                         </td>
                     </tr>
-                    <tr>
-                        <td colSpan="2">
-                            <div className="profilePicContainer">
-                                <img
-                                  src={"https://via.placeholder.com/100"}
-                                  alt="Profile"
-                                  className="profilePic"
-                                />
-                              </div>
-                              </td>
-                      </tr>
                       <tr>
-                        <td>
-                            <div style={{marginLeft: "50%"}}>
+                        <td colSpan="2">
+                        <h3 style={{textAlign: "center"}}>Upload Group Picture</h3>
+                            <div style={{marginLeft: "40%"}}>
                               <input
                                 type="file"
                                 accept="image/*"
@@ -189,11 +218,6 @@ const handleSubmit = (e) => {
 
                               />
                               </div>
-                        </td>
-                        <td>
-                              <button onClick={handleProfilePictureUpload}>
-                                Upload Profile Picture
-                              </button>
                         </td>
                     </tr>
                   </tbody>
