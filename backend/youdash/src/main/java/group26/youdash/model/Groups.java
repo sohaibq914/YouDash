@@ -23,7 +23,6 @@ public class Groups {
 
     private String profilePictureKey;
 
-    public Groups() {};
 
     public Groups(String groupId, String groupName, List<Integer> managers, List<Integer> users,
                   List<Messages> messages, String groupDescription) {
@@ -36,7 +35,6 @@ public class Groups {
     }
 
 
-    private List<Messages> messages;
     private String description;
 
     public Groups() {}
@@ -49,15 +47,6 @@ public class Groups {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
-    }
-
-    @DynamoDBAttribute(attributeName = "group_description")
-    public String getGroupDescription() {
-        return description;
-    }
-
-    public void setGroupDescription(String description) {
-        this.description = description;
     }
 
 
