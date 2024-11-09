@@ -103,7 +103,10 @@ public class SecurityConfig {
 
                     //group endpoints
                         "/groups/{user}/create",
-                        "/groups/{user}/view"
+                        "/groups/{user}/view",
+                        "/api/direct-messages/**"  // Allow all direct message endpoints
+
+                    
 
                     
                 ).permitAll()

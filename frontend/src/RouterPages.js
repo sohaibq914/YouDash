@@ -21,6 +21,7 @@ import WatchTimeChart from "./Components/WatchDataChart.jsx";
 import GroupChat from "./Pages/GroupPage.jsx";
 import CreateGroup from "./Pages/CreateGroup";
 import GroupView from "./Pages/GroupView";
+import DirectMessage from "./Pages/DirectMessage.js";
 
 function RouterPages() {
   return (
@@ -30,7 +31,6 @@ function RouterPages() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-
         {/* User-specific routes */}
         <Route path="/:userId/home" element={<Home />} />
         <Route path="/:userId/youDashBoard" element={<YouDashBoard />} />
@@ -50,6 +50,7 @@ function RouterPages() {
         <Route path="/group-chat" element={<GroupChat />} />
         <Route path="/:userId/groupCreate" element={<CreateGroup />} />
         <Route path="/:userId/groupView" element={<GroupView />} />
+        <Route path="/:currentUserId/dm" element={<DirectMessage />} />
       </Routes>
     </div>
   );
