@@ -40,4 +40,17 @@ public class OpenAIController {
         }
     }
 
+    @PostMapping("/reformat-message")
+public ResponseEntity<String> reformatMessage(@RequestBody Map<String, String> request) {
+    try {
+        String message = request.get("message");
+        String prompt = "Please reformat and improve the following message to be more professional and clear, while maintaining its core meaning: \n\n" + message;
+        String reformattedMessage = openAIService.sendToOpenAI(prompt);
+        return ResponseEntity.ok(reformattedMessage);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>("Error reformatting message", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 }

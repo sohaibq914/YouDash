@@ -298,6 +298,31 @@ public ResponseEntity<List<User>> getRecommendedBasedOnFollowing(@PathVariable i
     }
 }
 
+
+@PostMapping("/{userId}/block/{blockedUserId}")
+    public ResponseEntity<?> blockUser(
+            @PathVariable int userId,
+            @PathVariable int blockedUserId) {
+        try {
+            userService.blockUser(userId, blockedUserId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{userId}/unblock/{blockedUserId}")
+    public ResponseEntity<?> unblockUser(
+            @PathVariable int userId,
+            @PathVariable int blockedUserId) {
+        try {
+            userService.unblockUser(userId, blockedUserId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
 
 class GoogleLoginRequest {

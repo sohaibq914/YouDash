@@ -767,4 +767,45 @@ public boolean hasExistingFollowRequest(int targetUserId, int requesterId) {
         }
         return null; // Return null if no user is found
     }
+
+
+    public void blockUser(int userId, int blockedUserId) {
+        User user = findById(userId);
+        if (user == null) {
+            throw new NoSuchElementException("User not found");
+        }
+
+        List<Integer> blockedUsers = user.getBlockedUsers();
+        if (blockedUsers == null) {
+            blockedUsers = new ArrayList<>();
+        }
+        
+        if (!blockedUsers.contains(blockedUserId)) {
+            blockedUsers.add(blockedUserId);
+            user.setBlockedUsers(blockedUsers);
+            dynamoDBMapper.save(user);
+        }
+    }
+
+    public void unblockUser(int userId, int blockedUserId) {
+        User user = findById(userId);
+        if (user == null) {
+            throw new NoSuchElementException("User not found");
+        }
+
+        List<Integer> blockedUsers = user.getBlockedUsers();
+        if (blockedUsers != null) {
+            blockedUsers.remove(Integer.valueOf(blockedUserId));
+            user.setBlockedUsers(blockedUsers);
+            dynamoDBMapper.save(user);
+        }
+    }
+
+    public boolean isUserBlocked(int userId, int blockedUserId) {
+        User user = findById(userId);
+        return user != null && 
+               user.getBlockedUsers() != null && 
+               user.getBlockedUsers().contains(blockedUserId);
+    }
+
 }

@@ -104,7 +104,10 @@ public class SecurityConfig {
                     //group endpoints
                         "/groups/{user}/create",
                         "/groups/{user}/view",
-                        "/api/direct-messages/**"  // Allow all direct message endpoints
+                        "/api/direct-messages/**",  // Allow all direct message endpoints
+
+                        "/api/users/{userId}/block/{userId1}",
+                        "/api/users/{userId}/unblock/{userId1}"
 
                     
 

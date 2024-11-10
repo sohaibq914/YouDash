@@ -44,6 +44,9 @@ public class User {
     private String authProvider;      // "local" or "google"
     private String accessToken;       // OAuth access token (optional)
 
+    private List<Integer> blockedUsers;
+
+
 
     private int timeFrame;
     private int timeFrameSelection;
@@ -339,5 +342,14 @@ public class User {
 
     public void setPromptHistory(List<Map<String, String>> promptHistory) {
         this.promptHistory = promptHistory;
+    }
+
+
+    public List<Integer> getBlockedUsers() {
+        return blockedUsers;
+    }
+
+    public void setBlockedUsers(List<Integer> blockedUsers) {
+        this.blockedUsers = blockedUsers;
     }
 }
