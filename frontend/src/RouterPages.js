@@ -46,7 +46,7 @@ function RouterPages() {
         <Route path="/ai/:userId/promptHistory" element={<PromptHistory />} />
         <Route path="/:userId/watchtime-leaderboard" element={<WatchtimeLeaderboard />} />
         <Route path="/:userId/analytics" element={<WatchTimeChart />} />
-        <Route path="/group-chat" element={<GroupChat />} />
+        <Route path="/:userId/group-chat" element={<GroupChat />} />
         <Route path="/:userId/groupCreate" element={<CreateGroup />} />
       </Routes>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Client } from "@stomp/stompjs"; // Use Client instead of 'over'
+import { useParams } from "react-router-dom";
 import SockJS from "sockjs-client";
 import axios from "axios";
 
@@ -8,7 +9,8 @@ let stompClient = null; // Define stompClient outside the component
 const GroupChat = () => {
   // Hard-code the groupId and userId
   const groupId = "d5f0a7e2-9c3f-4b9d-9c4b-8764f9a17b5d"; // Replace with your group ID
-  const userId = 12345; // Replace with your user ID
+  //const userId = 12345; // Replace with your user ID
+  const { userId } = useParams();
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
