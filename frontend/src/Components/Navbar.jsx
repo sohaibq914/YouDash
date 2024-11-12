@@ -79,6 +79,9 @@ export const Navbar = () => {
               <NavLink id="groupCreate" to={"/" + String(userID) + "/groupCreate"}>
                 Create Group
               </NavLink>
+              <NavLink id="groupView" to={"/" + String(userID) + "/groupView"}>
+                View Groups
+              </NavLink>
             </li>
             <li>
               <NavLink id="goalsCreate" to={"/" + String(userID) + "/goalsCreate"}>

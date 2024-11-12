@@ -109,6 +109,19 @@ public class GroupsController {
                 theUsers.add(Integer.parseInt(s));
             }
         }
+        //make sure all managers are users
+        for (Integer i : theManagers) {
+            boolean found = false;
+            for (Integer j : theUsers) {
+                if (i.intValue() == j.intValue()) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                theUsers.add(i);
+            }
+        }
         targetGroup.setUsers(theUsers);
 
         targetGroup.setGroupDescription(group.groupDescription);
@@ -156,4 +169,19 @@ public class GroupsController {
         }
     }
 
+
+    //return all groups that the user is a part of
+    @GetMapping("/{user}/view")
+    public ArrayList<Groups> viewGoal(@PathVariable("user") String user)
+    {
+        List<Groups> allGroupsList = gs.getAllGroups();
+        ArrayList<Groups> allGroups = new ArrayList<>();
+        for (Groups g : allGroupsList) {
+            if (g.getUsers().contains(Integer.parseInt(user))) {
+                allGroups.add(g);
+            }
+        }
+
+        return allGroups;
+    }
 }

@@ -102,7 +102,8 @@ public class SecurityConfig {
                     "/api/privacy/{userID}/toggle",
 
                     //group endpoints
-                        "/groups/{user}/create"
+                        "/groups/{user}/create",
+                        "/groups/{user}/view"
 
                     
                 ).permitAll()
