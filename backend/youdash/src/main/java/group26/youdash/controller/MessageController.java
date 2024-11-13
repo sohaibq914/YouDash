@@ -2,6 +2,7 @@ package group26.youdash.controller;
 
 import group26.youdash.classes.Messages;
 import group26.youdash.model.Groups;
+import group26.youdash.model.User;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMappingException;
 
@@ -22,11 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Controller
-@RestController 
-@RequestMapping("/group-chat") 
+@RestController
+@RequestMapping("/group-chat")
 @CrossOrigin(origins = {
-    "http://localhost:3000", 
-    "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"
+        "http://localhost:3000",
+        "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"
 })
 public class MessageController {
     private final SimpMessagingTemplate messagingTemplate;
@@ -42,6 +43,13 @@ public class MessageController {
     public void sendMessage(@DestinationVariable String groupId, Messages chatMessage) {
         System.out.println("Received message for group " + groupId + ": " + chatMessage.getMessageText());
 
+        // Fetch user profile picture from user table
+        User user = dynamoDBMapper.load(User.class, chatMessage.getUserId());
+        if (user != null) {
+            chatMessage.setProfilePicture(user.getProfilePicture()); // Assuming `User` class has `getProfilePicture`
+        } else {
+            System.out.println("User not found for ID: " + chatMessage.getUserId());
+        }
         // Retrieve the group by groupId
         Groups group = dynamoDBMapper.load(Groups.class, groupId);
         if (group != null) {
@@ -63,11 +71,11 @@ public class MessageController {
     @GetMapping("/groups/{groupId}/messages")
     public ResponseEntity<List<Messages>> getMessageHistory(@PathVariable String groupId) {
         // Load the group from DynamoDB
-      //  try {
+        // try {
         Groups group = dynamoDBMapper.load(Groups.class, groupId);
-       // } catch(DynamoDBMappingException e) {
-            //System.out.println(e);
-        //}
+        // } catch(DynamoDBMappingException e) {
+        // System.out.println(e);
+        // }
 
         if (group == null) {
             System.out.println("Group not found for ID: " + groupId);
@@ -78,7 +86,5 @@ public class MessageController {
         List<Messages> messageHistory = group.getMessages();
         return ResponseEntity.ok(messageHistory);
     }
-
-
 
 }

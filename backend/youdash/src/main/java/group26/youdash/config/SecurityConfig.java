@@ -93,6 +93,7 @@ public class SecurityConfig {
 
                     // Messages
                     "/group-chat/groups/{groupId}/messages",
+                    "{userID}/group-chat",
 
 
                     "api/users/signup",

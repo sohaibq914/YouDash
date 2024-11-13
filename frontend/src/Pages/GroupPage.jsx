@@ -3,6 +3,7 @@ import { Client } from "@stomp/stompjs"; // Use Client instead of 'over'
 import { useParams } from "react-router-dom";
 import SockJS from "sockjs-client";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 let stompClient = null; // Define stompClient outside the component
 
@@ -66,21 +67,24 @@ const GroupChat = () => {
   };
 
   const sendMessage = () => {
+    const timestamp = new Date().toISOString();
+    const messageId = uuidv4(); // Generates a universally unique identifier
+
     if (newMessage.trim() && stompClient) {
       const message = {
+        messageId: messageId, // Add the messageId here
         userId: userId,
         groupId: groupId,
         messageText: newMessage,
-        timestamp: new Date(),
+        timeStamp: timestamp,
       };
+
+      console.log("Sending message:", message);
       stompClient.publish({
         destination: `/app/chat/${groupId}`,
-        body: JSON.stringify({
-          userId: userId,
-          messageText: newMessage,
-          timestamp: new Date(),
-        }),
+        body: JSON.stringify(message), // Now sends the full message with messageId
       });
+
       setNewMessage("");
     }
   };
@@ -98,18 +102,25 @@ const GroupChat = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "8px", // Space between user, text, and timestamp
-              padding: "8px 0", // Space between each message
-              borderBottom: "1px solid #ddd", // Optional: adds a subtle divider
+              gap: "8px", // Space between elements
+              padding: "8px 0",
+              borderBottom: "1px solid #ddd",
             }}
           >
-            <span style={{ fontWeight: "bold", marginRight: "5px" }}>
-              {msg.userId === userId ? "You" : `User ${msg.userId}`}:
-            </span>
-            <span style={{ flex: 1 }}>{msg.messageText}</span>
-            <span style={{ fontSize: "0.9em", color: "gray" }}>
-              {new Date(msg.timestamp).toLocaleTimeString()}
-            </span>
+            <img
+              src={msg.profilePicture}
+              alt="Profile"
+              style={{ width: "40px", height: "40px", borderRadius: "50%" }}
+            />
+            <div>
+              <span style={{ fontWeight: "bold", marginRight: "5px" }}>
+                {msg.userId === userId ? "You" : `User ${msg.userId}`}:
+              </span>
+              <span style={{ flex: 1 }}>{msg.messageText}</span>
+              <span style={{ fontSize: "0.9em", color: "gray" }}>
+                {msg.timestamp}
+              </span>
+            </div>
           </div>
         ))}
       </div>

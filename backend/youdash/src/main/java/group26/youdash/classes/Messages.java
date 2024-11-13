@@ -15,6 +15,8 @@ public class Messages {
      int userId;
      String messageText;
      String timeStamp;
+     private String profilePicture;
+     String profilePictureKey;
 
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
@@ -24,7 +26,7 @@ public class Messages {
         this.messageId = messageId;
         this.userId = userId;
         this.messageText = messageText;
-        this.timeStamp = LocalDateTime.now().toString();
+        this.timeStamp = timeStamp;
     }
 
     @DynamoDBHashKey(attributeName = "message_id")
@@ -61,6 +63,25 @@ public class Messages {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    @DynamoDBAttribute(attributeName = "profile_picture")
+     public String getProfilePicture() {
+         return profilePicture;
+     }
+
+     public void setProfilePicture(String profilePicture) {
+         this.profilePicture = profilePicture;
+     }
+
+
+     @DynamoDBAttribute(attributeName = "profilePictureKey")
+    public String getProfilePictureKey() {
+        return profilePictureKey;
+    }
+
+    public void setProfilePictureKey(String profilePictureKey) {
+        this.profilePictureKey = profilePictureKey;
     }
 
 }
