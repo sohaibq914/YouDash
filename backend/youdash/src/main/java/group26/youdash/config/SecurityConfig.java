@@ -75,6 +75,7 @@ public class SecurityConfig {
                     // OpenAI Controller endpoints
                     "/ai/{userId}/recommendations",
                     "/ai/{userId}/prompt-history",
+                    "/ai/reformat-message",
 
                     // Watch History Controller endpoints
                     "/watch-history/{userID}/historyList",
@@ -104,7 +105,13 @@ public class SecurityConfig {
 
                     //group endpoints
                         "/groups/{user}/create",
-                        "/groups/{user}/view"
+                        "/groups/{user}/view",
+                        "/api/direct-messages/**",  // Allow all direct message endpoints
+
+                        "/api/users/{userId}/block/{userId1}",
+                        "/api/users/{userId}/unblock/{userId1}"
+
+                    
 
                     
                 ).permitAll()
