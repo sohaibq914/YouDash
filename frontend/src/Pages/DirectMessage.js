@@ -2,12 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import axios from "axios";
-import { Loader2, MessageSquare, UserPlus, AlertCircle } from "lucide-react";
+import { Loader2, MessageSquare, UserPlus, AlertCircle, Ban, Unlock, Wand2, Check, X, Edit } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const DirectMessage = () => {
-  // Get currentUserId from URL parameters
   const { currentUserId } = useParams();
   const navigate = useNavigate();
 
@@ -25,7 +24,11 @@ const DirectMessage = () => {
   const messagesEndRef = useRef(null);
   const stompClient = useRef(null);
 
-  // Validate currentUserId on component mount
+  // AI reformatting states
+  const [isReformatting, setIsReformatting] = useState(false);
+  const [reformattedMessage, setReformattedMessage] = useState("");
+  const [isEditingReformatted, setIsEditingReformatted] = useState(false);
+
   useEffect(() => {
     const validateUser = async () => {
       try {
@@ -76,6 +79,15 @@ const DirectMessage = () => {
 
     loadUserDetails();
   }, [conversations]);
+
+  const isUserBlocked = (userId) => {
+    return currentUser?.blockedUsers?.includes(userId) || false;
+  };
+
+  const isBlockedByUser = (userId) => {
+    const otherUser = userCache[userId];
+    return otherUser?.blockedUsers?.includes(parseInt(currentUserId)) || false;
+  };
 
   const connectWebSocket = () => {
     try {
@@ -174,6 +186,69 @@ const DirectMessage = () => {
     }
   };
 
+  const handleBlock = async (userId) => {
+    try {
+      await axios.post(`http://localhost:8080/api/users/${currentUserId}/block/${userId}`);
+
+      // Update current user in state
+      const updatedUser = await axios.get(`http://localhost:8080/api/users/${currentUserId}`);
+      setCurrentUser(updatedUser.data);
+
+      toast.success("User blocked successfully");
+
+      // If currently chatting with blocked user, clear the chat
+      if (selectedUser === userId) {
+        setSelectedUser(null);
+        setMessages([]);
+      }
+    } catch (error) {
+      toast.error("Failed to block user");
+    }
+  };
+
+  const handleUnblock = async (userId) => {
+    try {
+      await axios.post(`http://localhost:8080/api/users/${currentUserId}/unblock/${userId}`);
+
+      // Update current user in state
+      const updatedUser = await axios.get(`http://localhost:8080/api/users/${currentUserId}`);
+      setCurrentUser(updatedUser.data);
+
+      toast.success("User unblocked successfully");
+    } catch (error) {
+      toast.error("Failed to unblock user");
+    }
+  };
+
+  const handleReformat = async () => {
+    if (!newMessage.trim()) return;
+
+    setIsReformatting(true);
+    try {
+      const response = await axios.post("http://localhost:8080/ai/reformat-message", {
+        message: newMessage,
+      });
+
+      setReformattedMessage(response.data);
+      setIsEditingReformatted(false);
+    } catch (error) {
+      toast.error("Failed to reformat message");
+      console.error("Reformatting error:", error);
+    } finally {
+      setIsReformatting(false);
+    }
+  };
+
+  const applyReformattedMessage = () => {
+    setNewMessage(reformattedMessage);
+    setReformattedMessage("");
+  };
+
+  const cancelReformatting = () => {
+    setReformattedMessage("");
+    setIsEditingReformatted(false);
+  };
+
   const startNewConversation = async () => {
     if (!newChatName.trim()) return;
 
@@ -212,6 +287,16 @@ const DirectMessage = () => {
   const sendMessage = () => {
     if (!newMessage.trim() || !stompClient.current || !selectedUser) return;
 
+    if (isBlockedByUser(selectedUser)) {
+      toast.error("You cannot send messages to this user as they have blocked you");
+      return;
+    }
+
+    if (isUserBlocked(selectedUser)) {
+      toast.error("You cannot send messages to users you have blocked");
+      return;
+    }
+
     try {
       const message = {
         senderId: parseInt(currentUserId),
@@ -242,6 +327,62 @@ const DirectMessage = () => {
     }
   };
 
+  const renderMessageInput = () => (
+    <div className="border-t border-gray-200 p-4 bg-white">
+      {reformattedMessage && (
+        <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+          <div className="flex justify-between items-start mb-2">
+            <span className="text-sm font-medium text-blue-700">AI Suggested Message:</span>
+            <div className="flex gap-2">
+              {!isEditingReformatted ? (
+                <>
+                  <button onClick={() => setIsEditingReformatted(true)} className="p-1 text-blue-600 hover:bg-blue-100 rounded" title="Edit suggestion">
+                    <Edit size={16} />
+                  </button>
+                  <button onClick={applyReformattedMessage} className="p-1 text-green-600 hover:bg-green-100 rounded" title="Apply suggestion">
+                    <Check size={16} />
+                  </button>
+                  <button onClick={cancelReformatting} className="p-1 text-red-600 hover:bg-red-100 rounded" title="Cancel">
+                    <X size={16} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      setIsEditingReformatted(false);
+                      applyReformattedMessage();
+                    }}
+                    className="p-1 text-green-600 hover:bg-green-100 rounded"
+                    title="Save edits"
+                  >
+                    <Check size={16} />
+                  </button>
+                  <button onClick={() => setIsEditingReformatted(false)} className="p-1 text-red-600 hover:bg-red-100 rounded" title="Cancel editing">
+                    <X size={16} />
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+          {isEditingReformatted ? <textarea value={reformattedMessage} onChange={(e) => setReformattedMessage(e.target.value)} className="w-full p-2 border rounded-lg resize-none focus:outline-none focus:border-blue-500" rows="3" /> : <p className="text-sm text-blue-800">{reformattedMessage}</p>}
+        </div>
+      )}
+
+      <div className="flex gap-2">
+        <textarea value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyPress={handleKeyPress} placeholder={isBlockedByUser(selectedUser) ? "You cannot send messages to this user as they have blocked you" : isUserBlocked(selectedUser) ? "You have blocked this user" : "Type a message..."} disabled={isUserBlocked(selectedUser) || isBlockedByUser(selectedUser)} className="flex-1 resize-none rounded-lg border border-gray-300 p-2 focus:outline-none focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-500" rows="2" />
+        <div className="flex flex-col gap-2">
+          <button onClick={handleReformat} disabled={!newMessage.trim() || isReformatting} className="px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" title="AI Reformat">
+            {isReformatting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Wand2 className="h-5 w-5" />}
+          </button>
+          <button onClick={sendMessage} disabled={!connected || !newMessage.trim() || isUserBlocked(selectedUser) || isBlockedByUser(selectedUser)} className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   if (!currentUser) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -262,7 +403,6 @@ const DirectMessage = () => {
 
   return (
     <div className="flex h-screen bg-white">
-      {/* Conversations sidebar */}
       <div className="w-1/4 border-r border-gray-200 bg-gray-50">
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
@@ -311,15 +451,33 @@ const DirectMessage = () => {
           ) : (
             <div className="space-y-2">
               {conversations.map((userId) => (
-                <div
-                  key={userId}
-                  className={`p-3 cursor-pointer rounded-lg transition-colors ${selectedUser === userId ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"}`}
-                  onClick={() => {
-                    setSelectedUser(userId);
-                    fetchMessages(userId);
-                  }}
-                >
-                  <div className="font-medium">{userCache[userId]?.name || `Loading...`}</div>
+                <div key={userId} className="p-3 rounded-lg transition-colors hover:bg-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div
+                      className={`font-medium cursor-pointer ${selectedUser === userId ? "text-blue-700" : ""}`}
+                      onClick={() => {
+                        if (!isBlockedByUser(userId)) {
+                          setSelectedUser(userId);
+                          fetchMessages(userId);
+                        }
+                      }}
+                    >
+                      {userCache[userId]?.name || `Loading...`}
+                      {isBlockedByUser(userId) && <span className="ml-2 text-xs text-red-500">(You are blocked)</span>}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {isUserBlocked(userId) ? (
+                        <button onClick={() => handleUnblock(userId)} className="p-1 text-blue-500 hover:bg-blue-50 rounded" title="Unblock user">
+                          <Unlock size={16} />
+                        </button>
+                      ) : (
+                        <button onClick={() => handleBlock(userId)} className="p-1 text-red-500 hover:bg-red-50 rounded" title="Block user">
+                          <Ban size={16} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -327,16 +485,19 @@ const DirectMessage = () => {
         </div>
       </div>
 
-      {/* Chat area */}
       <div className="flex-1 flex flex-col">
         {selectedUser ? (
           <>
-            {/* Chat header */}
             <div className="p-4 border-b border-gray-200 bg-white">
-              <h3 className="font-medium">Chat with {userCache[selectedUser]?.name || "Loading..."}</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium">
+                  Chat with {userCache[selectedUser]?.name || "Loading..."}
+                  {isBlockedByUser(selectedUser) && <span className="ml-2 text-sm text-red-500">(This user has blocked you)</span>}
+                  {isUserBlocked(selectedUser) && <span className="ml-2 text-sm text-red-500">(You have blocked this user)</span>}
+                </h3>
+              </div>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 p-4 overflow-y-auto">
               {messages.map((msg, index) => (
                 <div key={index} className={`mb-4 flex ${msg.senderId === parseInt(currentUserId) ? "justify-end" : "justify-start"}`}>
@@ -350,15 +511,7 @@ const DirectMessage = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Message input */}
-            <div className="border-t border-gray-200 p-4 bg-white">
-              <div className="flex gap-2">
-                <textarea value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyPress={handleKeyPress} placeholder="Type a message..." className="flex-1 resize-none rounded-lg border border-gray-300 p-2 focus:outline-none focus:border-blue-500" rows="2" />
-                <button onClick={sendMessage} disabled={!connected || !newMessage.trim()} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed">
-                  Send
-                </button>
-              </div>
-            </div>
+            {renderMessageInput()}
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center text-gray-500">
