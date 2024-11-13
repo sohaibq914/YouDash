@@ -75,6 +75,7 @@ public class SecurityConfig {
                     // OpenAI Controller endpoints
                     "/ai/{userId}/recommendations",
                     "/ai/{userId}/prompt-history",
+                    "/ai/reformat-message",
 
                     // Watch History Controller endpoints
                     "/watch-history/{userID}/historyList",
