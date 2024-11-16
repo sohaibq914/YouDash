@@ -11,6 +11,7 @@ import group26.youdash.model.User;
 import group26.youdash.service.GoalsService;
 import group26.youdash.service.GroupsService;
 import group26.youdash.service.UserService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -179,9 +180,110 @@ public class GroupsController {
         for (Groups g : allGroupsList) {
             if (g.getUsers().contains(Integer.parseInt(user))) {
                 allGroups.add(g);
+            } else if (g.getManagers().contains(Integer.parseInt(user))) {
+                allGroups.add(g);
             }
         }
 
         return allGroups;
+    }
+
+
+
+    private static class GroupPkgEdit {
+        public GroupPkgEdit(String groupName, String groupDescription, ArrayList<Integer> managers, ArrayList<Integer> users, String userCreating, String groupId) {
+            this.groupName = groupName;
+            this.groupDescription = groupDescription;
+            this.managers = managers;
+            this.users = users;
+            this.groupId = groupId;
+            this.userCreating = userCreating;
+        }
+        public GroupPkgEdit() {};
+        public String groupName;
+        public String groupDescription;
+        public ArrayList<Integer> managers; //list
+        public ArrayList<Integer> users; //list
+
+        public String userCreating;
+        public String groupId;
+
+        //public  image;
+
+        @Override
+        public String toString() {
+            return groupName + " " + groupDescription + " " + managers + " " + users + " " + groupId;// + " " + image.toString();
+        }
+    }
+
+    @PostMapping(path = "/{user}/edit", consumes = "multipart/form-data", produces = "application/json")
+    public ResponseEntity<String> editGoal(@PathVariable("user") String user, @RequestPart("group") GroupPkgEdit group, @RequestPart(value = "image", required = false) MultipartFile file) {
+        //System.out.println(user);
+        //GroupPkg group = new GroupPkg();
+        System.out.println(group);
+        System.out.println(file);
+        //System.out.println((TimeOfDayGoal)goal);
+        //System.out.println((QualityGoal) goal);
+        int userId;
+        if (user.equals("")) {
+            userId = 12345;
+        } else {
+            userId = Integer.parseInt(user);
+        }
+        //Todo, check for duplicates and create groupservice
+        List<Groups> allGroups = gs.getAllGroups();
+        for (Groups g : allGroups) {
+            if (g.getGroupName().equalsIgnoreCase(group.groupName) && !g.getGroupId().equals(group.groupId)) {
+                HttpHeaders header = new HttpHeaders();
+                header.add("Duplicate", "Duplicate group");
+                return new ResponseEntity<>(header, HttpStatus.CONFLICT);
+            }
+        }
+        Groups targetGroup = null;
+        for (Groups g : allGroups) {
+            if (g.getGroupId().equals(group.groupId)) {
+                targetGroup = g;
+            }
+        }
+        //targetGroup.setUsers(group.users);
+        //TODO need to parse string for users
+        targetGroup.setGroupDescription(group.groupDescription);
+        targetGroup.setGroupName(group.groupName);
+        targetGroup.setManagers(group.managers);
+        //add users if they are managers
+        ArrayList<Integer> newUsers = group.users;
+        for (Integer i : targetGroup.getManagers()) {
+            boolean found = false;
+            for (Integer j : group.users) {
+                if (i.intValue() == j.intValue()) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                newUsers.add(i);
+            }
+        }
+        targetGroup.setUsers(newUsers);
+        //targetGroup.setGroupId(UUID.randomUUID().toString());
+        Groups theGroup = gs.save(targetGroup);
+        System.out.println("Test pic");
+        System.out.println(file);
+        if (file != null){
+            try {
+                System.out.println("uploading pic");
+                gs.uploadProfilePicture(theGroup.getGroupId(), file);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else {
+            gs.save(theGroup);
+        }
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("200", "uno");
+        //System.out.println("Received New Group: " + group.groupName + " " + group.groupDescription + " " + group.userCreating + " " + group.users + " " + group.managers);
+        //Todo, put in system
+
+        return new ResponseEntity<>(header, HttpStatus.OK);
     }
 }

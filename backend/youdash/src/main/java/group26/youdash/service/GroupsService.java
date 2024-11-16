@@ -65,7 +65,6 @@ public class GroupsService {
         group.setProfilePictureKey(profilePictureKey);
         dynamoDBMapper.save(group);
 
-        System.out.println("BEFOREE RETURNNNING");
         return profilePictureUrl;
     }
 

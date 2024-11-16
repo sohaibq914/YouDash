@@ -14,7 +14,7 @@ function CreateGroup() {
 
 const handleChange = (e) => {
     const value = e.target.value;
-    console.log(value + " " + e.target.name);
+    //console.log(value + " " + e.target.name);
     setData({
       ...data,
       [e.target.name]: value,
@@ -51,15 +51,8 @@ const getGroupUsers = () => {
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
     const formDataFull = new FormData();
-    if (selectedFile) {
-    console.log ("exists");
-        formData.append("file", selectedFile);
-        setSelectedFile(null);
-    }
     console.log(selectedFile);
-    console.log(formData.get("file"));
     const groupData = {
       groupName: data.groupName,
       groupDescription: data.groupDescription,
@@ -71,6 +64,7 @@ const handleSubmit = (e) => {
     formDataFull.append("group", new Blob([JSON.stringify(groupData)], {type: "application/json" } ));
     if (selectedFile) {
         formDataFull.append("image", selectedFile);
+        setSelectedFile(null);
     }
     axios
       .post("http://localhost:8080/groups/" + getUser() + "/create", formDataFull)
