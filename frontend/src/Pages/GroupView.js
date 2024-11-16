@@ -38,8 +38,46 @@ function GroupView() {
 
         }
 
+    const requestJoin = () => {
+    }
+    const acceptInvite = () => {
+    }
+
   return (
     <div className="GroupView">
+        <div>
+        <table style={{width: "80%", margin: "auto"}}>
+            <tbody>
+                <tr>
+                    <td style={{width: "33%", padding: "5px"}}>
+                        <h3 style={{textAlign: "center"}}>Join Groups</h3>
+                        <select id="groupJoin" name="groupJoin" multiple size="5" style={{height:"5em", width:"100%"}}>
+                            <option>PLACEHOLDER</option>
+                        </select>
+                        <button style={{width:"100%"}} onClick={requestJoin}>
+                                Request
+                            </button>
+                    </td>
+                    <td style={{width: "33%", padding: "5px"}}>
+                        <h3 style={{textAlign: "center"}}>Requested</h3>
+                        <select id="groupRequest" name="groupRequest" multiple size="8" style={{height:"10em", width:"100%"}}>
+                            <option>PLACEHOLDER</option>
+                        </select>
+                    </td>
+                    <td style={{width: "33%", padding: "5px"}}>
+                        <h3 style={{textAlign: "center"}}>Invites</h3>
+                        <select id="groupInvite" name="groupInvite" multiple size="5" style={{height:"5em", width:"100%"}}>
+                            <option>PLACEHOLDER</option>
+                        </select>
+                        <button style={{width:"100%"}} onClick={acceptInvite}>
+                                Accept
+                            </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <hr/>
         {data.map((igroup, index) => (
             <div key={index}>
                 <h3 style={{textAlign: "center"}}>Group #{index + 1}</h3>

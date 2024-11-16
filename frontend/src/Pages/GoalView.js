@@ -41,6 +41,7 @@ function GoalView() {
 
   return (
     <div className="GoalView">
+
         {data.map((igoal, index) => (
             <div key={index}>
                 <h3 style={{textAlign: "center"}}>Goal #{index + 1}</h3>

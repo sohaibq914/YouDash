@@ -126,7 +126,7 @@ public class GroupsController {
         targetGroup.setUsers(theUsers);
 
         targetGroup.setGroupDescription(group.groupDescription);
-
+        targetGroup.setMessages(new ArrayList<>());
         //targetGroup.setGroupId(UUID.randomUUID().toString());
         Groups theGroup = gs.save(targetGroup);
         System.out.println("Test pic");

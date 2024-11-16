@@ -132,7 +132,7 @@ function GroupComponent(props) {
 
               console.log(response);
               //window.location.reload();
-              //TODO figure out reload?? get
+              //TODO figure out reload?? get request of specific group id to update group to?
               /*if (selectedFile) {
                 console.log("group-" + group.groupId + "-profile-picture." + selectedFile.name.substring(selectedFile.name.indexOf(".") + 1))
                 setProfilePic("group-" + group.groupId + "-profile-picture." + selectedFile.name.substring(selectedFile.name.indexOf(".") + 1));
@@ -172,6 +172,39 @@ function GroupComponent(props) {
         //wait and refresh?
     }
 
+    const addManagers = (e) => {
+        const result = document.getElementById("managersSelect").selectedOptions;
+        //console.log("add manager button clicked");
+        if (result.length == 0 || result[0].value === "IGNORE") {
+            return;
+        }
+        //console.log(result);
+        var newManagerGroup = group.managers;
+        for (let i = 0; i < result.length; i++) {
+            if (!group.managers.includes(+result[i].value)) {
+                newManagerGroup.push(+result[i].value);
+            }
+        }
+        setGroup(group => ({...group, managers: newManagerGroup}));
+    }
+    const addUsers = (e) => {
+
+        const result = document.getElementById("usersSelect").selectedOptions;
+        if (result.length == 0 || result[0].value === "IGNORE") {
+            //console.log("empty");
+            return;
+        }
+        //var values  = result[0].value;
+        var newUserGroup = group.users;
+        for (let i = 0; i < result.length; i++) {
+            if (!group.users.includes(+result[i].value)) {
+                newUserGroup.push(+result[i].value);
+            }
+        }
+        //console.log(newUserGroup);
+        setGroup(group => ({...group, users: newUserGroup}));
+    }
+
     const handleChange = (e) => {
         //handle the change
         const value = e.target.value;
@@ -201,6 +234,7 @@ function GroupComponent(props) {
         //console.log(group[e.target.name], value);
     }
     useEffect (() => {
+        console.log("update group");
         updateGroup();
     }, [group]);
 
@@ -261,47 +295,65 @@ function GroupComponent(props) {
         <tbody style={{width: "80%", margin:"auto"}}>
         <tr>
         <td style={{width: "50%"}}>
-            <h5 style={{textAlign: "center"}}>Users</h5>
+            <h5 style={{textAlign: "center"}}>Current Users</h5>
             {cusers ? cusers.map((iuser, index) => (
-                <div key={index}>
-                <p style={{textAlign: "center"}}>{iuser}</p>
+                <div key={index} style={{textAlign: "center"}}>
+                <p style={{textAlign: "center", display: "inline-block"}}>{iuser} </p>
+                <button style={{textAlign: "center", display: "inline-block", padding: "1px", marginLeft: "5px"}}>X</button>
                 </div>
             )) : (<></>)}
             <br/>
         </td>
         <td style={{width: "50%"}}>
-            <h5 style={{textAlign: "center"}}>Add Users</h5>
+            <h5 style={{textAlign: "center"}}>Invite Users</h5>
             <select id="usersSelect" name="users" multiple size="5" style={{height:"5em", width:"100%"}}>
-                  <option value="Empty"></option>
-                  {users ? users.map((u, index) => (
+                  {users && users.length != 0 ? users.map((u, index) => (
                      <option key={"u" + index} value={u.id}>{u.name}</option>
-                 )) : (<></>)}
+                 )) : (<><option value="IGNORE">All Users in Group</option></>)}
                 </select>
             <br/>
-            <button style={{width:"100%"}} onClick={() => window.location.href = `chat/${group.groupId}`}>
-                                Add
+            <button style={{width:"100%"}} onClick={addUsers}>
+                                Invite
                             </button>
         </td>
         </tr>
         <tr>
+        <td colSpan="2">
+            <br/>
+        <div style={{margin: "auto", width: "65%"}}>
+        <h5 style={{textAlign: "center"}}>Requests To Join From Users</h5>
+                    <select id="usersRequest" name="usersRequest" multiple size="5" style={{height:"5em", width:"100%"}}>
+                          {users && users.length != 0 ? users.map((u, index) => (
+                             <option key={"u" + index} value={u.id}>{u.name}</option>
+                         )) : (<><option value="IGNORE">No Requests</option></>)}
+                        </select>
+                    <br/>
+                    <button style={{width:"100%"}} onClick={addUsers}>
+                                        Accept
+                                    </button>
+        </div>
+        <br/>
+        </td>
+        </tr>
+        <tr>
         <td>
-        <h5 style={{textAlign: "center"}}>Managers</h5>
+        <h5 style={{textAlign: "center"}}> Current Managers</h5>
         {cmanagers ? cmanagers.map((imanager, index) => (
-            <div key={index}>
-            <p style={{textAlign: "center"}}>{imanager}</p>
+            <div key={index} style={{textAlign: "center"}}>
+            <p style={{textAlign: "center", display: "inline-block"}}>{imanager}</p>
+            <button style={{textAlign: "center", display: "inline-block", padding: "1px", marginLeft: "5px"}}>X</button>
             </div>
         )) : (<></>)}
         </td>
         <td style={{width: "50%"}}>
             <h5 style={{textAlign: "center"}}>Add Managers</h5>
             <select id="managersSelect" name="managers" multiple size="5" style={{height:"5em", width:"100%"}}>
-                  <option value="Empty"></option>
-                  {managers ? managers.map((m, index) => (
+                  {managers && managers.length != 0 ? managers.map((m, index) => (
                      <option key={"m" + index} value={m.id}>{m.name}</option>
-                 )) : (<></>)}
+                 )) : (<><option value="IGNORE">All Managers in Group</option></>)}
                 </select>
             <br/>
-            <button style={{width:"100%"}} onClick={() => window.location.href = `chat/${group.groupId}`}>
+            <button style={{width:"100%"}} onClick={addManagers}>
                                 Add
                             </button>
         </td>
