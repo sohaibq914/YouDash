@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 @RestController 
-@RequestMapping("/group-chat") 
+@RequestMapping("/block-categories") 
 @CrossOrigin(origins = {
     "http://localhost:3000", 
     "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"

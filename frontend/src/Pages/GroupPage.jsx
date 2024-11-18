@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import SockJS from "sockjs-client";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from 'react-hot-toast';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 let stompClient = null;
@@ -145,10 +146,14 @@ const GroupChat = () => {
     // Validate YouTube link and timestamp only if it looks like a YouTube message
     if (isYouTube) {
       if (timestampPart && !isValidTimestamp) {
-        alert("Invalid timestamp format. Please use hh:mm:ss.");
+        toast.error("Invalid timestamp format. Please use hh:mm:ss.", {
+          position: "top-center",
+          duration: 3000, // Duration in milliseconds
+        });
         return;
       }
     }
+  
 
     if (newMessage.trim() && stompClient) {
       const message = {
