@@ -20,7 +20,8 @@ const GroupChat = () => {
 
   // Helper function to check for a valid YouTube URL
   const isValidYouTubeUrl = (url) => {
-    const youtubeRegex = /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+    const youtubeRegex =
+      /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
     return youtubeRegex.test(url);
   };
 
@@ -141,14 +142,12 @@ const GroupChat = () => {
     const videoTimestamp = isYouTube ? extractTimestamp(timestampPart) : null;
     const isValidTimestamp = /^\d{2}:\d{2}:\d{2}$/.test(timestampPart);
 
-    if (!isYouTube) {
-      alert("Invalid YouTube link. Please check the URL format.");
-      return;
-    }
-
-    if (timestampPart && !isValidTimestamp) {
-      alert("Invalid timestamp format. Please use hh:mm:ss.");
-      return;
+    // Validate YouTube link and timestamp only if it looks like a YouTube message
+    if (isYouTube) {
+      if (timestampPart && !isValidTimestamp) {
+        alert("Invalid timestamp format. Please use hh:mm:ss.");
+        return;
+      }
     }
 
     if (newMessage.trim() && stompClient) {
@@ -181,17 +180,17 @@ const GroupChat = () => {
 
   return (
     <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-      }}
+      className="group-chat"
+      style={{ display: "flex", flexDirection: "column", height: "100vh" }}
     >
+      {/* Messages container */}
       <div
+        className="message-display-area"
         style={{
           flex: 1,
           overflowY: "auto",
           padding: "10px",
+          marginBottom: "100px", // Space for the fixed input box
         }}
       >
         {messages.map((msg, index) => {
@@ -327,20 +326,22 @@ const GroupChat = () => {
             </div>
           );
         })}
-        <div ref={messageEndRef} />
       </div>
 
+      {/* Fixed input area */}
       <div
+        className="message-input-area"
         style={{
           position: "fixed",
           bottom: 0,
           left: 0,
-          right: 0,
-          padding: "10px",
+          width: "100%",
           backgroundColor: "white",
           borderTop: "1px solid #ddd",
+          padding: "10px",
           display: "flex",
           alignItems: "center",
+          gap: "10px",
         }}
       >
         <input
@@ -348,9 +349,25 @@ const GroupChat = () => {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
-          style={{ flex: 1, marginRight: "10px" }}
+          style={{
+            flex: 1,
+            padding: "10px",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+          }}
         />
-        <button onClick={sendMessage} disabled={!connected}>
+        <button
+          onClick={sendMessage}
+          disabled={!connected}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
           Send
         </button>
       </div>

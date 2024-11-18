@@ -1,6 +1,7 @@
 package group26.youdash.classes;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,9 @@ public class Messages {
 
     @DynamoDBAttribute(attributeName = "user_votes")
     public Map<String, String> getUserVotes() {
+        if (userVotes == null) {
+            userVotes = new HashMap<>(); // Ensure it is not null
+        }
         return userVotes;
     }
 
