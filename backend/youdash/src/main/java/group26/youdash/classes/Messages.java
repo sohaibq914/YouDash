@@ -1,5 +1,7 @@
 package group26.youdash.classes;
+
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,17 +13,27 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "messages")
 public class Messages {
-     String messageId;
-     int userId;
-     String messageText;
-     String timeStamp;
-     private String profilePicture;
-     String profilePictureKey;
+    String messageId;
+    int userId;
+    String messageText;
+    String timeStamp;
+    boolean isYoutube;
+    Integer videoTimestamp;
+   
+     int upvotes;
+
+
+     int downvotes;
+
+   
+    private Map<String, String> userVotes; // Map of userId -> "upvote" or "downvote"
 
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
 
-    public Messages() {}
+    public Messages() {
+    }
+
     public Messages(String messageId, int userId, String messageText, String timeStamp) {
         this.messageId = messageId;
         this.userId = userId;
@@ -36,7 +48,7 @@ public class Messages {
     }
 
     public void setMessageId(String messageId) {
-        this.messageId =  messageId;
+        this.messageId = messageId;
     }
 
     @DynamoDBAttribute(attributeName = "message_text")
@@ -47,6 +59,7 @@ public class Messages {
     public void setMessageText(String messageText) {
         this.messageText = messageText;
     }
+
     @DynamoDBAttribute(attributeName = "timestamp")
     public String getTimeStamp() {
         return timeStamp;
@@ -65,23 +78,49 @@ public class Messages {
         this.userId = userId;
     }
 
-    @DynamoDBAttribute(attributeName = "profile_picture")
-     public String getProfilePicture() {
-         return profilePicture;
-     }
-
-     public void setProfilePicture(String profilePicture) {
-         this.profilePicture = profilePicture;
-     }
-
-
-     @DynamoDBAttribute(attributeName = "profilePictureKey")
-    public String getProfilePictureKey() {
-        return profilePictureKey;
+    @DynamoDBAttribute(attributeName = "is_youtube")
+    public boolean getIsYouTube() {
+        return isYoutube;
     }
 
-    public void setProfilePictureKey(String profilePictureKey) {
-        this.profilePictureKey = profilePictureKey;
+    public void setIsYouTube(boolean isYoutube) {
+        this.isYoutube = isYoutube;
+    }
+
+    @DynamoDBAttribute(attributeName = "video_timestamp")
+    public Integer getVideoTimestamp() {
+        return videoTimestamp;
+    }
+
+    public void setVideoTimestamp(Integer videoTimestamp) {
+        this.videoTimestamp = videoTimestamp;
+    }
+
+    @DynamoDBAttribute(attributeName = "upvotes")
+    public int getUpvotes() {
+        return upvotes;
+    }
+
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    @DynamoDBAttribute(attributeName = "downvotes")
+    public int getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(int downvotes) {
+        this.downvotes = downvotes;
+    }
+
+    @DynamoDBAttribute(attributeName = "user_votes")
+    public Map<String, String> getUserVotes() {
+        return userVotes;
+    }
+
+    public void setUserVotes(Map<String, String> userVotes) {
+        this.userVotes = userVotes;
     }
 
 }

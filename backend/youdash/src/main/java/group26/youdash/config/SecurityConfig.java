@@ -94,6 +94,7 @@ public class SecurityConfig {
 
                     // Messages
                     "/group-chat/groups/{groupId}/messages",
+                    "/group-chat/groups/{groupId}/messages/{messageId}/vote",
                     "{userID}/group-chat",
 
 
