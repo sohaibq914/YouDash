@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios to communicate with backend
 
 export const Navbar = () => {
   const [userID, setUserID] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false); // State to track if the menu is open
   const [darkMode, setDarkMode] = useState(false); // State to track dark mode
+  const navigate = useNavigate();
+  // Check if the user is logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/users/session", {
+          withCredentials: true,
+        });
+        setUserID(response.data.userId); // Set userID from session
+      } catch (error) {
+        console.error("No active session:", error);
+        setUserID(null);
+        navigate("/login"); // Redirect to login if not logged in
+      }
+    };
+
+    checkSession();
+  }, [navigate]);
 
   // Fetch user's dark mode setting from the backend when component mounts
   useEffect(() => {

@@ -2,8 +2,10 @@
 
 package group26.youdash.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -25,5 +27,15 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .exposedHeaders("Authorization")
                 .maxAge(3600); // 1 hour
+    }
+
+    @Autowired
+    private SessionValidationInterceptor sessionValidationInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(sessionValidationInterceptor)
+                .addPathPatterns("/**") // Apply to all routes
+                .excludePathPatterns("/auth/**", "/public/**", "/login", "/signup"); // Exclude public routes
     }
 }

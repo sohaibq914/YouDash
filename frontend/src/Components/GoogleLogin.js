@@ -11,11 +11,13 @@ const GoogleLoginButton = () => {
     try {
       const result = await axios.post(
         "http://localhost:8080/auth/google-login",
-        { tokenId: response.credential } // Include tokenId in the request body
+        { tokenId: response.credential }, // Include tokenId in the request body
+        { withCredentials: true }
       );
       console.log("Login Successful:", result.data);
 
-      const userId = result.data.id;
+      
+      const userId = result.data.userId;
       console.log(userId);
       // Redirect to main page
       navigate(`/${userId}/home`); 

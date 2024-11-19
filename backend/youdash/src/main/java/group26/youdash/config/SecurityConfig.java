@@ -29,6 +29,8 @@ public class SecurityConfig {
                     // User Controller endpoints
                     "/api/users",
                     "/api/users/login",
+                    "/api/users/session",
+                    "api/users/logout",
                     "/api/users/signup",
                     "/api/users/google-login",
                     "/api/users/{id}",
