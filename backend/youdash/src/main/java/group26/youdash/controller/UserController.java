@@ -243,6 +243,7 @@ public class UserController {
      * @PostMapping("/login")
      * public ResponseEntity<User> loginUser(@RequestBody LoginRequest loginRequest)
      * {
+     * System.out.println("yo its here");
      * String username = loginRequest.getUsername();
      * String password = loginRequest.getPassword();
      * 
@@ -269,6 +270,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest, HttpSession session) {
+        System.out.println("yoooo");
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 

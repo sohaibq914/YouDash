@@ -7,7 +7,7 @@ import GoogleLoginButton from "../Components/GoogleLogin";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const navigate = useNavigate();
 
   const handleSignup = () => {
@@ -33,15 +33,14 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+    console.log("Login attempt with:", { username, password });
     try {
         const response = await axios.post(
-            "http://localhost:8080/api/users/login",
+            "http://localhost:8080/auth/login",
             { username, password },
             { withCredentials: true }
         );
         console.log("Response data:", response.data);
-        console.log("hello before")
         const userId = response.data.userId;
         navigate(`/${userId}/home`);
         window.location.reload();

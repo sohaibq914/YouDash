@@ -20,17 +20,14 @@ public class SecurityConfig {
         http
             .cors().and()
             .csrf().disable()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/ws/**").permitAll()
                 .requestMatchers(
                     // User Controller endpoints
-                    "/api/users",
+                    "auth/login",
                     "/api/users/login",
                     "/api/users/session",
-                    "api/users/logout",
+                    "/api/users/logout",
                     "/api/users/signup",
                     "/api/users/google-login",
                     "/api/users/{id}",
@@ -118,6 +115,10 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
             )
+
+            .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Enable session creation
+        )
             .headers(headers -> headers
                 .frameOptions().disable()
             );

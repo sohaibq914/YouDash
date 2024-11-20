@@ -3,6 +3,7 @@ package group26.youdash.controller;
 import group26.youdash.classes.QualityGoal;
 import group26.youdash.classes.TimeOfDayGoal;
 import group26.youdash.classes.WatchTimeGoal;
+import group26.youdash.model.LoginRequest;
 import group26.youdash.model.User;
 import group26.youdash.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -89,6 +90,28 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error verifying token.");
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest, HttpSession session) {
+        System.out.println("yoooo");
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+
+        User user = userService.findByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            // Store user details in session
+            session.setAttribute("userId", user.getId());
+
+            // Return userId in the response
+            return ResponseEntity.ok(new HashMap<String, Object>() {
+                {
+                    put("userId", user.getId());
+                    put("message", "Login successful");
+                }
+            });
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 
 }
