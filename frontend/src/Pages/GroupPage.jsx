@@ -15,6 +15,7 @@ const GroupChat = () => {
   const [newMessage, setNewMessage] = useState("");
   const [connected, setConnected] = useState(false);
   const [userProfiles, setUserProfiles] = useState({});
+  const [manager, setManager] = useState(false);
 
   // Create a ref for the message container
   const messageEndRef = useRef(null);
@@ -76,9 +77,35 @@ const GroupChat = () => {
     }
   };
 
+const getUser = () => {
+            let theUrl = window.location.href;
+            console.log(theUrl);
+            if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+                return null;
+            }
+            console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
+
+        };
+
+    const checkIfManager = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/group-chat/isManager/${userId}/${groupId}`
+          );
+          console.log(response.data);
+          setManager(response.data);
+        } catch (error) {
+          console.error("Error fetching manager role:", error);
+        }
+    }
+
   // Connect to WebSocket when the component mounts
   useEffect(() => {
     fetchMessages();
+    //check if user is a Manager
+    checkIfManager();
+
     // Create a new Stomp Client
     stompClient = new Client({
       webSocketFactory: () => new SockJS("http://localhost:8080/ws"), // SockJS client
@@ -130,6 +157,23 @@ const GroupChat = () => {
       console.error("Error voting on message:", error);
     }
   };
+
+  const deleteMsg = async (messageId) => {
+    try {
+        await axios.post(
+            `http://localhost:8080/group-chat/groups/${groupId}/messages/${messageId}/delete`,
+            null, // No request body is needed in this case
+            {
+              params: {
+                userId, // This adds userId as a query parameter
+              },
+            }
+          );
+          await fetchMessages();
+    } catch (error) {
+        console.error("Error deleting message:", error);
+    }
+  }
 
   const sendMessage = () => {
     const timestamp = new Date().toISOString();
@@ -292,6 +336,20 @@ const GroupChat = () => {
                     gap: "5px",
                   }}
                 >
+                  {manager == true ? (
+                  <button
+                      onClick={() => deleteMsg(msg.messageId)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "blue",
+                        fontSize: "18px",
+                        padding: 0,
+                      }}
+                    >
+                      Delete
+                    </button>) : (<></>)}
                   <button
                     onClick={() => handleVote(msg.messageId, "upvote")}
                     style={{

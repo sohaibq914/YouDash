@@ -44,11 +44,11 @@ function GroupComponent(props) {
 
     const getAllUsers = () => {
 
-              axios.get("http://localhost:8080/api/users")
+              axios.get("http://localhost:8080/api/users/getAll")
               .then(function (response) {
                 //console.log(group);
                 //console.log(group.users.length);
-                //console.log(response.data);
+                console.log(response.data);
                 let userList = [];
                 let invList = [];
                   for (let i = 0; i < response.data.length; i++) {
@@ -73,21 +73,22 @@ function GroupComponent(props) {
                     }
                   }
                     //separate if invited
-
-                  for (let i = 0; i < response.data.length; i++) {
-                    for (let k = 0; k < group.invitations.length; k++) {
-                        if (response.data[i].id == group.invitations[k]) {
-                            //invList.push(response.data[i]);
-                            response.data.splice(i, 1);
-                            i--;
-                            break;
+                  if (group.invitations) {
+                      for (let i = 0; i < response.data.length; i++) {
+                        for (let k = 0; k < group.invitations.length; k++) {
+                            if (response.data[i].id == group.invitations[k]) {
+                                //invList.push(response.data[i]);
+                                response.data.splice(i, 1);
+                                i--;
+                                break;
+                            }
                         }
-                    }
+                      }
                   }
                     //id is null? check if i is below 0 or something like that
                     //separate if requested
                     //console.log(response.data);
-
+                  if (group.requests) {
                   for (let i = 0; i < response.data.length; i++) {
                     for (let x = 0; x < group.requests.length; x++) {
                         if (response.data[i].id == group.requests[x]) {
@@ -97,6 +98,7 @@ function GroupComponent(props) {
                             break;
                         }
                     }
+                  }
                   }
                   setInvUsers(invList);
                   setUsers(response.data);
@@ -111,7 +113,7 @@ function GroupComponent(props) {
 
       const getAllManagers = () => {
 
-            axios.get("http://localhost:8080/api/users")
+            axios.get("http://localhost:8080/api/users/getAll")
             .then(function (response) {
               //console.log(group);
               //console.log(group.users.length);

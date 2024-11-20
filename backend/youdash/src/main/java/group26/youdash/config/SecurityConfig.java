@@ -94,13 +94,15 @@ public class SecurityConfig {
                     // Messages
                     "/group-chat/groups/{groupId}/messages",
                     "/group-chat/groups/{groupId}/messages/{messageId}/vote",
+                    "/group-chat/groups/{groupId}/messages/{messageId}/delete",
+                    "/group-chat/isManager/{userId}/{groupId}",
                     "{userID}/group-chat",
 
 
                     "api/users/signup",
                     "/api/privacy/{userId}/pending-requests",
-"/api/privacy/{userId}/handle-request",
-"/api/privacy/{targetId}/follow-request",
+                    "/api/privacy/{userId}/handle-request",
+                    "/api/privacy/{targetId}/follow-request",
                     "/api/privacy/{userID}/toggle",
 
                     //group endpoints
@@ -111,7 +113,8 @@ public class SecurityConfig {
                         "/groups/{user}/req",
                         "/groups/{user}/acc",
                         "/api/direct-messages/**",  // Allow all direct message endpoints
-
+                        "/api/users/getAll",
+                        "/api/users",
                         "/api/users/{userId}/block/{userId1}",
                         "/api/users/{userId}/unblock/{userId1}"
                     

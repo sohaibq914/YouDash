@@ -42,6 +42,12 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
     @Autowired
     private EmailService emailService;
 
@@ -312,6 +318,7 @@ public class UserController {
     @GetMapping("/session")
     public ResponseEntity<?> getSessionDetails(HttpSession session) {
         // Retrieve userId from the session
+        System.out.println(session);
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
