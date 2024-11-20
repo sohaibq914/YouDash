@@ -89,16 +89,16 @@ function GroupComponent(props) {
                     //separate if requested
                     //console.log(response.data);
                   if (group.requests) {
-                  for (let i = 0; i < response.data.length; i++) {
-                    for (let x = 0; x < group.requests.length; x++) {
-                        if (response.data[i].id == group.requests[x]) {
-                            invList.push(response.data[i]);
-                            response.data.splice(i, 1);
-                            i--;
-                            break;
+                      for (let i = 0; i < response.data.length; i++) {
+                        for (let x = 0; x < group.requests.length; x++) {
+                            if (response.data[i].id == group.requests[x]) {
+                                invList.push(response.data[i]);
+                                response.data.splice(i, 1);
+                                i--;
+                                break;
+                            }
                         }
-                    }
-                  }
+                      }
                   }
                   setInvUsers(invList);
                   setUsers(response.data);
@@ -580,7 +580,7 @@ function GroupComponent(props) {
                     Go to leaderboard
                 </button>
 
-        <button style={{width:"50%"}} onClick={() => window.location.href = `chat/${group.groupId}`}>
+        <button style={{width:"50%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
                     Go to chat
                 </button>
         <hr/>
