@@ -107,6 +107,9 @@ public class SecurityConfig {
                         "/groups/{user}/create",
                         "/groups/{user}/edit",
                         "/groups/{user}/view",
+                        "/groups/{user}/rij",
+                        "/groups/{user}/req",
+                        "/groups/{user}/acc",
                         "/api/direct-messages/**",  // Allow all direct message endpoints
 
                         "/api/users/{userId}/block/{userId1}",

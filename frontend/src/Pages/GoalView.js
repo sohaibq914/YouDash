@@ -42,12 +42,12 @@ function GoalView() {
   return (
     <div className="GoalView">
 
-        {data.map((igoal, index) => (
+        {data && data.length != 0 ? data.map((igoal, index) => (
             <div key={index}>
                 <h3 style={{textAlign: "center"}}>Goal #{index + 1}</h3>
                 <GoalComponent goal={igoal} />
             </div>
-            ))}
+            )) : (<><h3 style={{textAlign: "center"}}>YOU DO NOT HAVE ANY GOALS</h3></>)}
 
 
     </div>

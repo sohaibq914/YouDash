@@ -44,7 +44,7 @@ public class GroupsService {
         if (group.getGroupId() == null || group.getGroupId().equals("")) {
             group.setGroupId(UUID.randomUUID().toString());
         } else {
-            System.out.println("Already UUID exists");
+            //System.out.println("Already UUID exists");
         }
         dynamoDBMapper.save(group);
         return group;

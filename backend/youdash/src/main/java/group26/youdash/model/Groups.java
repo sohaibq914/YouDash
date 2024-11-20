@@ -17,6 +17,8 @@ public class Groups {
     // managers is int because users are ints in our user table e.g. user 12345
     private List<Integer> managers;
     private List<Integer> users;
+    private List<Integer> requests;
+    private List<Integer> invitations;
     private List<Messages> messages;
     private String groupDescription;
 
@@ -25,13 +27,15 @@ public class Groups {
 
 
     public Groups(String groupId, String groupName, List<Integer> managers, List<Integer> users,
-                  List<Messages> messages, String groupDescription) {
+                  List<Messages> messages, String groupDescription, List<Integer> invitations, List<Integer> requests) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.managers = managers;
         this.users = users;
         this.messages = messages;
         this.groupDescription = groupDescription;
+        this.requests = requests;
+        this.invitations = invitations;
     }
     
 
@@ -85,7 +89,25 @@ public class Groups {
     public void setUsers(List<Integer> users) {
         this.users = users;
     }
-    
+
+
+    @DynamoDBAttribute(attributeName = "requests")
+    public List<Integer> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Integer> requests) {
+        this.requests = requests;
+    }
+
+    @DynamoDBAttribute(attributeName = "invitations")
+    public List<Integer> getInvitations() {
+        return invitations;
+    }
+
+    public void setInvitations(List<Integer> invitations) {
+        this.invitations = invitations;
+    }
 
     @DynamoDBAttribute(attributeName = "group_description")
     public String getGroupDescription() {
