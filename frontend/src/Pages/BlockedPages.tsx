@@ -119,6 +119,7 @@ const BlockedPages = () => {
             ))}
           </ul>
         </div>
+        <br/>
       </div>
   
       {/* a rectangle container for Blocking Categories */}
@@ -140,6 +141,7 @@ const BlockedPages = () => {
               value={inputValue}
               id="addCategoryInput"
               onChange={handleInputChange}
+              style={{width: "100%"}}
             />
           </div>
         </div>
@@ -161,6 +163,7 @@ const BlockedPages = () => {
         </div>
       </div>
     </div>
+
   </div>
   
   );

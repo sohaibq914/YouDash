@@ -35,7 +35,8 @@ function WatchTimeChart(props) {
 
   return (
     <div className="watch-time-chart-container"> {/* Apply CSS class for styling */}
-      <h3>Goal Progress Over Time Frame</h3>
+      <h2 style={{color: "white", textAlign: "center"}}>Goal Progress Over Time Frame</h2>
+      <br/>
       <ResponsiveContainer width="90%" height={400}>
         <BarChart data={watchTimeData}>
           <CartesianGrid strokeDasharray="3 3" />
