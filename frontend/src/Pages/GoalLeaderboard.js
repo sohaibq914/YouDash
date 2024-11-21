@@ -139,15 +139,15 @@ const GoalLeaderboard = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <div className="mb-6">
+      <div className="mb-6" >
         <h1 className="text-2xl font-bold text-center mb-6">Goal Leaderboard</h1>
 
-        <div className="flex gap-4 mb-4">
+        <div className="flex gap-4 mb-4"  style={{width: "80%", margin: "auto"}}>
           <div className="w-1/2">
             <label htmlFor="goalTypeFilter" className="block mb-2 font-medium">
               Filter by Goal Type:
             </label>
-            <select id="goalTypeFilter" className="w-full p-2 border rounded-lg" value={goalTypeFilter} onChange={(e) => setGoalTypeFilter(e.target.value)}>
+            <select id="goalTypeFilter" style={{marginLeft: "44px"}} className="w-full p-2 border rounded-lg" value={goalTypeFilter} onChange={(e) => setGoalTypeFilter(e.target.value)}>
               <option value="All">All Goals</option>
               <option value="QualityGoal">Quality Goals</option>
               <option value="WatchTimeGoal">Watch Time Goals</option>
@@ -159,7 +159,7 @@ const GoalLeaderboard = () => {
             <label htmlFor="progressFilter" className="block mb-2 font-medium">
               Filter by Progress Level:
             </label>
-            <select id="progressFilter" className="w-full p-2 border rounded-lg" value={progressFilter} onChange={(e) => setProgressFilter(e.target.value)}>
+            <select id="progressFilter" style={{marginLeft: "10px"}} className="w-full p-2 border rounded-lg" value={progressFilter} onChange={(e) => setProgressFilter(e.target.value)}>
               <option value="All">All Progress</option>
               <option value="High">High (≥ 75%)</option>
               <option value="Medium">Medium (25% - 74%)</option>
@@ -168,7 +168,7 @@ const GoalLeaderboard = () => {
           </div>
         </div>
 
-        <div className="mb-4 flex items-center justify-end space-x-4 text-sm text-gray-600">
+        <div className="mb-4 flex items-center justify-end space-x-4 text-sm text-gray-600"  style={{width: "80%", margin: "auto"}}>
           <div className="flex items-center">
             <span className="text-yellow-500">🏆</span>
             <span className="ml-1">Goal Completed (100%)</span>
@@ -180,7 +180,7 @@ const GoalLeaderboard = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse bg-white">
+          <table className="w-full border-collapse bg-white" style={{width: "80%", margin: "auto"}}>
             <thead>
               <tr className="bg-gray-100">
                 <th className="p-3 text-left border">Rank</th>
