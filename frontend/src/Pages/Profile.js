@@ -382,21 +382,34 @@ function Profile() {
         />
       </div>
       <input type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} style={styles.fileInput} />
+<br/>
+
+      <div style={{margin: "auto", width: "72%"}}>
       <button onClick={handleProfilePictureUpload} style={styles.uploadButton}>
         Upload Profile Picture
       </button>
+      </div>
 
+      <div style={{margin: "auto", width: "70%"}}>
       <button
         onClick={() => navigate("/followers")} // Use the useNavigate hook to redirect
         style={styles.followersButton}
       >
         View Followers
       </button>
+      </div>
 
+    <br/>
+
+      <div style={{margin: "auto", width: "84%"}}>
       <CaptureImageButton />
+      </div>
+      <br/>
 
       {Object.entries(profile).map(([key, value]) => (
+
         <div key={key} style={styles.fieldContainer}>
+          {key === "profilePicture" ? (<></>) : (<>
           <div style={styles.fieldLabel}>{key.charAt(0).toUpperCase() + key.slice(1)}</div>
           {editField === key ? (
             <>
@@ -426,6 +439,7 @@ function Profile() {
               Edit
             </button>
           )}
+          </>)}
         </div>
       ))}
     </div>
@@ -433,6 +447,11 @@ function Profile() {
 }
 
 const styles = {
+
+  userButton: {
+    width: "100%",
+    height: "80px",
+  },
   container: {
     width: "400px",
     margin: "auto",
