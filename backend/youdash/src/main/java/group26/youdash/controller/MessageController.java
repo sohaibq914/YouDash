@@ -87,7 +87,7 @@ public class MessageController {
             @PathVariable String groupId,
             @PathVariable String messageId,
             @RequestParam int userId,
-            @RequestParam String voteType) { // voteType = "upvote" or "downvote"
+            @RequestParam String voteType) {
 
         // Load the group
         Groups group = dynamoDBMapper.load(Groups.class, groupId);
@@ -118,17 +118,17 @@ public class MessageController {
 
         // Update vote: if changing vote, remove previous vote
         if (existingVote != null && !existingVote.equals(voteType)) {
-            message.getUserVotes().remove(userId);
+            message.getUserVotes().remove(String.valueOf(userId));
         }
+
         // Add the new vote
         message.getUserVotes().put(String.valueOf(userId), voteType);
 
         // Save the group with the updated message
         dynamoDBMapper.save(group);
 
-        // Broadcast the updated vote count to all users in the group chat
-        String destination = "/topic/group/" + groupId;
-        messagingTemplate.convertAndSend(destination, message);
+        // Send the updated message with votes to the WebSocket topic
+        messagingTemplate.convertAndSend("/topic/group/" + groupId + "/votes", message);
 
         return ResponseEntity.ok("Vote registered.");
     }

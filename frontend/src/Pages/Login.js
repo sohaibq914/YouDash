@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import GoogleLoginButton from "../Components/GoogleLogin";
@@ -9,12 +9,18 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignup = () => {
+    console.log("hello")
     navigate("/signup");
   };
 
   useEffect(() => {
+    console.log("location is ");
+    if (location.pathname === "/signup") {
+      return;
+    }
     // Check session validity
 
     axios

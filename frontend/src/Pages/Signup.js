@@ -10,34 +10,44 @@ function Signup() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const navigate = useNavigate();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+
     const newUser = {
       name,
       email,
       username,
       password,
       phoneNumber,
-      registered: true, // Assuming you want to mark them as registered
+      registered: true, 
       goals: [],
       blocked: [],
       availableCategories: [],
     };
 
-    axios
-      .post("http://localhost:8080/api/users/signup", newUser)
-      .then((response) => {
-        // Handle successful sign-up
-        console.log("Sign-up successful", response.data);
-        navigate("/home");
-      })
-      .catch((error) => {
-        // Handle sign-up error
-        if (error.response.status == "409") {
-          // alert("Username already taken");
-        }
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/auth/signup", // Correct endpoint
+        newUser,
+        { withCredentials: true } // Required to send cookies for the session
+      );
+
+      // Handle successful sign-up
+      console.log("Sign-up successful", response.data);
+
+      // Extract the userId from the response
+      const { id: userId } = response.data;
+
+      // Navigate to {userId}/home
+      navigate(`/${userId}/home`);
+    } catch (error) {
+      // Handle errors during sign-up
+      if (error.response?.status === 409) {
+        alert("Username already taken");
+      } else {
         console.error("Sign-up failed", error);
-      });
+      }
+    }
   };
 
   return (
@@ -46,19 +56,19 @@ function Signup() {
       <form onSubmit={handleSignup}>
         <div>
           <label>Name</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div>
           <label>Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div>
           <label>Username</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
         </div>
         <div>
           <label>Password</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <div>
           <label>Phone Number</label>

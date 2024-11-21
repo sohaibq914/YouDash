@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import SockJS from "sockjs-client";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 let stompClient = null;
@@ -101,6 +101,7 @@ const GroupChat = () => {
 
     // Subscribe to the group chat topic
     stompClient.subscribe(`/topic/group/${groupId}`, onMessageReceived);
+    stompClient.subscribe(`/topic/group/${groupId}/votes`, onVoteReceived);
   };
 
   const onError = (error) => {
@@ -117,11 +118,11 @@ const GroupChat = () => {
     try {
       await axios.post(
         `http://localhost:8080/group-chat/groups/${groupId}/messages/${messageId}/vote`,
-        null, // No request body is needed in this case
+        null,
         {
           params: {
-            userId, // This adds userId as a query parameter
-            voteType, // Add voteType as well if the backend expects it as a query parameter
+            userId,
+            voteType,
           },
         }
       );
@@ -129,6 +130,17 @@ const GroupChat = () => {
     } catch (error) {
       console.error("Error voting on message:", error);
     }
+  };
+  const onVoteReceived = (payload) => {
+    const updatedMessage = JSON.parse(payload.body);
+    console.log("Vote update received:", updatedMessage);
+
+    // Update the message's votes in the local state
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) =>
+        msg.messageId === updatedMessage.messageId ? updatedMessage : msg
+      )
+    );
   };
 
   const sendMessage = () => {
@@ -152,8 +164,17 @@ const GroupChat = () => {
         });
         return;
       }
+    } else if (urlPart.startsWith("http") && timestampPart) {
+      // Non-YouTube URL with timestamp
+      toast.error(
+        "Invalid URL. Only YouTube URLs are allowed with timestamps.",
+        {
+          position: "top-center",
+          duration: 3000, // Duration in milliseconds
+        }
+      );
+      return;
     }
-  
 
     if (newMessage.trim() && stompClient) {
       const message = {

@@ -405,7 +405,7 @@ function GroupComponent(props) {
                     Go to leaderboard
                 </button>
 
-        <button style={{width:"50%"}} onClick={() => window.location.href = `chat/${group.groupId}`}>
+        <button style={{width:"50%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
                     Go to chat
                 </button>
         <hr/>
