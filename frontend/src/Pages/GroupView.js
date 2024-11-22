@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import GroupComponent from "../Components/GroupComponent";
+import { useNavigate } from 'react-router-dom';
 import "./GroupView.css";
 
 function GroupView() {
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [join, setJoin] = useState([]);
     const [inv, setInv] = useState([]);
@@ -194,6 +196,21 @@ function GroupView() {
                 <GroupComponent group={igroup} />
             </div>
             )) : (<><h3 style={{textAlign: "center"}}>YOU ARE NOT PART OF ANY GROUPS</h3></>)}
+                <div style={{ textAlign: "center", marginBottom: "20px" }}>
+                <button 
+                    onClick={() => navigate(`/${getUser()}/all-announcements`)}
+                    style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer"
+                    }}
+                >
+                    View All Announcements
+                </button>
+            </div>
 
 
     </div>
