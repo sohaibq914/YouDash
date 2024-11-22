@@ -386,13 +386,6 @@ function Profile() {
         Upload Profile Picture
       </button>
 
-      <button
-        onClick={() => navigate("/followers")} // Use the useNavigate hook to redirect
-        style={styles.followersButton}
-      >
-        View Followers
-      </button>
-
       <CaptureImageButton />
 
       {Object.entries(profile).map(([key, value]) => (
