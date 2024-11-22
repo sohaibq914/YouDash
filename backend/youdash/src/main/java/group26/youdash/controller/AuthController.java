@@ -5,6 +5,7 @@ import group26.youdash.classes.TimeOfDayGoal;
 import group26.youdash.classes.WatchTimeGoal;
 import group26.youdash.model.LoginRequest;
 import group26.youdash.model.User;
+import group26.youdash.service.EmailService;
 import group26.youdash.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
@@ -30,6 +31,9 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/google-login")
     public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> payload, HttpSession session) {
@@ -113,5 +117,32 @@ public class AuthController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
+
+
+    @PostMapping("/signup")
+public ResponseEntity<User> signUpUser(@RequestBody User user, HttpSession session) {
+    System.out.println("Received sign-up request for user: " + user);
+
+    // Check if a user with the same username already exists
+    User existingUser = userService.findByUsername(user.getUsername());
+    if (existingUser != null) {
+        System.out.println("Username already taken: " + user.getUsername());
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+    User savedUser = userService.save(user);
+    if (savedUser != null) {
+        System.out.println("User saved successfully: " + savedUser);
+
+        // Set the session for the user
+        session.setAttribute("userId", savedUser.getId());
+
+        emailService.sendEmail(savedUser.getEmail(), "Welcome to YouDash",
+                "Thank you for signing up, " + savedUser.getName() + "!");
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    } else {
+        System.out.println("Failed to save user.");
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
 
 }

@@ -18,18 +18,29 @@ function WatchHistory() {
   const [watchHistoryList, setWatchHistoryList] = useState<string[]>([]); // Initialized to empty array
 
   useEffect(() => {
-    const userID = 12345;
+
+    const getUser = () => {
+            let theUrl = window.location.href;
+            console.log(theUrl);
+            if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+                return null;
+            }
+            console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
+
+        }
+    const userID = getUser();
 
     const fetchWatchHistory = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/watch-history/${userID}/historyList`);
         setWatchHistoryList(response.data.watchHistory);
         // If fetching the watch history is successful, show an alert
-        alert("Watch history loaded successfully!");
+        //alert("Watch history loaded successfully!");
       } catch (error) {
         console.error("Error fetching watch history", error);
         // If there is an error, show an alert indicating the failure
-        alert("Failed to load watch history.");
+        //alert("Failed to load watch history.");
       }
     };
 
@@ -48,7 +59,7 @@ function WatchHistory() {
     return (
       <ListItem style={style} key={index} component="div"  id="watchHistory-list" sx={{ mb: 2 }}>
         <ListItemButton>
-          <ListItemText primary={watchHistoryList[index]} />
+          <a href={watchHistoryList[index]} target="_blank" style={{color: "white"}}><ListItemText primary={watchHistoryList[index]} /></a>
         </ListItemButton>
       </ListItem>
     );
@@ -59,7 +70,7 @@ function WatchHistory() {
     <Box
       sx={{
         width: "100%",
-        height: "100vh", // Full viewport height to center vertically
+        height: "auto", // Full viewport height to center vertically
         display: "flex",
         flexDirection: "column", // Align children in column (h1 above list)
         alignItems: "center", // Center horizontally
@@ -70,19 +81,19 @@ function WatchHistory() {
       <h1 style={{ marginBottom: "20px" }}>Watch History</h1> {/* Margin to create space below heading */}
       <Box
         sx={{
-          backgroundColor: "#f0f0f0", // Background color for the list
+          backgroundColor: "#787878", // Background color for the list
           padding: "10px", // Optional padding
           borderRadius: "8px", // Optional border radius for rounded corners
-          height: "150vh",
+          height: "520px",
         }}
       >
         <FixedSizeList
-          height={400}
-          width={500}
-          itemSize={46}
+          height={500}
+          width={700}
+          itemSize={50}
           overscanCount={5}
           itemCount={200}
-          style={{ backgroundColor: "blue", color: "white" }} // Background for the list
+          style={{ backgroundColor: "#787878", color: "white" }} // Background for the list
         >
           {renderRow}
         </FixedSizeList>

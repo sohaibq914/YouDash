@@ -80,7 +80,7 @@ function WatchTimeChartCustom(props) {
 
   return (
     <div className="watch-time-chart-container"> {/* Apply CSS class for styling */}
-      <h3>Watch Time Analysis</h3>
+      <h3 style={{color: "white"}}>Watch Time Analysis</h3>
       <select
         onChange={(e) => setSelectedCategory(e.target.value)}
         value={selectedCategory}

@@ -55,13 +55,27 @@ function Home() {
 
   return (
     <div className="Home">
+        <div style={{textAlign: "center"}}>
       <h1>Home page: User {userId}</h1>
       <button onClick={handleLogout}>Logout</button>
+      <br/>
+      <br/>
+      <div style={{margin: "auto", width: "100%"}}>
+      <table style={{margin: "auto", width:"400px"}}>
+      <tbody>
+      <tr>
+      <td style={{margin: "auto"}}>
       <AIWidget
         handleAiRequests={handleAiRequests}
         aiRecommendations={aiRecommendations}
         loading={loading}
       />
+      </td>
+      </tr>
+      </tbody>
+      </table>
+      </div>
+      </div>
     </div>
   );
 }

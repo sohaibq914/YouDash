@@ -26,6 +26,7 @@ public class SecurityConfig {
                     // User Controller endpoints
                     "auth/login",
                     "/api/users/login",
+                    "auth/signup",
                     "/api/users/session",
                     "/api/users/logout",
                     "/api/users/signup",
@@ -94,24 +95,36 @@ public class SecurityConfig {
                     // Messages
                     "/group-chat/groups/{groupId}/messages",
                     "/group-chat/groups/{groupId}/messages/{messageId}/vote",
+                    "/group-chat/groups/{groupId}/messages/{messageId}/delete",
+                    "/group-chat/isManager/{userId}/{groupId}",
                     "{userID}/group-chat",
 
 
                     "api/users/signup",
                     "/api/privacy/{userId}/pending-requests",
-"/api/privacy/{userId}/handle-request",
-"/api/privacy/{targetId}/follow-request",
+                    "/api/privacy/{userId}/handle-request",
+                    "/api/privacy/{targetId}/follow-request",
                     "/api/privacy/{userID}/toggle",
 
                     //group endpoints
                         "/groups/{user}/create",
                         "/groups/{user}/edit",
                         "/groups/{user}/view",
+                        "/groups/announcements/{groupId}",
+                        "/groups/{userId}/announcement/{groupId}",
+                        "/groups/{groupId}/announcements/{index}",
+                        "/groups/{userId}/announcement/{groupId}/{index}",
+                        "/groups/{userId}/all-announcements",
+                        "/groups/{user}/rij",
+                        "/groups/{user}/req",
+                        "/groups/{user}/acc",
+                        "/groups/{groupId}/viewgroup",
                         "/api/direct-messages/**",  // Allow all direct message endpoints
-
+                        "/api/users/getAll",
+                        "/api/users",
                         "/api/users/{userId}/block/{userId1}",
                         "/api/users/{userId}/unblock/{userId1}"
-                    
+
                 ).permitAll()
                 .anyRequest().authenticated()
             )
