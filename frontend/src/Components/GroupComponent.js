@@ -246,7 +246,7 @@ function GroupComponent(props) {
 
 
     const addManagers = (e) => {
-        const result = document.getElementById("managersSelect").selectedOptions;
+        const result = document.getElementById("managersSelect" + group.groupName).selectedOptions;
         //console.log("add manager button clicked");
         if (result.length == 0 || result[0].value === "IGNORE") {
             return;
@@ -315,7 +315,7 @@ function GroupComponent(props) {
 
     const leaveGroup = () => {
         console.log("leave group");
-    /*
+
             let newUserLeave = cusers;
             let newManagerLeave = cmanagers;
 
@@ -343,11 +343,11 @@ function GroupComponent(props) {
                 managerIdList.push(newManagerLeave[j].id);
             }
             setGroup(group => ({...group, users: userIdList, managers: managerIdList}));
-        */
+
         }
 
     const inviteUsers = (e) => {
-        const result = document.getElementById("usersSelect").selectedOptions;
+        const result = document.getElementById("usersSelect" + group.groupName).selectedOptions;
             if (result.length == 0 || result[0].value === "IGNORE") {
                 //console.log("empty");
                 return;
@@ -376,7 +376,8 @@ function GroupComponent(props) {
 
     const addUsers = (e) => {
 
-        const result = document.getElementById("usersRequest").selectedOptions;
+        const result = document.getElementById("usersRequest" + group.groupName).selectedOptions;
+        console.log(result);
         if (result.length == 0 || result[0].value === "IGNORE") {
             //console.log("empty");
             return;
@@ -512,7 +513,7 @@ function GroupComponent(props) {
         </td>
         <td style={{width: "50%"}}>
             <h5 style={{textAlign: "center"}}>Invite Users</h5>
-            <select id="usersSelect" name="users" multiple size="5" style={{height:"5em", width:"100%"}}>
+            <select id={"usersSelect" + group.groupName} name="users" multiple size="5" style={{height:"5em", width:"100%"}}>
                   {users && users.length != 0 ? users.map((u, index) => (
                      <option key={"u" + index} value={u.id}>{u.name}</option>
                  )) : (<><option value="IGNORE">All Users invited or in Group</option></>)}
@@ -528,7 +529,7 @@ function GroupComponent(props) {
             <br/>
         <div style={{margin: "auto", width: "65%"}}>
         <h5 style={{textAlign: "center"}}>Requests To Join From Users</h5>
-                    <select id="usersRequest" name="usersRequest" multiple size="5" style={{height:"5em", width:"100%"}}>
+                    <select id={"usersRequest" + group.groupName} name="usersRequest" multiple size="5" style={{height:"5em", width:"100%"}}>
                           {invUsers && invUsers.length != 0 ? invUsers.map((u, index) => (
                              <option key={"u" + index} value={u.id}>{u.name}</option>
                          )) : (<><option value="IGNORE">No Requests</option></>)}
@@ -555,7 +556,7 @@ function GroupComponent(props) {
         </td>
         <td style={{width: "50%"}}>
             <h5 style={{textAlign: "center"}}>Add Managers</h5>
-            <select id="managersSelect" name="managers" multiple size="5" style={{height:"5em", width:"100%"}}>
+            <select id={"managersSelect" + group.groupName} name="managers" multiple size="5" style={{height:"5em", width:"100%"}}>
                   {managers && managers.length != 0 ? managers.map((m, index) => (
                      <option key={"m" + index} value={m.id}>{m.name}</option>
                  )) : (<><option value="IGNORE">All Managers in Group</option></>)}
@@ -584,7 +585,7 @@ function GroupComponent(props) {
                    >
                      Go to announcements
                    </button>
-                   <button style={{width:"33.3%"}} onClick={leaveGroup()}>
+                   <button style={{width:"100%"}} onClick={leaveGroup}>
                            Leave Group
                        </button>
         <hr/>
@@ -634,6 +635,9 @@ function GroupComponent(props) {
                          }
                        >
                          Go to announcements
+                       </button>
+                   <button style={{width:"100%"}} onClick={leaveGroup}>
+                           Leave Group
                        </button>
         <hr/>
         </>)}
