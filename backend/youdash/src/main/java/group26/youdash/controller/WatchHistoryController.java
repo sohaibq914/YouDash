@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import group26.youdash.service.GroupsService;
 import group26.youdash.service.WatchHistoryService;
 
 import java.util.Map;
@@ -21,6 +22,9 @@ public class WatchHistoryController {
 
     @Autowired
     private WatchHistoryService whs;
+
+    @Autowired
+    private GroupsService gs;
 
     @GetMapping("/{userID}/historyList")
     public ResponseEntity<Map<String, List<String>>> getWatchHistory(@PathVariable int userID) {
@@ -72,8 +76,6 @@ public class WatchHistoryController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-   
 
 
 }

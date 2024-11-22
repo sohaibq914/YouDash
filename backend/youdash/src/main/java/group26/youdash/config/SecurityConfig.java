@@ -107,11 +107,16 @@ public class SecurityConfig {
                         "/groups/{user}/create",
                         "/groups/{user}/edit",
                         "/groups/{user}/view",
+                        "/groups/announcements/{groupId}",
+                        "/groups/{userId}/announcement/{groupId}",
+                        "/groups/{groupId}/announcements/{index}",
+                        "/groups/{userId}/announcement/{groupId}/{index}",
+                        "/groups/{userId}/all-announcements",
                         "/api/direct-messages/**",  // Allow all direct message endpoints
 
                         "/api/users/{userId}/block/{userId1}",
                         "/api/users/{userId}/unblock/{userId1}"
-                    
+
                 ).permitAll()
                 .anyRequest().authenticated()
             )
