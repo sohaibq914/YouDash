@@ -36,6 +36,7 @@ public class GroupsController {
     @Autowired
     private GroupsService gs;
 
+
     ArrayList<Groups> groups = new ArrayList<>();
 
     private static class GroupPkg {
@@ -259,6 +260,39 @@ public class GroupsController {
         System.out.println(allGroups);
         return allGroups;
 
+    }
+
+    @GetMapping("/{groupId}/viewgroup")
+    public ResponseEntity<List<User>> viewGroup(@PathVariable("groupId") String groupId) {
+        System.out.println( groupId);
+        try {
+            List<Groups> allGroupsList = gs.getAllGroups();
+            List<Integer> userGroups = new ArrayList<>();
+            List<User> allUsers = us.getAllUsers();
+            List<User> newUsers = new ArrayList<>();
+
+            for (Groups g : allGroupsList) {
+                if (g.getGroupId().equals(groupId)) {
+                    userGroups = g.getUsers();
+                    break;
+                }
+            }
+
+            for (Integer u : userGroups) {
+                for (User user: allUsers) {
+                    if (u.intValue() == user.getId()) {
+                        newUsers.add(user);
+                        break;
+                    }
+
+                }
+            }
+
+            return ResponseEntity.ok(newUsers);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     private static class GroupPkgEdit {

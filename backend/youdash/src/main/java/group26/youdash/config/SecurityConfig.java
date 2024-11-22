@@ -118,6 +118,7 @@ public class SecurityConfig {
                         "/groups/{user}/rij",
                         "/groups/{user}/req",
                         "/groups/{user}/acc",
+                        "/groups/{groupId}/viewgroup",
                         "/api/direct-messages/**",  // Allow all direct message endpoints
                         "/api/users/getAll",
                         "/api/users",

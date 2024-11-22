@@ -24,6 +24,7 @@ import GroupView from "./Pages/GroupView";
 import DirectMessage from "./Pages/DirectMessage.js";
 import AnnouncementsPage from "./Pages/AnnouncementsPage";
 import AllAnnouncementsPage from "./Pages/AllAnnouncementsPage";
+import InterestWatchTimeDashboard from "./Pages/InterestWatchtimeLeaderboard.js";
 
 function RouterPages() {
   return (
@@ -55,6 +56,7 @@ function RouterPages() {
         <Route path="/:currentUserId/dm" element={<DirectMessage />} />
         <Route path="/:userId/announcements/:groupId" element={<AnnouncementsPage />} />
         <Route path="/:userId/all-announcements" element={<AllAnnouncementsPage />} />
+        <Route path="/:userId/leaderboard/:groupId" element={<InterestWatchTimeDashboard />} />
       </Routes>
     </div>
   );

@@ -576,7 +576,7 @@ function GroupComponent(props) {
             </div>
         )) : (<></>)}
         <br/>
-        <button style={{width:"50%"}} onClick={() => window.location.href = `leaderboard/${group.groupId}`}>
+        <button style={{width:"50%"}} onClick={() => window.location.href = `/interest-group-watch-time-leaderboard/${group.groupId}`}>
                     Go to leaderboard
                 </button>
 
