@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from "react";
-import { useNavigate, useLocation} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import GoogleLoginButton from "../Components/GoogleLogin";
@@ -12,7 +12,7 @@ function Login() {
   const location = useLocation();
 
   const handleSignup = () => {
-    console.log("hello")
+    console.log("hello");
     navigate("/signup");
   };
 
@@ -41,20 +41,20 @@ function Login() {
     e.preventDefault();
     console.log("Login attempt with:", { username, password });
     try {
-        const response = await axios.post(
-            "http://localhost:8080/auth/login",
-            { username, password },
-            { withCredentials: true }
-        );
-        console.log("Response data:", response.data);
-        const userId = response.data.userId;
-        navigate(`/${userId}/home`);
-        window.location.reload();
+      const response = await axios.post(
+        "http://localhost:8080/auth/login",
+        { username, password },
+        { withCredentials: true }
+      );
+      console.log("Response data:", response.data);
+      const userId = response.data.userId;
+      navigate(`/${userId}/home`);
+      window.location.reload();
     } catch (error) {
-        console.error("Login failed:", error);
-        alert("Login failed. Please check your credentials.");
+      console.error("Login failed:", error);
+      alert("Login failed. Please check your credentials.");
     }
-};
+  };
 
   return (
     <div style={styles.container}>
@@ -101,6 +101,8 @@ function Login() {
           Sign Up
         </button>
       </div>
+
+      <div style={styles.footer}>&copy; 2024 YouDash. All Rights Reserved.</div>
     </div>
   );
 }
@@ -176,6 +178,17 @@ const styles = {
     borderRadius: "4px",
     border: "none",
     cursor: "pointer",
+  },
+  footer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    textAlign: "center",
+    padding: "5px", // Reduced padding
+    backgroundColor: "#f9f9f9", // Lighter background
+    color: "#888", // Subtler text color
+    fontSize: "12px", // Smaller font size
+    borderTop: "1px solid #eee", // Softer border
   },
 };
 
