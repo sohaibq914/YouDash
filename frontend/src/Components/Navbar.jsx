@@ -124,6 +124,8 @@ export const Navbar = () => {
             </li>
             <li>
               <NavLink to={"/" + String(userID) + "/profile"}>Profile</NavLink>
+
+              <NavLink to={"/" + String(userID) + "/dm"}>DMs</NavLink>
             </li>
             <li>
               <NavLink to={"/" + String(userID) + "/watch-history"}>Watch History</NavLink>
