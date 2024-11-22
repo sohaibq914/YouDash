@@ -219,14 +219,8 @@ public class GroupsController {
         for (Groups g : allGroupsList) {
             if (g.getUsers().contains(Integer.parseInt(user))) {
                 allGroups.add(g);
-                System.out.println(g.getGroupName());
-                System.out.println(g.getManagers());
             } else if (g.getManagers().contains(Integer.parseInt(user))) {
                 allGroups.add(g);
-            }
-            if (g.getGroupId().equals("c170105c-ab66-4696-9a52-c3e7a01461cd")) {
-                System.out.println(g.getGroupName());
-                System.out.println(g.getManagers());
             }
         }
         return allGroups;
@@ -380,6 +374,7 @@ public class GroupsController {
         }
         targetGroup.setUsers(newUsers);
         // targetGroup.setGroupId(UUID.randomUUID().toString());
+        System.out.println(targetGroup);
         Groups theGroup = gs.save(targetGroup);
         //System.out.println("Test pic");
         //System.out.println(file);

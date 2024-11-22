@@ -313,6 +313,39 @@ function GroupComponent(props) {
         setGroup(group => ({...group, users: userIdList}));
     }
 
+    const leaveGroup = () => {
+        console.log("leave group");
+    /*
+            let newUserLeave = cusers;
+            let newManagerLeave = cmanagers;
+
+            for (let i = 0; i < cmanagers.length; i++) {
+                if (cmanagers[i].id == getUser()) {
+                    cmanagers.splice(i, 1);
+                    break;
+                }
+            }
+            //remove from possible managers list:
+
+            for (let i = 0; i < cusers.length; i++) {
+                if (cusers[i].id == getUser()) {
+                    cusers.splice(i, 1);
+                    break;
+                }
+            }
+
+            let userIdList = [];
+            for (let j = 0; j < newUserLeave.length; j++) {
+                userIdList.push(newUserLeave[j].id);
+            }
+            let managerIdList = [];
+            for (let j = 0; j < newManagerLeave.length; j++) {
+                managerIdList.push(newManagerLeave[j].id);
+            }
+            setGroup(group => ({...group, users: userIdList, managers: managerIdList}));
+        */
+        }
+
     const inviteUsers = (e) => {
         const result = document.getElementById("usersSelect").selectedOptions;
             if (result.length == 0 || result[0].value === "IGNORE") {
@@ -536,13 +569,24 @@ function GroupComponent(props) {
         </tbody>
         </table>
         <br/>
-        <button style={{width:"50%"}} onClick={() => window.location.href = `leaderboard/${group.groupId}`}>
+        <button style={{width:"33.3%"}} onClick={() => window.location.href = `leaderboard/${group.groupId}`}>
                     Go to leaderboard
                 </button>
 
-        <button style={{width:"50%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
+        <button style={{width:"33.3%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
                     Go to chat
                 </button>
+                <button
+                     style={{ width: "33.33%" }}
+                     onClick={() =>
+                       (window.location.href = `announcements/${group.groupId}`)
+                     }
+                   >
+                     Go to announcements
+                   </button>
+                   <button style={{width:"33.3%"}} onClick={leaveGroup()}>
+                           Leave Group
+                       </button>
         <hr/>
 
         </>) : (<>
@@ -576,13 +620,21 @@ function GroupComponent(props) {
             </div>
         )) : (<></>)}
         <br/>
-        <button style={{width:"50%"}} onClick={() => window.location.href = `/interest-group-watch-time-leaderboard/${group.groupId}`}>
+        <button style={{width:"33.3%"}} onClick={() => window.location.href = `leaderboard/${group.groupId}`}>
                     Go to leaderboard
                 </button>
 
-        <button style={{width:"50%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
+        <button style={{width:"33.3%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
                     Go to chat
                 </button>
+             <button
+                         style={{ width: "33.33%" }}
+                         onClick={() =>
+                           (window.location.href = `announcements/${group.groupId}`)
+                         }
+                       >
+                         Go to announcements
+                       </button>
         <hr/>
         </>)}
     </div>

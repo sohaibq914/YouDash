@@ -22,8 +22,6 @@ public class Groups {
     private String groupDescription;
     private String profilePictureKey;
     private List<Announcement> announcements = new ArrayList<>();
-    private Map<Integer, WatchTimeGoal> watchTimeGoals = new HashMap<>();
-    private List<LeaderboardEntry> watchTimeLeaderboard = new ArrayList<>();
 
     public Groups(String groupId, String groupName, List<Integer> managers, List<Integer> users,
                   List<Messages> messages, String groupDescription, List<Integer> invitations, List<Integer> requests) {
@@ -133,22 +131,5 @@ public class Groups {
         this.announcements = announcements;
     }
 
-    @DynamoDBAttribute(attributeName = "watch_time_goals")
-    public Map<Integer, WatchTimeGoal> getWatchTimeGoals() {
-        return watchTimeGoals == null ? new HashMap<>() : watchTimeGoals;
-    }
-
-    public void setWatchTimeGoals(Map<Integer, WatchTimeGoal> watchTimeGoals) {
-        this.watchTimeGoals = watchTimeGoals;
-    }
-
-    @DynamoDBAttribute(attributeName = "watch_time_leaderboard")
-    public List<LeaderboardEntry> getWatchTimeLeaderboard() {
-        return watchTimeLeaderboard == null ? new ArrayList<>() : watchTimeLeaderboard;
-    }
-
-    public void setWatchTimeLeaderboard(List<LeaderboardEntry> watchTimeLeaderboard) {
-        this.watchTimeLeaderboard = watchTimeLeaderboard;
-    }
 
 }
