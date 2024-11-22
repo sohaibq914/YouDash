@@ -82,12 +82,22 @@ public class MessageController {
         return ResponseEntity.ok(messageHistory);
     }
 
+    @GetMapping("/isManager/{userId}/{groupId}")
+    public ResponseEntity<Boolean> checkIfManager(@PathVariable String userId, @PathVariable String groupId) {
+        Groups group = dynamoDBMapper.load(Groups.class, groupId);
+        if (group.getManagers().contains(Integer.parseInt(userId))) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
+    }
+
     @PostMapping("/groups/{groupId}/messages/{messageId}/vote")
     public ResponseEntity<?> voteMessage(
             @PathVariable String groupId,
             @PathVariable String messageId,
             @RequestParam int userId,
-            @RequestParam String voteType) { // voteType = "upvote" or "downvote"
+            @RequestParam String voteType) {
 
         // Load the group
         Groups group = dynamoDBMapper.load(Groups.class, groupId);
@@ -118,11 +128,66 @@ public class MessageController {
 
         // Update vote: if changing vote, remove previous vote
         if (existingVote != null && !existingVote.equals(voteType)) {
-            message.getUserVotes().remove(userId);
+            message.getUserVotes().remove(String.valueOf(userId));
         }
+
         // Add the new vote
         message.getUserVotes().put(String.valueOf(userId), voteType);
 
+        // Save the group with the updated message
+        dynamoDBMapper.save(group);
+
+        // Send the updated message with votes to the WebSocket topic
+        messagingTemplate.convertAndSend("/topic/group/" + groupId + "/votes", message);
+
+        return ResponseEntity.ok("Vote registered.");
+    }
+
+
+
+    @PostMapping("/groups/{groupId}/messages/{messageId}/delete")
+    public ResponseEntity<?> deleteMessage(
+            @PathVariable String groupId,
+            @PathVariable String messageId,
+            @RequestParam int userId) { // voteType = "upvote" or "downvote"
+
+        // Load the group
+        Groups group = dynamoDBMapper.load(Groups.class, groupId);
+        if (group == null) {
+            return ResponseEntity.notFound().build(); // 404 if group is not found
+        }
+
+        // Find the specific message by messageId in the group
+        Messages message = group.getMessages().stream()
+                .filter(m -> m.getMessageId().equals(messageId))
+                .findFirst()
+                .orElse(null);
+
+        if (message == null) {
+            return ResponseEntity.notFound().build(); // 404 if message is not found
+        }
+
+        // Prevent the user from voting on their own message
+        /*if (message.getUserId() == userId) {
+            return ResponseEntity.badRequest().body("Users cannot vote on their own messages.");
+        }*/
+
+        // Check if the user has already voted
+        /*String existingVote = message.getUserVotes().get(String.valueOf(userId));
+        if (existingVote != null && existingVote.equals(voteType)) {
+            return ResponseEntity.ok("Vote already registered.");
+        }*/
+
+        // Update vote: if changing vote, remove previous vote
+        /*if (existingVote != null && !existingVote.equals(voteType)) {
+            message.getUserVotes().remove(userId);
+        }*/
+        // Add the new vote
+        //message.getUserVotes().put(String.valueOf(userId), voteType);
+        message.setMessageText("DELETED");
+        message.setDownvotes(0);
+        message.setUpvotes(0);
+        message.setIsYouTube(false);
         // Save the group with the updated message
         dynamoDBMapper.save(group);
 
@@ -132,5 +197,4 @@ public class MessageController {
 
         return ResponseEntity.ok("Vote registered.");
     }
-
 }

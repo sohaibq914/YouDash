@@ -173,7 +173,7 @@ const handleSubmit = (e) => {
                         <select id="managersSelect" name="managers" multiple>
                                 <option value="Empty"></option>
                                 {users ? users.map((u, index) => (
-                                            <option key={"m" + index} value={u.id}>{u.username}</option>
+                                            <option key={"m" + index} value={u.id}>{u.name}</option>
                                         )) : (console.log("no users"))}
                                                     </select>
                         </td>

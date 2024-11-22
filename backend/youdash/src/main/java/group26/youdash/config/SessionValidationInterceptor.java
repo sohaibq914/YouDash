@@ -15,9 +15,15 @@ public class SessionValidationInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false); // Don't create a session if it doesn't exist
         String requestURI = request.getRequestURI();
 
-        // Allow public routes (e.g., login and signup)
-        if (requestURI.startsWith("/auth") || requestURI.startsWith("/public")) {
+        if (requestURI.startsWith("/auth") || 
+            requestURI.startsWith("/public") || 
+            requestURI.startsWith("/login") || 
+            requestURI.startsWith("/signup")) {
             return true; // Allow these routes without checking session
+        }
+
+        if (!requestURI.startsWith("/login")) {
+            return true; // Assume this is a frontend route and allow it
         }
 
         // Validate session

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import SockJS from "sockjs-client";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 let stompClient = null;
@@ -15,6 +15,7 @@ const GroupChat = () => {
   const [newMessage, setNewMessage] = useState("");
   const [connected, setConnected] = useState(false);
   const [userProfiles, setUserProfiles] = useState({});
+  const [manager, setManager] = useState(false);
 
   // Create a ref for the message container
   const messageEndRef = useRef(null);
@@ -76,9 +77,35 @@ const GroupChat = () => {
     }
   };
 
+const getUser = () => {
+            let theUrl = window.location.href;
+            console.log(theUrl);
+            if (theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1) == -1) {
+                return null;
+            }
+            console.log(theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1)));
+            return theUrl.substring(theUrl.indexOf("/", 10) + 1, theUrl.indexOf("/", theUrl.indexOf("/", 10) + 1));
+
+        };
+
+    const checkIfManager = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/group-chat/isManager/${userId}/${groupId}`
+          );
+          console.log(response.data);
+          setManager(response.data);
+        } catch (error) {
+          console.error("Error fetching manager role:", error);
+        }
+    }
+
   // Connect to WebSocket when the component mounts
   useEffect(() => {
     fetchMessages();
+    //check if user is a Manager
+    checkIfManager();
+
     // Create a new Stomp Client
     stompClient = new Client({
       webSocketFactory: () => new SockJS("http://localhost:8080/ws"), // SockJS client
@@ -101,6 +128,7 @@ const GroupChat = () => {
 
     // Subscribe to the group chat topic
     stompClient.subscribe(`/topic/group/${groupId}`, onMessageReceived);
+    stompClient.subscribe(`/topic/group/${groupId}/votes`, onVoteReceived);
   };
 
   const onError = (error) => {
@@ -117,11 +145,11 @@ const GroupChat = () => {
     try {
       await axios.post(
         `http://localhost:8080/group-chat/groups/${groupId}/messages/${messageId}/vote`,
-        null, // No request body is needed in this case
+        null,
         {
           params: {
-            userId, // This adds userId as a query parameter
-            voteType, // Add voteType as well if the backend expects it as a query parameter
+            userId,
+            voteType,
           },
         }
       );
@@ -130,6 +158,34 @@ const GroupChat = () => {
       console.error("Error voting on message:", error);
     }
   };
+  const onVoteReceived = (payload) => {
+    const updatedMessage = JSON.parse(payload.body);
+    console.log("Vote update received:", updatedMessage);
+
+    // Update the message's votes in the local state
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) =>
+        msg.messageId === updatedMessage.messageId ? updatedMessage : msg
+      )
+    );
+  };
+
+  const deleteMsg = async (messageId) => {
+    try {
+        await axios.post(
+            `http://localhost:8080/group-chat/groups/${groupId}/messages/${messageId}/delete`,
+            null, // No request body is needed in this case
+            {
+              params: {
+                userId, // This adds userId as a query parameter
+              },
+            }
+          );
+          await fetchMessages();
+    } catch (error) {
+        console.error("Error deleting message:", error);
+    }
+  }
 
   const sendMessage = () => {
     const timestamp = new Date().toISOString();
@@ -152,8 +208,17 @@ const GroupChat = () => {
         });
         return;
       }
+    } else if (urlPart.startsWith("http") && timestampPart) {
+      // Non-YouTube URL with timestamp
+      toast.error(
+        "Invalid URL. Only YouTube URLs are allowed with timestamps.",
+        {
+          position: "top-center",
+          duration: 3000, // Duration in milliseconds
+        }
+      );
+      return;
     }
-  
 
     if (newMessage.trim() && stompClient) {
       const message = {
@@ -292,6 +357,20 @@ const GroupChat = () => {
                     gap: "5px",
                   }}
                 >
+                  {manager == true ? (
+                  <button
+                      onClick={() => deleteMsg(msg.messageId)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "blue",
+                        fontSize: "18px",
+                        padding: 0,
+                      }}
+                    >
+                      Delete
+                    </button>) : (<></>)}
                   <button
                     onClick={() => handleVote(msg.messageId, "upvote")}
                     style={{
