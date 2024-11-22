@@ -110,6 +110,11 @@ public class SecurityConfig {
                         "/groups/{user}/create",
                         "/groups/{user}/edit",
                         "/groups/{user}/view",
+                        "/groups/announcements/{groupId}",
+                        "/groups/{userId}/announcement/{groupId}",
+                        "/groups/{groupId}/announcements/{index}",
+                        "/groups/{userId}/announcement/{groupId}/{index}",
+                        "/groups/{userId}/all-announcements",
                         "/groups/{user}/rij",
                         "/groups/{user}/req",
                         "/groups/{user}/acc",
@@ -118,7 +123,7 @@ public class SecurityConfig {
                         "/api/users",
                         "/api/users/{userId}/block/{userId1}",
                         "/api/users/{userId}/unblock/{userId1}"
-                    
+
                 ).permitAll()
                 .anyRequest().authenticated()
             )
