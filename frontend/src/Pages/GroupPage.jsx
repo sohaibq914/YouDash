@@ -29,6 +29,7 @@ const GroupChat = () => {
 
   // Utility function to detect and validate timestamps in (hh:mm:ss) format
   function extractTimestamp(text) {
+    if (!text) return null; // If text is undefined or null, return null
     const timestampPattern = /\b(\d{1,2}):(\d{2}):(\d{2})\b/;
     const match = text.match(timestampPattern);
     if (match) {
@@ -192,12 +193,15 @@ const getUser = () => {
     const messageId = uuidv4(); // Generates a universally unique identifier
 
     const messageParts = newMessage.trim().split(" ");
+    console.log(messageParts);
     const urlPart = messageParts[0];
     const timestampPart = messageParts[1];
 
     const isYouTube = isValidYouTubeUrl(urlPart);
     const videoTimestamp = isYouTube ? extractTimestamp(timestampPart) : null;
     const isValidTimestamp = /^\d{2}:\d{2}:\d{2}$/.test(timestampPart);
+
+   
 
     // Validate YouTube link and timestamp only if it looks like a YouTube message
     if (isYouTube) {
