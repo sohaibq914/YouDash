@@ -75,7 +75,7 @@ function Cactus(props) {
         </>)}
         </>)}
         </>)}
-        <h3 style={{textAlign: "center"}}>Goal Progress: {progress*100}%</h3>
+        <h5 style={{textAlign: "center"}}>Goal Progress: {Math.round(progress*10000)/100}%</h5>
         </div>
     );
 }
