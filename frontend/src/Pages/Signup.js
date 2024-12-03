@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ReactNotifications } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+import { Store } from 'react-notifications-component';
 
 function Signup() {
   const [name, setName] = useState("");
@@ -39,11 +42,23 @@ function Signup() {
       const { id: userId } = response.data;
 
       // Navigate to {userId}/home
-      navigate(`/${userId}/home`);
+      navigate(`/login`);
     } catch (error) {
       // Handle errors during sign-up
       if (error.response?.status === 409) {
-        alert("Username already taken");
+        Store.addNotification({
+                              title: "Account Creation Error",
+                              message: "Username already taken",
+                              type: "warning",
+                              insert: "top",
+                              container: "top-right",
+                                animationIn: ["animate__animated", "animate__fadeIn"],
+                                animationOut: ["animate__animated", "animate__fadeOut"],
+                                dismiss: {
+                                  duration: 5000,
+                                  onScreen: true
+                                }
+                          });
       } else {
         console.error("Sign-up failed", error);
       }
