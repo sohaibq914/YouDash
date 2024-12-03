@@ -54,27 +54,54 @@ function Signup() {
     <div>
       <h2>Sign Up</h2>
       <form onSubmit={handleSignup}>
-        <div>
-          <label>Name</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+        <table style={{width: "40%", marginLeft: "24%"}}>
+        <tbody>
+        <tr>
+        <td style={{textAlign: "right", width: "30%"}}>
+          <h5>Name: </h5>
+          </td>
+          <td style={{width: "70%"}}>
+          <input type="text" style={{width: "100%"}} value={name} onChange={(e) => setName(e.target.value)} required />
+          </td>
+          </tr>
+          <tr>
+          <td style={{textAlign: "right"}}>
+          <h5>Email: </h5>
+          </td>
+          <td>
+          <input type="email" style={{width: "100%", backgroundColor: "#BCBCBC", border: "none", borderBottom: "2px solid #121212"}} value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </td>
+          </tr>
+          <tr>
+          <td style={{textAlign: "right"}}>
+          <h5>Username: </h5>
+          </td>
+          <td>
+          <input type="text" style={{width: "100%"}} value={username} onChange={(e) => setUsername(e.target.value)} required />
+          </td>
+          </tr>
+          <tr>
+          <td style={{textAlign: "right"}}>
+          <h5>Password: </h5>
+          </td>
+          <td>
+          <input type="password" style={{width: "100%", backgroundColor: "#BCBCBC", border: "none", borderBottom: "2px solid #121212"}} value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </td>
+          </tr>
+          <tr>
+          <td style={{textAlign: "right"}}>
+          <h5>Phone Number: </h5>
+          </td>
+          <td>
+          <input type="text" style={{width: "100%"}} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+          </td>
+          </tr>
+        </tbody>
+        </table>
+        <br/>
+        <div style={{width: "25%", margin: "auto"}}>
+        <button style={{width: "100%"}} type="submit">Sign Up</button>
         </div>
-        <div>
-          <label>Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div>
-          <label>Username</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
-        </div>
-        <div>
-          <label>Password</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </div>
-        <div>
-          <label>Phone Number</label>
-          <input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-        </div>
-        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
