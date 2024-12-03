@@ -451,7 +451,7 @@ const DirectMessage = () => {
             </div>
           ) : (
             <div className="space-y-2">
-              {conversations.map((userId) => (
+              {conversations.map((userId, index) => (
                 <div key={userId} className="p-3 rounded-lg transition-colors hover:bg-gray-100">
                   <div className="flex items-center justify-between">
                     <div

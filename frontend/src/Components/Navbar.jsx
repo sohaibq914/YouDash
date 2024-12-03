@@ -99,45 +99,70 @@ export const Navbar = () => {
               <NavLink to={"/" + String(userID) + "/block-categories"}>Block Categories</NavLink>
             </li>
             <li>
-              <NavLink id="groupCreate" to={"/" + String(userID) + "/groupCreate"}>
-                Create Group
-              </NavLink>
-              <NavLink id="groupView" to={"/" + String(userID) + "/groupView"}>
-                View Groups
-              </NavLink>
+                  <div className="dropdown" style={{marginLeft: "8px", marginRight: "8px"}}>
+                                  <button style={{fontSize: "0.9rem"}} className="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown">Groups <span className="caret"></span></button>
+                      <ul className="dropdown-menu" role="menu">
+                    <li>
+                      <NavLink id="groupView" to={"/" + String(userID) + "/groupView"}>
+                        View Groups
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink id="groupCreate" to={"/" + String(userID) + "/groupCreate"}>
+                        Create Group
+                      </NavLink>
+                    </li>
+                    </ul>
+                    </div>
             </li>
             <li>
-              <NavLink id="goalsCreate" to={"/" + String(userID) + "/goalsCreate"}>
-                Create Goals
-              </NavLink>
-              <NavLink id="goalsView" to={"/" + String(userID) + "/goalsView"}>
-                View Goals
-              </NavLink>
-            </li>
-            <li>
-              <NavLink id="goalsEdit" to={"/" + String(userID) + "/goalsEdit"}>
-                Edit Goals
-              </NavLink>
-              <NavLink id="goalsVis" to={"/" + String(userID) + "/goalsVis"}>
-                Visual Goals
-              </NavLink>
+              <div className="dropdown" style={{marginLeft: "8px", marginRight: "8px"}}>
+                              <button style={{fontSize: "0.9rem"}} className="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown">Goals <span className="caret"></span></button>
+                  <ul className="dropdown-menu" role="menu">
+                  <li>
+                    <NavLink id="goalsCreate" to={"/" + String(userID) + "/goalsCreate"}>
+                      Create Goals
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink id="goalsView" to={"/" + String(userID) + "/goalsView"}>
+                      View Goals
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink id="goalsEdit" to={"/" + String(userID) + "/goalsEdit"}>
+                      Edit Goals
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink id="goalsVis" to={"/" + String(userID) + "/goalsVis"}>
+                      Visual Goals
+                    </NavLink>
+                  </li>
+                  </ul>
+                  </div>
             </li>
             <li>
               <NavLink to={"/" + String(userID) + "/profile"}>Profile</NavLink>
-
+            </li>
+            <li>
               <NavLink to={"/" + String(userID) + "/dm"}>DMs</NavLink>
             </li>
             <li>
               <NavLink to={"/" + String(userID) + "/watch-history"}>Watch History</NavLink>
             </li>
             <li>
-              <NavLink id="analytics-button" to={"/" + String(userID) + "/analytics"}>
-                Analytics
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to={"/" + String(userID) + "/goalLeaderboard"}>Top Goal</NavLink>
-              <NavLink to={"/" + String(userID) + "/watchtime-leaderboard"}>Top Watchtime</NavLink>
+                      <div className="dropdown" style={{marginLeft: "8px", marginRight: "8px"}}>
+                                      <button style={{fontSize: "0.9rem"}} className="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown">Leaderboards <span className="caret"></span></button>
+                          <ul className="dropdown-menu" role="menu">
+                    <li>
+                      <NavLink to={"/" + String(userID) + "/goalLeaderboard"}>Top Goal</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to={"/" + String(userID) + "/watchtime-leaderboard"}>Top Watchtime</NavLink>
+                    </li>
+                    </ul>
+                    </div>
             </li>
             <li>
               {/* Dark mode toggle button */}
@@ -162,25 +187,48 @@ export const Navbar = () => {
               <NavLink to="/login">Block Categories</NavLink>
             </li>
             <li>
-              <NavLink id="groupCreate" to="/login">
-                Create Group
-              </NavLink>
+                  <div className="dropdown" style={{marginLeft: "8px", marginRight: "8px"}}>
+                                  <button style={{fontSize: "0.9rem"}} className="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown">Groups <span className="caret"></span></button>
+                      <ul className="dropdown-menu" role="menu">
+                    <li>
+                      <NavLink id="groupView" to={"/login"}>
+                        View Groups
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink id="groupCreate" to="/login">
+                        Create Group
+                      </NavLink>
+                    </li>
+                    </ul>
+                    </div>
             </li>
             <li>
-              <NavLink id="goalsCreate" to="/login">
-                Create Goals
-              </NavLink>
-              <NavLink id="goalsView" to="/login">
-                View Goals
-              </NavLink>
-            </li>
-            <li>
-              <NavLink id="goalsEdit" to="/login">
-                Edit Goals
-              </NavLink>
-              <NavLink id="goalsVis" to="/login">
-                Visual Goals
-              </NavLink>
+              <div className="dropdown" style={{marginLeft: "8px", marginRight: "8px"}}>
+                              <button style={{fontSize: "0.9rem"}} className="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown">Goals <span className="caret"></span></button>
+                  <ul className="dropdown-menu" role="menu">
+                  <li>
+                    <NavLink id="goalsCreate" to={"/login"}>
+                      Create Goals
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink id="goalsView" to={"/login"}>
+                      View Goals
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink id="goalsEdit" to={"/login"}>
+                      Edit Goals
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink id="goalsVis" to={"/login"}>
+                      Visual Goals
+                    </NavLink>
+                  </li>
+                  </ul>
+                  </div>
             </li>
             <li>
               <NavLink to="/login">Profile</NavLink>
@@ -188,6 +236,20 @@ export const Navbar = () => {
             <li>
               <NavLink to="/login">Watch History</NavLink>
             </li>
+            <li>
+                          <div className="dropdown" style={{marginLeft: "8px", marginRight: "8px"}}>
+                                          <button style={{fontSize: "0.9rem"}} className="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown">Leaderboards <span className="caret"></span></button>
+                              <ul className="dropdown-menu" role="menu">
+                        <li>
+                          <NavLink to={"/login"}>Top Goal</NavLink>
+                        </li>
+                        <li>
+                          <NavLink to={"/login"}>Top Watchtime</NavLink>
+                        </li>
+                        </ul>
+                        </div>
+                </li>
+
             <li>
               {/* Dark mode toggle button */}
               <button onClick={handleDarkModeToggle} className="dark-mode-btn">

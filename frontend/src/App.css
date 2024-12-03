@@ -31,6 +31,13 @@ body.dark .navbar {
   color: #f4f4f4;
 }
 
+body.dark .navbar ul li li {
+    background-color: #232323
+}
+body.dark .dropdown-menu {
+    background-color: #232323
+}
+
 body.dark .dark-mode-btn {
   background-color: #ffffff;
   color: #000000;
