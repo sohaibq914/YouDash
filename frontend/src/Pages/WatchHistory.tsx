@@ -49,7 +49,7 @@ function WatchHistory() {
 
   // Ensure that watchHistoryList is properly initialized and contains valid data
   if (!watchHistoryList || watchHistoryList.length === 0) {
-    return <div>Loading...</div>; // Show a loading message until data is fetched
+    return <div style={{textAlign: "center"}}>You have no watch history. Watch some videos!</div>; // Show a loading message until data is fetched
   }
 
   console.log(watchHistoryList);
