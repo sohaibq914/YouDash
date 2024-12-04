@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000",  "chrome-extension://pcfljeghhkdmleihaobbdhkphdonijdm"})
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

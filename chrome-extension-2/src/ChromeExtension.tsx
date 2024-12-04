@@ -1,86 +1,103 @@
-import React, {useState, useEffect} from 'react'
-import "./DeleteCategoriesButton.css";
-import { DeleteCategoriesButton } from "./DeleteCategoriesButton.tsx";
-import "./index.css";
-import axios from "axios";
-
+import React, { useState, useEffect, FormEvent } from "react";
 
 const ChromeExtension = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [blockedCategories, setBlockedCategories] = useState<string[]>([]);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginMessage, setLoginMessage] = useState("");
 
-   // track available categories to block
-   const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+  // Check session on mount
+  useEffect(() => {
+    chrome.storage.local.get(["session", "userId"], async (data) => {
+      if (data.session && data.userId) {
+        setIsLoggedIn(true);
+        fetchBlockedCategories(data.userId);
+      }
+    });
+  }, []);
 
-   // tracks blocked categories
-   const [blockedCategories, setBlockedCategories] = useState<string[]>([]);
- 
-   // gets user input from the input field
-   const [inputValue, setInputValue] = useState("");
-   // will hold filtered options depending on what user inputs
-   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
- 
-   // fetch data from backend when the component mounts
-   useEffect(() => {
-     const userID = 12345;
- 
-     // Fetch available categories
-     const fetchAvailableCategories = async () => {
-       try {
-         const response = await axios.get(
-           `http://localhost:8080/block-categories/${userID}/availableCategories`
-         );
-         console.log("Available Categories Response:", response.data);
-         setAvailableCategories(response.data.availableCategories);
-       } catch (error) {
-         console.error("Error fetching available categories", error);
-       }
-     };
- 
-     // Fetch currently blocked categories
-     const fetchBlockedCategories = async () => {
-       try {
-         const response = await axios.get(
-           `http://localhost:8080/block-categories/${userID}/blockedCategories`
-         );
-         console.log("Blocked Categories Response:", response.data); // Log response
-         setBlockedCategories(response.data.blockedCategories);
-       } catch (error) {
-         console.log("Error fetching blocked categories", error);
-       }
-     };
- 
-     fetchAvailableCategories();
-     fetchBlockedCategories();
-   }, []);
-  const handleDeleteCategory = (categoryName: string) => {
-    // remove from blocked categories
-    const updatedDeletedCategories = blockedCategories.filter(
-      (blockedCategory) => blockedCategory != categoryName
-    );
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    // add deleted category back into the available ones
-    setAvailableCategories([...availableCategories, categoryName]);
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Include session cookies
+        body: JSON.stringify({ username, password }),
+      });
 
-    // update deleted categories
-    setBlockedCategories(updatedDeletedCategories);
+      if (response.ok) {
+        const result = await response.json();
+        chrome.storage.local.set({ session: true, userId: result.userId });
+        setIsLoggedIn(true);
+        fetchBlockedCategories(result.userId);
+      } else {
+        setLoginMessage("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setLoginMessage("An error occurred during login.");
+    }
   };
 
+  const fetchBlockedCategories = async (userId: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/block-categories/${userId}/availableCategories`,
+        { credentials: "include" }
+      );
 
+      if (response.ok) {
+        const categories = await response.json();
+        setBlockedCategories(categories);
+      } else {
+        console.error("Failed to fetch blocked categories.");
+      }
+    } catch (error) {
+      console.error("Error fetching blocked categories:", error);
+    }
+  };
 
   return (
     <div>
-        <ul className="category-list">
-            {blockedCategories.map((category, index) => (
-              <li className="category-item" key={index}>
-                <span>{category}</span>
-                <DeleteCategoriesButton
-                  categoryName={category}
-                  onDeleteCategory={handleDeleteCategory}
-                />
-              </li>
+      {isLoggedIn ? (
+        <div>
+          <h1>Blocked Categories</h1>
+          <ul>
+            {blockedCategories.map((category) => (
+              <li key={category}>{category}</li>
             ))}
           </ul>
+        </div>
+      ) : (
+        <div>
+          <h1>Login to YouDash</h1>
+          <form onSubmit={handleLogin}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button type="submit">Login</button>
+          </form>
+          <p>{loginMessage}</p>
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default ChromeExtension
+export default ChromeExtension;
