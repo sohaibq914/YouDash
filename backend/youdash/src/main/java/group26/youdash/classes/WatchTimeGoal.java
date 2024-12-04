@@ -75,6 +75,9 @@ public class WatchTimeGoal extends Goal {
     //this computes the current goal progress as a float percentage
     public float computeProgress() {
         float progress = currentWatchTime / (0.0f + goalWatchTime);
+        if (progress > 1.0f) {
+            progress = 1.0f;
+        }
         setGoalProgress(progress);
         System.out.println(this.getGoalProgress());
         return progress;

@@ -14,28 +14,23 @@ export const DeleteCategoriesButton: React.FC<DeleteCategoriesButtonProps> = ({
 
   //handle add button click
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete the category: " + categoryName
+
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/block-categories/${user}/delete-category`,
+      {
+        categoryName: categoryName,
+      }
     );
 
-    if (confirmDelete) {
-      try {
-        const response = await axios.post(
-          `http://localhost:8080/block-categories/${user}/DeleteCategory`,
-          {
-            categoryName: categoryName,
-          }
-        );
+    console.log("Response from backend:", response.data);
+    //alert(categoryName + " deleted successfully!");
 
-        console.log("Response from backend:", response.data);
-        alert(categoryName + " deleted successfully!");
-
-        onDeleteCategory(categoryName);
-      } catch (error) {
-        console.error("Error deleting category", error);
-        alert("Failed to delete category!");
-      }
-    }
+    onDeleteCategory(categoryName);
+  } catch (error) {
+    console.error("Error deleting category", error);
+    //alert("Failed to delete category!");
+  }
   };
 
   return (

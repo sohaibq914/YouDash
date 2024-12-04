@@ -138,7 +138,7 @@ const GoalLeaderboard = () => {
   }, [allGoals, goalTypeFilter, progressFilter]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg" style={{marginBottom: "7%"}}>
       <div className="mb-6" >
         <h1 className="text-2xl font-bold text-center mb-6">Goal Leaderboard</h1>
 
