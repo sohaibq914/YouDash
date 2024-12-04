@@ -358,22 +358,7 @@ function Profile() {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Profile</h1>
-      <div style={styles.buttonContainer}>
-        <button onClick={() => navigate(`/${userID}/followers`)} style={styles.actionButton}>
-          {" "}
-          View Followers
-        </button>
 
-        <button onClick={handleExportCSV} disabled={isExporting.csv} style={styles.actionButton}>
-          <FileSpreadsheet style={styles.buttonIcon} />
-          {isExporting.csv ? "Exporting..." : "Export CSV"}
-        </button>
-
-        <button onClick={handleExportPDF} disabled={isExporting.pdf} style={styles.actionButton}>
-          <FileText style={styles.buttonIcon} />
-          {isExporting.pdf ? "Exporting..." : "Export PDF"}
-        </button>
-      </div>
       <div style={styles.profilePicContainer}>
         <img
           src={profile.profilePicture || "https://via.placeholder.com/100"} // Display profile picture if available
@@ -392,7 +377,7 @@ function Profile() {
 
       <div style={{ margin: "auto", width: "70%" }}>
         <button
-          onClick={() => navigate("/followers")} // Use the useNavigate hook to redirect
+          onClick={() => navigate(`/${userID}/followers`)} // Use the useNavigate hook to redirect
           style={styles.followersButton}
         >
           View Followers

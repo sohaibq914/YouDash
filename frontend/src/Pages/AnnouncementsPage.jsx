@@ -131,7 +131,7 @@ function AnnouncementsPage() {
   return (
     <div className="container" style={{ maxWidth: "800px", margin: "auto", padding: "20px" }}>
       <h2 style={{ textAlign: "center", marginBottom: "30px" }}>Group Announcements</h2>
-      
+
       {isManager && (
         <div style={{ marginBottom: "30px", padding: "20px", border: "1px solid #ddd", borderRadius: "5px" }}>
           <h3>Post New Announcement</h3>
@@ -151,7 +151,7 @@ function AnnouncementsPage() {
               style={{ width: "100%", marginBottom: "10px", padding: "8px", minHeight: "100px" }}
               required
             />
-            <button 
+            <button
               type="submit"
               style={{ padding: "8px 16px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "4px" }}
             >
