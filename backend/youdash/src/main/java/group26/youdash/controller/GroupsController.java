@@ -205,6 +205,14 @@ public class GroupsController {
             if (acc.contains(g.getGroupName())) {
                 List<Integer> newUsers = g.getUsers();
                 newUsers.add(Integer.parseInt(user));
+                List<Integer> newInvites = g.getInvitations();
+                for (int i = 0; i < newInvites.size();i++) {
+                    if (newInvites.get(i).intValue() == Integer.parseInt(user)) {
+                        newInvites.remove(i);
+                        break;
+                    }
+                }
+                g.setInvitations(newInvites);
                 g.setUsers(newUsers);
                 System.out.println(user + " " + newUsers.get(0) + " " + g.getGroupName());
                 gs.save(g);

@@ -136,8 +136,8 @@ public ResponseEntity<User> signUpUser(@RequestBody User user, HttpSession sessi
         // Set the session for the user
         session.setAttribute("userId", savedUser.getId());
 
-        emailService.sendEmail(savedUser.getEmail(), "Welcome to YouDash",
-                "Thank you for signing up, " + savedUser.getName() + "!");
+        /*emailService.sendEmail(savedUser.getEmail(), "Welcome to YouDash",
+                "Thank you for signing up, " + savedUser.getName() + "!"); */
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     } else {
         System.out.println("Failed to save user.");

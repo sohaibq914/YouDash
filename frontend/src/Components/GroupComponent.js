@@ -246,7 +246,7 @@ function GroupComponent(props) {
 
 
     const addManagers = (e) => {
-        const result = document.getElementById("managersSelect").selectedOptions;
+        const result = document.getElementById("managersSelect" + group.groupName).selectedOptions;
         //console.log("add manager button clicked");
         if (result.length == 0 || result[0].value === "IGNORE") {
             return;
@@ -315,7 +315,7 @@ function GroupComponent(props) {
 
     const leaveGroup = () => {
         console.log("leave group");
-    /*
+
             let newUserLeave = cusers;
             let newManagerLeave = cmanagers;
 
@@ -343,11 +343,11 @@ function GroupComponent(props) {
                 managerIdList.push(newManagerLeave[j].id);
             }
             setGroup(group => ({...group, users: userIdList, managers: managerIdList}));
-        */
+
         }
 
     const inviteUsers = (e) => {
-        const result = document.getElementById("usersSelect").selectedOptions;
+        const result = document.getElementById("usersSelect" + group.groupName).selectedOptions;
             if (result.length == 0 || result[0].value === "IGNORE") {
                 //console.log("empty");
                 return;
@@ -376,7 +376,8 @@ function GroupComponent(props) {
 
     const addUsers = (e) => {
 
-        const result = document.getElementById("usersRequest").selectedOptions;
+        const result = document.getElementById("usersRequest" + group.groupName).selectedOptions;
+        console.log(result);
         if (result.length == 0 || result[0].value === "IGNORE") {
             //console.log("empty");
             return;
@@ -446,10 +447,23 @@ function GroupComponent(props) {
   return (
     <div className="GroupComponent">
         {(isManager) ? (<>
+        <table style={{width: "70%", margin: "auto"}}>
+                <tbody>
+                <tr>
+                <td>
         <div style={{textAlign: "center"}}>
-        <h3 style={{display: "inline-block"}}> Group Name: </h3>
+        <h5 style={{display: "inline-block"}}> Group Name: </h5>
         <input style={{display: "inline-block"}} type="text" id="groupName" name="groupName" autoCapitalize="words" required={true} onBlur={handleChange} defaultValue={group.groupName} />
         </div>
+        <br/>
+        <div style={{textAlign: "center"}}>
+        <h5 style={{display: "inline-block"}}>Description:</h5>
+        <input style={{display: "inline-block"}} type="text" id="groupDescription" name="groupDescription" autoCapitalize="words" required={true} onBlur={handleChange} defaultValue={group.groupDescription} />
+        </div>
+                </td>
+                <td>
+                <br/>
+
         {(profilePic) ? ( <>
         <div className="profilePic">
         <img
@@ -458,8 +472,9 @@ function GroupComponent(props) {
                   className="profilePic"
                 />
                 </div>
+                <br/>
                 <h5 style={{textAlign: "center"}}>Alter Group Picture</h5>
-                <div style={{marginLeft: "40%"}}>
+                <div style={{marginLeft: "10%"}}>
                   <input
                     type="file"
                     accept="image/*"
@@ -475,7 +490,7 @@ function GroupComponent(props) {
                 </> ) : (
                 <>
                 <h5 style={{textAlign: "center"}}>Upload Group Picture</h5>
-                <div style={{marginLeft: "40%"}}>
+                <div style={{marginLeft: "10%"}}>
                   <input
                     type="file"
                     accept="image/*"
@@ -490,10 +505,10 @@ function GroupComponent(props) {
                   </div>
                 </>)}
         <br/>
-        <div style={{textAlign: "center"}}>
-        <h5 style={{display: "inline-block"}}>Description:</h5>
-        <input style={{display: "inline-block"}} type="text" id="groupDescription" name="groupDescription" autoCapitalize="words" required={true} onBlur={handleChange} defaultValue={group.groupDescription} />
-        </div>
+        </td>
+        </tr>
+        </tbody>
+        </table>
         <br/>
         <table style={{width: "80%", margin:"auto"}}>
         <tbody style={{width: "80%", margin:"auto"}}>
@@ -512,7 +527,7 @@ function GroupComponent(props) {
         </td>
         <td style={{width: "50%"}}>
             <h5 style={{textAlign: "center"}}>Invite Users</h5>
-            <select id="usersSelect" name="users" multiple size="5" style={{height:"5em", width:"100%"}}>
+            <select id={"usersSelect" + group.groupName} name="users" multiple size="5" style={{height:"5em", width:"100%"}}>
                   {users && users.length != 0 ? users.map((u, index) => (
                      <option key={"u" + index} value={u.id}>{u.name}</option>
                  )) : (<><option value="IGNORE">All Users invited or in Group</option></>)}
@@ -528,7 +543,7 @@ function GroupComponent(props) {
             <br/>
         <div style={{margin: "auto", width: "65%"}}>
         <h5 style={{textAlign: "center"}}>Requests To Join From Users</h5>
-                    <select id="usersRequest" name="usersRequest" multiple size="5" style={{height:"5em", width:"100%"}}>
+                    <select id={"usersRequest" + group.groupName} name="usersRequest" multiple size="5" style={{height:"5em", width:"100%"}}>
                           {invUsers && invUsers.length != 0 ? invUsers.map((u, index) => (
                              <option key={"u" + index} value={u.id}>{u.name}</option>
                          )) : (<><option value="IGNORE">No Requests</option></>)}
@@ -555,7 +570,7 @@ function GroupComponent(props) {
         </td>
         <td style={{width: "50%"}}>
             <h5 style={{textAlign: "center"}}>Add Managers</h5>
-            <select id="managersSelect" name="managers" multiple size="5" style={{height:"5em", width:"100%"}}>
+            <select id={"managersSelect" + group.groupName} name="managers" multiple size="5" style={{height:"5em", width:"100%"}}>
                   {managers && managers.length != 0 ? managers.map((m, index) => (
                      <option key={"m" + index} value={m.id}>{m.name}</option>
                  )) : (<><option value="IGNORE">All Managers in Group</option></>)}
@@ -569,29 +584,39 @@ function GroupComponent(props) {
         </tbody>
         </table>
         <br/>
-        <button style={{width:"33.3%"}} onClick={() => window.location.href = `leaderboard/${group.groupId}`}>
-                    Go to leaderboard
+        <div style={{width: "70%", margin: "auto"}}>
+        <button className="btmBtn" style={{width:"23%"}} onClick={() => window.location.href = `leaderboard/${group.groupId}`}>
+                    <h5 style={{fontSize: "1.2vw"}}>Leaderboard</h5>
                 </button>
 
-        <button style={{width:"33.3%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
-                    Go to chat
+        <button className="btmBtn" style={{width:"23%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
+                    <h5 style={{fontSize: "1.2vw"}}>Chat</h5>
                 </button>
                 <button
-                     style={{ width: "33.33%" }}
+                     className="btmBtn" style={{width:"23%"}}
                      onClick={() =>
                        (window.location.href = `announcements/${group.groupId}`)
                      }
                    >
-                     Go to announcements
+                     <h5 style={{fontSize: "1.2vw"}}>Announcements</h5>
                    </button>
-                   <button style={{width:"33.3%"}} onClick={leaveGroup()}>
-                           Leave Group
+                   <button className="btmBtn" style={{width:"23%"}} onClick={leaveGroup}>
+                           <h5 style={{fontSize: "1.2vw"}}>Leave</h5>
                        </button>
+       </div>
         <hr/>
 
         </>) : (<>
 
-        <h3 style={{textAlign: "center"}}> Group Name: {group.groupName}</h3>
+        <table style={{width: "50%", margin: "auto"}}>
+        <tbody>
+        <tr>
+        <td>
+        <h5 style={{textAlign: "center"}}> Group Name: {group.groupName}</h5>
+        <h5 style={{textAlign: "center"}}>Description: {group.groupDescription}</h5>
+        </td>
+        <td>
+        <br/>
         {(profilePic) ? ( <>
         <div className="profilePic">
             <img
@@ -604,7 +629,17 @@ function GroupComponent(props) {
                 <>
                 </>)}
 
-        <h5 style={{textAlign: "center"}}>Description: {group.groupDescription}</h5>
+        <br/>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        <br/>
+
+        <table style={{margin: "auto", width: "50%"}}>
+        <tbody>
+        <tr>
+        <td>
         <br/>
             <h5 style={{textAlign: "center"}}>Users</h5>
             {cusers ? cusers.map((iuser, index) => (
@@ -612,29 +647,39 @@ function GroupComponent(props) {
                 <p style={{textAlign: "center"}}>{iuser.name}</p>
                 </div>
             )) : (<></>)}
-            <br/>
+         </td>
+         <td>
         <h5 style={{textAlign: "center"}}>Managers</h5>
         {cmanagers ? cmanagers.map((imanager, index) => (
             <div key={index}>
             <p style={{textAlign: "center"}}>{imanager.name}</p>
             </div>
         )) : (<></>)}
+        </td>
+        </tr>
+        </tbody>
+        </table>
         <br/>
-        <button style={{width:"33.3%"}} onClick={() => window.location.href = `leaderboard/${group.groupId}`}>
-                    Go to leaderboard
+        <div style={{width: "60%", margin: "auto"}}>
+        <button className="btmBtn" style={{width:"23%", }} onClick={() => window.location.href = `leaderboard/${group.groupId}`}>
+                    <h5 style={{fontSize: "1.2vw"}}>Leaderboard</h5>
                 </button>
 
-        <button style={{width:"33.3%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
-                    Go to chat
+        <button className="btmBtn" style={{width:"23%"}} onClick={() => window.location.href = `group-chat/${group.groupId}`}>
+                    <h5 style={{fontSize: "1.2vw"}}>Chat</h5>
                 </button>
-             <button
-                         style={{ width: "33.33%" }}
+             <button className="btmBtn"
+                         style={{ width: "23%" }}
                          onClick={() =>
                            (window.location.href = `announcements/${group.groupId}`)
                          }
                        >
-                         Go to announcements
+                         <h5 style={{fontSize: "1.2vw"}}>Announcements</h5>
                        </button>
+                   <button className="btmBtn" style={{width:"23%"}} onClick={leaveGroup}>
+                           <h5 style={{fontSize: "1.2vw"}}>Leave</h5>
+                       </button>
+       </div>
         <hr/>
         </>)}
     </div>

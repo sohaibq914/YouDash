@@ -13,11 +13,15 @@ function GoalEditComponent(props) {
 
         if (!goal.hasOwnProperty("multiplier")) {
             if (goal.watchLessThanGoal) {
-                document.getElementById('aimAboveGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+                document.getElementById('aimBelowGoal' + uniqueId).style.backgroundColor = "#02CCDD";
                 document.getElementById('aimBelowGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
+                document.getElementById('aimAboveGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+                document.getElementById('aimAboveGoal' + uniqueId).style.backgroundColor = "#02CCDD";
             } else {
+                document.getElementById('aimAboveGoal' + uniqueId).style.backgroundColor = "#02CCDD";
               document.getElementById('aimAboveGoal' + uniqueId).classList.add("selectedAimAboveBelowButton");
               document.getElementById('aimBelowGoal' + uniqueId).classList.remove("selectedAimAboveBelowButton");
+                document.getElementById('aimBelowGoal' + uniqueId).style.backgroundColor = "#02CCDD";
             }
         }
     }, []);
@@ -189,7 +193,7 @@ const getUser = () => {
             <button type="button" className="deleteBtn" id={'delete' + uniqueId} name="deleteGoal" onClick={deleteGoal}>
                                      Delete
                                     </button></div>
-        <table className="tableGoalView" style={{width: "90%"}}>
+        <table className="tableGoalView" style={{width: "60%"}}>
         <tbody>
         <tr>
         <td style={{width: "30%"}}>
@@ -214,7 +218,7 @@ const getUser = () => {
             <h3 style={{marginTop: "0.5rem"}}>Category: </h3>
         </td>
         <td>
-            <select id={'category' + uniqueId} defaultValue={goal.theCategory} name="theCategory" onChange={updateCategory}>
+            <select id={'category' + uniqueId} defaultValue={goal.theCategory} name="theCategory" onChange={updateCategory} style={{backgroundColor: "#BCBCBC", color: "black"}}>
               <option value="ALL">All Categories</option>
                               <option value="Film & Animation">Film & Animation</option>
                               <option value="Autos & Vehicles">Autos & Vehicles</option>
@@ -269,12 +273,12 @@ const getUser = () => {
         </tr>
         <tr>
         <td>
-        <button type="button" style={{ width: "100%" }} className="responsiveGoalButton" id={'aimAboveGoal' + uniqueId} name="watchLessThanGoal" value={false} onClick={aimForMoreBtn}>
+        <button type="button" style={{ width: "100%", backgroundColor: "02CCDD" }} className="responsiveGoalButton" id={'aimAboveGoal' + uniqueId} name="watchLessThanGoal" value={false} onClick={aimForMoreBtn}>
                          Aim Above
                         </button>
         </td>
         <td>
-                        <button type="button" style={{ width: "100%" }} className="responsiveGoalButton" id={'aimBelowGoal' + uniqueId} name="watchLessThanGoal" value={true} onClick={aimForLessBtn}>
+                        <button type="button" style={{ width: "100%", backgroundColor: "02CCDD" }} className="responsiveGoalButton" id={'aimBelowGoal' + uniqueId} name="watchLessThanGoal" value={true} onClick={aimForLessBtn}>
                           Aim Below
                         </button>
         </td>

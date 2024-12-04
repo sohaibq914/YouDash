@@ -382,64 +382,67 @@ function Profile() {
         />
       </div>
       <input type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} style={styles.fileInput} />
-<br/>
+      <br />
 
-      <div style={{margin: "auto", width: "72%"}}>
-      <button onClick={handleProfilePictureUpload} style={styles.uploadButton}>
-        Upload Profile Picture
-      </button>
+      <div style={{ margin: "auto", width: "72%" }}>
+        <button onClick={handleProfilePictureUpload} style={styles.uploadButton}>
+          Upload Profile Picture
+        </button>
       </div>
 
-      <div style={{margin: "auto", width: "70%"}}>
-      <button
-        onClick={() => navigate("/followers")} // Use the useNavigate hook to redirect
-        style={styles.followersButton}
-      >
-        View Followers
-      </button>
+      <div style={{ margin: "auto", width: "70%" }}>
+        <button
+          onClick={() => navigate("/followers")} // Use the useNavigate hook to redirect
+          style={styles.followersButton}
+        >
+          View Followers
+        </button>
       </div>
 
-    <br/>
+      <br />
 
-      <div style={{margin: "auto", width: "84%"}}>
-      <CaptureImageButton />
+      <div style={{ margin: "auto", width: "84%" }}>
+        <CaptureImageButton />
       </div>
-      <br/>
+      <br />
 
       {Object.entries(profile).map(([key, value]) => (
-
         <div key={key} style={styles.fieldContainer}>
-          {key === "profilePicture" ? (<></>) : (<>
-          <div style={styles.fieldLabel}>{key.charAt(0).toUpperCase() + key.slice(1)}</div>
-          {editField === key ? (
+          {key === "profilePicture" ? (
+            <></>
+          ) : (
             <>
-              <input
-                type={key === "password" ? "password" : "text"}
-                value={profile[key]}
-                onChange={handleChange}
-                style={{
-                  ...styles.input,
-                  borderColor: (key === "email" && !isEmailValid) || (key === "password" && !isPasswordValid) || (key === "bio" && !isBioValid) ? "red" : "initial",
-                }}
-                disabled={isGmail && (key === "email" || key === "password")}
-              />
-              {key === "email" && !isEmailValid && <span style={styles.errorText}>Invalid email format</span>}
-              {key === "password" && !isPasswordValid && <span style={styles.errorText}>Password must be at least 5 characters long</span>}
-              {key === "bio" && !isBioValid && <span style={styles.errorText}>Bio cannot be empty</span>}
+              <div style={styles.fieldLabel}>{key.charAt(0).toUpperCase() + key.slice(1)}</div>
+              {editField === key ? (
+                <>
+                  <input
+                    type={key === "password" ? "password" : "text"}
+                    value={profile[key]}
+                    onChange={handleChange}
+                    style={{
+                      ...styles.input,
+                      borderColor: (key === "email" && !isEmailValid) || (key === "password" && !isPasswordValid) || (key === "bio" && !isBioValid) ? "red" : "initial",
+                    }}
+                    disabled={isGmail && (key === "email" || key === "password")}
+                  />
+                  {key === "email" && !isEmailValid && <span style={styles.errorText}>Invalid email format</span>}
+                  {key === "password" && !isPasswordValid && <span style={styles.errorText}>Password must be at least 5 characters long</span>}
+                  {key === "bio" && !isBioValid && <span style={styles.errorText}>Bio cannot be empty</span>}
+                </>
+              ) : (
+                <div style={styles.fieldValue}>{value}</div>
+              )}
+              {editField === key ? (
+                <button onClick={handleSave} style={styles.saveButton} disabled={(key === "email" && !isEmailValid) || (key === "password" && !isPasswordValid) || (key === "bio" && !isBioValid)}>
+                  Save
+                </button>
+              ) : (
+                <button onClick={() => handleEditClick(key)} style={styles.editButton} disabled={isGmail && (key === "email" || key === "password")}>
+                  Edit
+                </button>
+              )}
             </>
-          ) : (
-            <div style={styles.fieldValue}>{value}</div>
           )}
-          {editField === key ? (
-            <button onClick={handleSave} style={styles.saveButton} disabled={(key === "email" && !isEmailValid) || (key === "password" && !isPasswordValid) || (key === "bio" && !isBioValid)}>
-              Save
-            </button>
-          ) : (
-            <button onClick={() => handleEditClick(key)} style={styles.editButton} disabled={isGmail && (key === "email" || key === "password")}>
-              Edit
-            </button>
-          )}
-          </>)}
         </div>
       ))}
     </div>
@@ -447,7 +450,6 @@ function Profile() {
 }
 
 const styles = {
-
   userButton: {
     width: "100%",
     height: "80px",

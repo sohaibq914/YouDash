@@ -13,21 +13,15 @@ import group26.youdash.model.FollowRequest;
 import group26.youdash.model.User;
 import group26.youdash.repository.UserRepository;
 
-import java.util.List;
+import java.util.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.Collections;
-import java.util.Optional;
 
 
 @Service // Marks this class as a service component in the Spring framework
@@ -560,7 +554,19 @@ public boolean hasExistingFollowRequest(int targetUserId, int requesterId) {
     public User save(User user) {
         // If new user (no ID set)
         if (user.getId() == 0) {
-            user.setId(userIdCounter.getAndIncrement());
+            int newId = 0;
+            List<User> users = getAllUsers();
+            boolean matchExists = true;
+            while (matchExists) {
+                matchExists = false;
+                for (User u : users) {
+                    if (u.getId() == newId) {
+                        newId++;
+                        matchExists = true;
+                    }
+                }
+            }
+            user.setId(newId);
         }
 
         // If Google user, handle special case

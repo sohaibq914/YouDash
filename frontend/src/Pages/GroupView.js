@@ -152,6 +152,21 @@ function GroupView() {
   return (
     <div className="GroupView">
         <div>
+        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+                                     <button
+                                         onClick={() => navigate(`/${getUser()}/all-announcements`)}
+                                         style={{
+                                             padding: "10px 20px",
+                                             backgroundColor: "#007bff",
+                                             color: "white",
+                                             border: "none",
+                                             borderRadius: "4px",
+                                             cursor: "pointer"
+                                         }}
+                                     >
+                                         View All Announcements
+                                     </button>
+                                 </div>
         <table style={{width: "80%", margin: "auto"}}>
             <tbody>
                 <tr>
@@ -190,27 +205,14 @@ function GroupView() {
         </table>
         </div>
         <hr/>
+
         {data && data.length != 0 ? data.map((igroup, index) => (
             <div key={index}>
                 <h3 style={{textAlign: "center"}}>Group #{index + 1}</h3>
                 <GroupComponent group={igroup} />
             </div>
             )) : (<><h3 style={{textAlign: "center"}}>YOU ARE NOT PART OF ANY GROUPS</h3></>)}
-                <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                <button 
-                    onClick={() => navigate(`/${getUser()}/all-announcements`)}
-                    style={{
-                        padding: "10px 20px",
-                        backgroundColor: "#007bff",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer"
-                    }}
-                >
-                    View All Announcements
-                </button>
-            </div>
+
 
 
     </div>
