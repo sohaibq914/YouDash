@@ -89,8 +89,6 @@ public class WatchHistoryService {
             List<VideoHistory> watchHistory = user.getHistory();
 
             if (watchHistory == null) {
-                user.setHistory(new ArrayList<>());
-                dynamoDBMapper.save(user);
                 return 0.0f;
             }
             float total = 0.0f;
@@ -139,8 +137,6 @@ public class WatchHistoryService {
             List<VideoHistory> watchHistory = user.getHistory();
 
             if (watchHistory == null) {
-                user.setHistory(new ArrayList<>());
-                dynamoDBMapper.save(user);
                 return 0.0f;
             }
             float total = 0.0f;

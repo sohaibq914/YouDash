@@ -114,10 +114,10 @@ function WatchTimeDashboard() {
   const sortedUsers = userWatchTimes.sort((a, b) => b.watchTime - a.watchTime);
 
   return (
-    <div className="WatchTimeDashboard">
-      <h1>User Watch Time Leaderboard</h1>
+    <div className="WatchTimeDashboard" style={{marginBottom: "7%"}}>
+      <h1 style={{textAlign: "center"}}>User Watch Time Leaderboard</h1>
 
-      <div style={{ marginBottom: "20px" }}>
+      <div style={{ marginBottom: "20px", textAlign: "center" }}>
         <label htmlFor="categoryFilter">Filter by category: </label>
         <select
           id="categoryFilter"
@@ -144,7 +144,7 @@ function WatchTimeDashboard() {
       </div>
 
       {/* Toggle for showing only followers' watch times */}
-      <div style={{ marginBottom: "20px" }}>
+      <div style={{ marginBottom: "20px", textAlign: "center" }}>
         <label>
           <input
             type="checkbox"
@@ -159,13 +159,21 @@ function WatchTimeDashboard() {
         <div>
           <h2>Leaderboard</h2>
           {sortedUsers.length > 0 ? (
-            <ul>
+
+            <table style={{margin: "auto", width: "80%"}}>
+            <tbody>
               {sortedUsers.map((user) => (
-                <li key={user.id}>
-                  {user.name} ({user.username}) - {user.watchTime > 0 ? `Watch Time: ${user.watchTime} hours` : "Not enough data"}
-                </li>
+                <tr>
+                <td key={user.id} style={{width: "40%"}}>
+                  {user.name}
+                </td>
+                <td>
+                ({user.username}) - {user.watchTime > 0 ? `Watch Time: ${user.watchTime} hours` : "Not enough data"}
+                </td>
+                </tr>
               ))}
-            </ul>
+            </tbody>
+            </table>
           ) : (
             <p>No users found for the selected category.</p>
           )}
