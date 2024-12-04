@@ -508,10 +508,10 @@ const DirectMessage = () => {
               <div className=" mx-auto w-full">
                 {messages.map((msg, index) => (
                   <div key={index} className={`mb-4 flex ${msg.senderId === parseInt(currentUserId) ? "justify-end" : "justify-start"}`}>
-                    <div className={`p-3 rounded-lg ${msg.senderId === parseInt(currentUserId) ? "bg-blue-500 text-white" : "bg-gray-100"}`}>
-                      <div className="text-xs font-medium mb-1">{msg.senderId === parseInt(currentUserId) ? currentUser.name : userCache[msg.senderId]?.name || "Loading..."}</div>
-                      <div className="text-sm">{msg.messageText}</div>
-                      <div className="text-xs mt-1 opacity-75">{new Date(msg.timestamp).toLocaleTimeString()}</div>
+                    <div className={`p-3 rounded-lg ${msg.senderId === parseInt(currentUserId) ? "bg-blue-500 text-white" : "bg-blue-500 text-white"}`}>
+                      <div className="dm text-xs font-medium mb-1">{msg.senderId === parseInt(currentUserId) ? currentUser.name : userCache[msg.senderId]?.name || "Loading..."}</div>
+                      <div className="dm text-sm">{msg.messageText}</div>
+                      <div className="dm text-xs mt-1 opacity-75">{new Date(msg.timestamp).toLocaleTimeString()}</div>
                     </div>
                   </div>
                 ))}
