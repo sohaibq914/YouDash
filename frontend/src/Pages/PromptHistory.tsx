@@ -40,7 +40,7 @@ const PromptHistory = () => {
         <div className="border-b border-gray-200 p-4 bg-gradient-to-r from-blue-500 to-blue-400 text-white">
           <div className="flex items-center space-x-2">
             {/* <MessageCircle className="w-6 h-6" /> */}
-            <h1 className="text-2xl font-bold p-5">AI Prompt History</h1>
+            <h1 className="history text-2xl font-bold p-5">AI Prompt History</h1>
           </div>
         </div>
 
@@ -51,8 +51,8 @@ const PromptHistory = () => {
               {promptHistory.map((prompt, index) => (
                 <li key={index} className="p-4 bg-gray-50 border border-gray-200 rounded-lg hover:shadow-lg hover:bg-gray-100 transition duration-200">
                   <div className="flex flex-col space-y-2">
-                    <span className="text-sm text-gray-500 font-medium">{formatDate(prompt.timestamp)}</span>
-                    <p className="text-gray-700 leading-relaxed">{prompt.response}</p>
+                    <span className="history text-sm text-gray-500 font-medium">{formatDate(prompt.timestamp)}</span>
+                    <p className="history text-gray-700 leading-relaxed">{prompt.response}</p>
                   </div>
                 </li>
               ))}

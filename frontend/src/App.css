@@ -158,6 +158,9 @@ body.dark .dm.bg-gray-50 {
   background-color: #1e1e1e !important;
 }
 
+body.dark .history {
+  color: black;
+}
 /* For the message bubbles in dark mode */
 body.dark .dm .bg-gray-100 {
   background-color: #2d2d2d !important;
