@@ -5,22 +5,9 @@
   </head>
   <body>
     <div class="mainPopup">
-      
-      <!-- This is the main header that has YouDash on top-->
+      <!-- Main Header -->
       <div class="YouDashHeader">
-        <h1 class="YouDashTitle">
-          YouDash
-        </h1>
-      </div>
-
-      <!-- Login Section -->
-      <div id="loginSection">
-        <form id="loginForm">
-          <input type="text" id="username" placeholder="Username" required />
-          <input type="password" id="password" placeholder="Password" required />
-          <button type="submit">Login</button>
-        </form>
-        <p id="loginMessage"></p>
+        <h1 class="YouDashTitle">YouDash</h1>
       </div>
 
       <!-- Blocked Categories Section -->
@@ -31,6 +18,10 @@
         <ul id="categoriesList"></ul>
       </div>
 
+      <!-- Login Message for Session Expired -->
+      <div id="loginMessage" style="display: none;">
+        <p>Please log in to view your blocked categories.</p>
+      </div>
     </div>
     <div id="react-root"></div>
     <script src="popup.js"></script>

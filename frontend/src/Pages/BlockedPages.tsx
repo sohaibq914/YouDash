@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./BlockedPages.css";
 import AddCategoriesButton from "../Components/AddCategoriesButton.tsx";
 import { DeleteCategoriesButton } from "../Components/DeleteCategoriesButton.tsx";
+import { useParams } from "react-router-dom"; // Import useParams
 
 import axios from "axios";
 
@@ -16,10 +17,11 @@ const BlockedPages = () => {
   const [inputValue, setInputValue] = useState("");
   // will hold filtered options depending on what user inputs
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
+  const { userID } = useParams();
 
   // fetch data from backend when the component mounts
   useEffect(() => {
-    const userID = 12345;
+    //const userID = 12345;
 
     // Fetch available categories
     const fetchAvailableCategories = async () => {
@@ -97,75 +99,75 @@ const BlockedPages = () => {
   return (
     //header for currently blocked and category block
     <div>
-    {/* main screen container for Blocked Page */}
-    <div className="container">
-      {/* rectangle container for Currently Blocked */}
-      <div className="CurrentlyBlockedCategoriesContainer">
-        <h1>Currently Blocked</h1>
-        <div className="CategoriesRectangleTitle">
-          <h2>Categories</h2>
-        </div>
-  
-        <div className="scroll-container">
-          <ul className="category-list" id="blockedCategories-list">
-            {blockedCategories.map((category, index) => (
-              <li className="category-item" key={index}>
-                <span>{category}</span>
-                <DeleteCategoriesButton
-                  categoryName={category}
-                  onDeleteCategory={handleDeleteCategory}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-        <br/>
-      </div>
-  
-      {/* a rectangle container for Blocking Categories */}
-      <div className="AddCategoriesContainer">
-        <h1>Available Categories</h1>
-        {/* Header for container(Category and Search function)*/}
-        <div className="AddCategoriesContainerHeader">
-          <h2>Search:</h2>
-  
-          <div
-            className="input-group flex-nowrap"
-            style={{ paddingLeft: "10px" }}
-          >
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search Category"
-              aria-label="Category"
-              value={inputValue}
-              id="addCategoryInput"
-              onChange={handleInputChange}
-              style={{width: "100%"}}
-            />
+      {/* main screen container for Blocked Page */}
+      <div className="container">
+        {/* rectangle container for Currently Blocked */}
+        <div className="CurrentlyBlockedCategoriesContainer">
+          <h1>Currently Blocked</h1>
+          <div className="CategoriesRectangleTitle">
+            <h2>Categories</h2>
           </div>
-        </div>
-  
-        <div className="scroll-container">
-          <ul className="category-list" id="availableCategories-list">
-            {(inputValue ? filteredOptions : availableCategories).map(
-              (category, index) => (
+
+          <div className="scroll-container">
+            <ul className="category-list" id="blockedCategories-list">
+              {blockedCategories.map((category, index) => (
                 <li className="category-item" key={index}>
                   <span>{category}</span>
-                  <AddCategoriesButton
+                  <DeleteCategoriesButton
+                    userId={userID} // Pass the userID dynamically
                     categoryName={category}
-                    onAddCategory={handleAddCategory}
+                    onDeleteCategory={handleDeleteCategory}
                   />
                 </li>
-              )
-            )}
-          </ul>
+              ))}
+            </ul>
+          </div>
+          <br />
+        </div>
+
+        {/* a rectangle container for Blocking Categories */}
+        <div className="AddCategoriesContainer">
+          <h1>Available Categories</h1>
+          {/* Header for container(Category and Search function)*/}
+          <div className="AddCategoriesContainerHeader">
+            <h2>Search:</h2>
+
+            <div
+              className="input-group flex-nowrap"
+              style={{ paddingLeft: "10px" }}
+            >
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search Category"
+                aria-label="Category"
+                value={inputValue}
+                id="addCategoryInput"
+                onChange={handleInputChange}
+                style={{ width: "100%" }}
+              />
+            </div>
+          </div>
+
+          <div className="scroll-container">
+            <ul className="category-list" id="availableCategories-list">
+              {(inputValue ? filteredOptions : availableCategories).map(
+                (category, index) => (
+                  <li className="category-item" key={index}>
+                    <span>{category}</span>
+                    <AddCategoriesButton
+                      userId={userID} // Pass userID from useParams
+                      categoryName={category}
+                      onAddCategory={handleAddCategory}
+                    />
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-
-  </div>
-  
   );
 };
 

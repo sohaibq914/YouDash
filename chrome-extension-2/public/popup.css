@@ -1,59 +1,61 @@
-/* Ensure there's no padding or margin on the body */
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box; /* Include padding in element's width/height */
-  }
-  
-  /* Main popup container with specific size */
-  .mainPopup {
-    width: 329px; /* Set specific width */
-    height: 312px; /* Set specific height */
-    background: #FFF;
-    margin: 0; /* Remove any margin */
-    box-sizing: border-box;
-  }
-  
-  /* YouDash Header */
-  .YouDashHeader {
-    width: 100%; /* Full width relative to the main container */
-    height: 46px;
-    display: flex;
-    background: #FE7B7B;
-    margin: 0; /* Remove margin to avoid extra space */
-    align-items: center; /* Vertically center content */
-  }
-  
-  /* YouDash Title */
-  .YouDashTitle {
-    padding-left: 10px;
-    color: #000;
-    font-family: Inter, sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    line-height: normal;
-  }
-  
-  /* Blocked Categories Header */
-  .BlockedCategoriesHeader {
-    width: 100%; /* Full width relative to the main container */
-    height: 52px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    padding-left: 10px;
-    box-sizing: border-box; /* Ensure padding doesn't affect width */
-  }
-  
-  .BlockedCategoriesTitle h1 {
-    margin: 0;
-    color: #000;
-    font-family: Inter, sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    line-height: normal;
-  }
-  
+/* Main popup container with specific size */
+.mainPopup {
+  width: 329px; /* Set specific width */
+  height: 312px; /* Set specific height */
+  background: #FFF;
+  margin: 0; /* Remove any margin */
+  box-sizing: border-box;
+  border: 1px solid #ddd; /* Optional: Add a border for visual clarity */
+  overflow: hidden; /* Ensure no elements overflow */
+}
+
+/* YouDash Header */
+.YouDashHeader {
+  width: 100%; /* Full width relative to the main container */
+  height: 46px;
+  display: flex;
+  align-items: center; /* Vertically center content */
+  background: #FE7B7B; /* Red background */
+  margin: 0; /* Remove margin to avoid extra space */
+  padding-left: 10px; /* Adjust spacing for text */
+}
+
+/* YouDash Title */
+.YouDashTitle {
+  color: #FFF; /* White text to contrast the red background */
+  font-family: Inter, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+/* Blocked Categories Header */
+.BlockedCategoriesHeader {
+  width: 100%; /* Full width relative to the main container */
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #F5F5F5; /* Light gray for better contrast */
+  padding-left: 10px;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+  border-bottom: 1px solid #ddd; /* Optional: Add a bottom border */
+}
+
+.BlockedCategoriesTitle h1 {
+  margin: 0;
+  color: #333; /* Darker gray text */
+  font-family: Inter, sans-serif;
+  font-size: 20px; /* Slightly smaller than YouDash title */
+  font-weight: 600;
+  line-height: normal;
+}
+
+/* Styling for login message */
+#loginMessage p {
+  color: #FE7B7B; /* Red text to match the theme */
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  margin: 10px;
+}

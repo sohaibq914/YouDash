@@ -3,9 +3,56 @@ const categoryMap = {
   2: "Autos & Vehicles",
   10: "Music",
   15: "Pets & Animals",
+  17: "Sports",
+  19: "Travel & Events",
+  20: "Gaming",
+  22: "People & Blogs",
+  23: "Comedy",
+  24: "Entertainment",
+  25: "News & Politics",
+  26: "Howto & Style",
+  27: "Education",
+  28: "Science & Technology",
+  29: "Nonprofits & Activism",
 };
 
-const userId = 12345;
+
+// Function to extract userId from the localhost URL
+function extractUserIdFromLocalhost(url) {
+  const match = url.match(/localhost:3000\/(\d+)/); // Regex to extract userId
+  return match ? match[1] : null; // Return userId or null if not found
+}
+
+// Function to fetch the current tab's URL and extract the userId
+function getUserIdFromCurrentTab() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0]?.url) {
+      console.log("Current tab URL:", tabs[0].url);
+
+      // Check if the current tab is localhost
+      if (tabs[0].url.includes("localhost:3000")) {
+        const extractedUserId = extractUserIdFromLocalhost(tabs[0].url);
+        if (extractedUserId) {
+          console.log("Extracted userId from localhost:", extractedUserId);
+          userId = extractedUserId; // Set global userId
+
+          // Optionally, store userId in Chrome storage for persistence
+          chrome.storage.local.set({ userId }, () => {
+            console.log("UserId saved to Chrome storage:", userId);
+          });
+        } else {
+          console.error("Failed to extract userId from localhost URL.");
+        }
+      } else {
+        console.log("Current tab is not localhost:3000.");
+      }
+    } else {
+      console.error("No URL found for the current tab.");
+    }
+  });
+}
+
+getUserIdFromCurrentTab();
 
 function mapCategoryID(categoryId) {
   return categoryMap[categoryId] || "Unknown Category";
@@ -77,6 +124,7 @@ function blockVideo(url) {
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   console.log("Tab update detected");
+  getUserIdFromCurrentTab();
 
   // Check if the URL has changed to a YouTube video
   if (changeInfo.url && changeInfo.url.includes("youtube.com/watch")) {
@@ -122,10 +170,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   console.log("End of onUpdated listener");
 });
 
-
 function trackWatchHistory(videoUrl) {
   console.log("Saving video URL to watch history: " + videoUrl);
-  
+
   // Send the YouTube URL to your backend to save in the user's watch history
   fetch(`http://localhost:8080/watch-history/${userId}/addVideo`, {
     method: "POST",
@@ -134,11 +181,23 @@ function trackWatchHistory(videoUrl) {
     },
     body: JSON.stringify({ url: videoUrl }), // Send the video URL in the request body
   })
-  .then(response => response.text())
-  .then(data => {
-    console.log("Watch history update response:", data);
-  })
-  .catch(error => {
-    console.error("Error saving watch history:", error);
-  });
+    .then((response) => response.text())
+    .then((data) => {
+      console.log("Watch history update response:", data);
+    })
+    .catch((error) => {
+      console.error("Error saving watch history:", error);
+    });
 }
+
+
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "LOGOUT") {
+    chrome.storage.local.remove(["authToken", "userId"], () => {
+      console.log("Session data cleared on logout.");
+    });
+    sendResponse({ status: "success" });
+  }
+});
+

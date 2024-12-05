@@ -40,14 +40,22 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log("Login attempt with:", { username, password });
+  
     try {
       const response = await axios.post(
         "http://localhost:8080/auth/login",
         { username, password },
-        { withCredentials: true }
+        { withCredentials: true } // Ensures cookies are sent/received
       );
+  
       console.log("Response data:", response.data);
-      const userId = response.data.userId;
+      const { userId, token } = response.data;
+  
+      // Store token in localStorage for website use
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userId", userId);
+  
+      // Navigate to the user's home page
       navigate(`/${userId}/home`);
       window.location.reload();
     } catch (error) {
@@ -55,6 +63,7 @@ function Login() {
       alert("Login failed. Please check your credentials.");
     }
   };
+  
 
   return (
     <div style={styles.container}>

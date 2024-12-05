@@ -1,39 +1,48 @@
 import React from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 interface AddCategoriesButtonProps {
-    categoryName: string;
-    onAddCategory: (categoryName: string) => void;
+  userId: string | undefined; // userID from useParams can be undefined if the route is missing
+  categoryName: string;
+  onAddCategory: (categoryName: string) => void;
 }
 
-
-
-
-const AddCategoriesButton: React.FC<AddCategoriesButtonProps> = ({ categoryName, onAddCategory }) => {
-
-    const user = 12345;
-  //handle add button click
+const AddCategoriesButton: React.FC<AddCategoriesButtonProps> = ({
+  userId,
+  categoryName,
+  onAddCategory,
+}) => {
   const handleClick = async () => {
+    if (!userId) {
+      alert("User ID is missing. Please log in.");
+      return;
+    }
+
     try {
+      const response = await axios.post(
+        `http://localhost:8080/block-categories/${userId}/addCategory`,
+        { categoryName }
+      );
+      console.log("Response from backend:", response.data);
+      toast.success(`${categoryName} added successfully!`);
 
-        const response = await axios.post(`http://localhost:8080/block-categories/${user}/addCategory`, {
-            categoryName: categoryName
-        });
-       
-        console.log("Response from backend:", response.data);
-        alert( categoryName + " added successfully!");
-
-        onAddCategory(categoryName);
-
-    } catch(error) {
-        console.error("Error adding category", error);
-        alert("Failed to add category!");
+      onAddCategory(categoryName);
+    } catch (error) {
+      console.error("Error adding category", error);
+      toast.error("Failed to add category!");
     }
   };
 
   return (
     <div>
-      <button className="add-btn" onClick={handleClick}  id={`add-btn-${categoryName}`}>Add</button>
+      <button
+        className="add-btn"
+        onClick={handleClick}
+        id={`add-btn-${categoryName}`}
+      >
+        Add
+      </button>
     </div>
   );
 };

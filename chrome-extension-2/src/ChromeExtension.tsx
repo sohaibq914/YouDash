@@ -1,99 +1,128 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState, useEffect } from "react";
+import "./DeleteCategoriesButton.css";
+import { DeleteCategoriesButton } from "./DeleteCategoriesButton.tsx";
 
 const ChromeExtension = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [blockedCategories, setBlockedCategories] = useState<string[]>([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [availableCategories, setAvailableCategories] = useState<string[]>([]); // To track available categories
   const [loginMessage, setLoginMessage] = useState("");
 
   // Check session on mount
   useEffect(() => {
-    chrome.storage.local.get(["session", "userId"], async (data) => {
-      if (data.session && data.userId) {
+    chrome.storage.local.get(["authToken", "userId"], (data) => {
+      if (data.authToken && data.userId) {
+        console.log("Found session data in local storage:", data);
         setIsLoggedIn(true);
-        fetchBlockedCategories(data.userId);
+        fetchBlockedCategories(data.userId, data.authToken);
+      } else {
+        console.log("No session data found, sending message to content script");
+        sendMessageToContentScript();
       }
     });
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Send a message to the content script to retrieve session data
+  const sendMessageToContentScript = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          { type: "GET_SESSION" },
+          (response) => {
+            if (response && response.authToken && response.userId) {
+              console.log(
+                "Received session data from content script:",
+                response
+              );
+              const { authToken, userId } = response;
 
-    try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Include session cookies
-        body: JSON.stringify({ username, password }),
-      });
+              chrome.storage.local.set({ authToken, userId }, () => {
+                console.log("Session data saved in local storage.");
+              });
 
-      if (response.ok) {
-        const result = await response.json();
-        chrome.storage.local.set({ session: true, userId: result.userId });
-        setIsLoggedIn(true);
-        fetchBlockedCategories(result.userId);
-      } else {
-        setLoginMessage("Login failed. Please try again.");
+              setIsLoggedIn(true);
+              fetchBlockedCategories(userId, authToken);
+            } else {
+              console.error("Failed to retrieve session from content script.");
+              setLoginMessage("Please log in on the main website.");
+            }
+          }
+        );
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      setLoginMessage("An error occurred during login.");
-    }
+    });
   };
 
-  const fetchBlockedCategories = async (userId: string) => {
+  // Fetch blocked categories using the userId and authToken
+  const fetchBlockedCategories = async (userId: string, authToken: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/block-categories/${userId}/availableCategories`,
-        { credentials: "include" }
+        `http://localhost:8080/block-categories/${userId}/blockedCategories`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          credentials: "include", // Include cookies if necessary
+        }
       );
 
       if (response.ok) {
-        const categories = await response.json();
-        setBlockedCategories(categories);
+        const data = await response.json(); // Parse the JSON response
+        if (data.blockedCategories && Array.isArray(data.blockedCategories)) {
+          setBlockedCategories(data.blockedCategories);
+        } else {
+          console.error(
+            "Expected blockedCategories to be an array, but got:",
+            data.blockedCategories
+          );
+          setBlockedCategories([]); // Fallback to an empty array
+        }
       } else {
-        console.error("Failed to fetch blocked categories.");
+        console.error(
+          "Failed to fetch blocked categories. Status:",
+          response.status
+        );
+        setLoginMessage("Failed to fetch blocked categories.");
       }
     } catch (error) {
       console.error("Error fetching blocked categories:", error);
+      setLoginMessage("An error occurred while fetching blocked categories.");
     }
+  };
+
+  const handleDeleteCategory = (categoryName: string) => {
+    // Remove the category from blocked categories
+    const updatedBlockedCategories = blockedCategories.filter(
+      (blockedCategory) => blockedCategory !== categoryName
+    );
+
+    // Add the deleted category back to available categories
+    setAvailableCategories([...availableCategories, categoryName]);
+
+    // Update blocked categories
+    setBlockedCategories(updatedBlockedCategories);
   };
 
   return (
     <div>
       {isLoggedIn ? (
         <div>
-          <h1>Blocked Categories</h1>
-          <ul>
-            {blockedCategories.map((category) => (
-              <li key={category}>{category}</li>
+          <ul className="category-list">
+            {blockedCategories.map((category, index) => (
+              <li className="category-item" key={index}>
+                <span>{category}</span>
+                <DeleteCategoriesButton
+                  categoryName={category}
+                  onDeleteCategory={handleDeleteCategory}
+                />
+              </li>
             ))}
           </ul>
         </div>
       ) : (
         <div>
-          <h1>Login to YouDash</h1>
-          <form onSubmit={handleLogin}>
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button type="submit">Login</button>
-          </form>
-          <p>{loginMessage}</p>
+          <h1>YouDash</h1>
+          <p>{loginMessage || "Checking session..."}</p>
         </div>
       )}
     </div>

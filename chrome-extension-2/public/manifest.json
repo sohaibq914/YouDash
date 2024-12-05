@@ -11,20 +11,22 @@
     "storage",        
     "activeTab",     
     "tabs",
-    "scripting"
+    "scripting",
+    "cookies"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
+      "matches": ["*://*.youtube.com/*", "http://localhost:3000/*"],
       "js": ["contentScript.js"],
       "css": ["blockpopup.css"],
-      "run_at": "document_end"
+      "run_at": "document_end" 
     }
   ],
   "host_permissions": [
-    "*://*.youtube.com/*"
+    "*://*.youtube.com/*",
+    "http://localhost:3000/*"
   ]
 }
