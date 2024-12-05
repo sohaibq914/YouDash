@@ -365,7 +365,7 @@ const DirectMessage = () => {
               )}
             </div>
           </div>
-          {isEditingReformatted ? <textarea value={reformattedMessage} onChange={(e) => setReformattedMessage(e.target.value)} className="w-full p-2 border rounded-lg resize-none focus:outline-none focus:border-blue-500" rows="3" /> : <p className="text-sm text-blue-800">{reformattedMessage}</p>}
+          {isEditingReformatted ? <textarea style={{width: "100%"}} value={reformattedMessage} onChange={(e) => setReformattedMessage(e.target.value)} className="w-full p-2 border rounded-lg resize-none focus:outline-none focus:border-blue-500" rows="3" /> : <p className="text-sm text-blue-800">{reformattedMessage}</p>}
         </div>
       )}
 
@@ -454,7 +454,7 @@ const DirectMessage = () => {
               {conversations.map((userId, index) => (
                 <div key={userId} className="p-3 rounded-lg transition-colors hover:bg-gray-100">
                   <div className="flex items-center justify-between">
-                    <div
+                    <div style={{textAlign: "center"}}
                       className={`font-medium cursor-pointer ${selectedUser === userId ? "text-blue-700" : ""}`}
                       onClick={() => {
                         if (!isBlockedByUser(userId)) {
@@ -467,7 +467,7 @@ const DirectMessage = () => {
                       {isBlockedByUser(userId) && <span className="ml-2 text-xs text-red-500">(You are blocked)</span>}
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2" style={{textAlign: "center"}}>
                       {isUserBlocked(userId) ? (
                         <button onClick={() => handleUnblock(userId)} className="p-1 text-blue-500 hover:bg-blue-50 rounded" title="Unblock user">
                           <Unlock size={16} />
@@ -505,7 +505,7 @@ const DirectMessage = () => {
 
             {/* Messages Area */}
             <div className="dm flex-1 p-4 overflow-y-auto w-full">
-              <div className=" mx-auto w-full">
+              <div className=" mx-auto w-full" >
                 {messages.map((msg, index) => (
                   <div key={index} className={`mb-4 flex ${msg.senderId === parseInt(currentUserId) ? "justify-end" : "justify-start"}`}>
                     <div className={`p-3 rounded-lg ${msg.senderId === parseInt(currentUserId) ? "bg-blue-500 text-white" : "bg-blue-500 text-white"}`}>
@@ -559,13 +559,13 @@ const DirectMessage = () => {
                         )}
                       </div>
                     </div>
-                    {isEditingReformatted ? <textarea value={reformattedMessage} onChange={(e) => setReformattedMessage(e.target.value)} className="w-full p-2 border rounded-lg resize-none focus:outline-none focus:border-blue-500" rows="3" /> : <p className="text-sm text-blue-800">{reformattedMessage}</p>}
+                    {isEditingReformatted ? <textarea style={{width: "100%"}} value={reformattedMessage} onChange={(e) => setReformattedMessage(e.target.value)} className="w-full p-2 border rounded-lg resize-none focus:outline-none focus:border-blue-500" rows="5" /> : <p className="text-sm text-blue-800">{reformattedMessage}</p>}
                   </div>
                 )}
 
                 <div className="flex w-full items-center gap-2">
-                  <div className="flex-grow">
-                    <textarea value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyPress={handleKeyPress} placeholder={isBlockedByUser(selectedUser) ? "You cannot send messages to this user as they have blocked you" : isUserBlocked(selectedUser) ? "You have blocked this user" : "Type a message..."} disabled={isUserBlocked(selectedUser) || isBlockedByUser(selectedUser)} className="w-full resize-none rounded-lg border border-gray-300 p-2 focus:outline-none focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-500" rows="2" />
+                  <div className="flex-grow" style={{width: "100%"}}>
+                    <textarea value={newMessage} style={{width: "100%"}} onChange={(e) => setNewMessage(e.target.value)} onKeyPress={handleKeyPress} placeholder={isBlockedByUser(selectedUser) ? "You cannot send messages to this user as they have blocked you" : isUserBlocked(selectedUser) ? "You have blocked this user" : "Type a message..."} disabled={isUserBlocked(selectedUser) || isBlockedByUser(selectedUser)} className="w-full resize-none rounded-lg border border-gray-300 p-2 focus:outline-none focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-500" rows="2" />
                   </div>
                   <div className="flex flex-col gap-2 flex-shrink-0">
                     <button onClick={handleReformat} disabled={!newMessage.trim() || isReformatting} className="px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" title="AI Reformat">
