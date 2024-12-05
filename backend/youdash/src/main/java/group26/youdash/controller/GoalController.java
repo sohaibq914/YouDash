@@ -186,6 +186,7 @@ public class GoalController {
             en = en.minusMonths(timeFrameSelection-1);
         }
         ArrayList<Goal> temp1 = updateAllGoalsProgressTimeFrame(userId, st, en);
+        //System.out.println(temp1);
         //updateAllGoalsProgress(userId);
         int numGoals = temp1.size();
         float progress = 0.0f;
@@ -197,6 +198,7 @@ public class GoalController {
                 progress += temp1.get(i).getGoalProgress();
             }
         }
+        System.out.println("Pie:" + progress/numGoals);
         return progress / numGoals;
     }
 
