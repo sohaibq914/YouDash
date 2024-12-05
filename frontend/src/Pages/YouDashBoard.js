@@ -316,7 +316,7 @@ function YouDashBoard() {
                     <td colSpan="2">
                         <button type="button" style={{ width: "100%", padding: "0%" }} id="r1left" onClick={split1}>Split</button>
                         <div className="fullPie">
-                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} />
+                            <PieChart timeFrame={timeFrame} timeFrameSelection={timeFrameSelection} userId={getUser()} percentVal={percentVal} />
                         </div>
                     </td>
                 </tr>

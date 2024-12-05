@@ -56,8 +56,9 @@ function Home() {
   return (
     <div className="Home">
         <div style={{textAlign: "center"}}>
-      <h1>Home page: User {userId}</h1>
+      <h1>Welcome to YouDash!</h1>
       <button onClick={handleLogout} id="logout">Logout</button>
+      <button onClick={handleLogout}>Logout</button>
       <br/>
       <br/>
       <div style={{margin: "auto", width: "100%"}}>
