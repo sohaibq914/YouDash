@@ -16,18 +16,18 @@ const AddCategoriesButton: React.FC<AddCategoriesButtonProps> = ({ categoryName,
   const handleClick = async () => {
     try {
 
-        const response = await axios.post(`http://localhost:8080/block-categories/${user}/addCategory`, {
+        const response = await axios.post(`http://localhost:8080/block-categories/${user}/add-category`, {
             categoryName: categoryName
         });
        
         console.log("Response from backend:", response.data);
-        alert( categoryName + " added successfully!");
+        //alert( categoryName + " added successfully!");
 
         onAddCategory(categoryName);
 
     } catch(error) {
         console.error("Error adding category", error);
-        alert("Failed to add category!");
+        //alert("Failed to add category!");
     }
   };
 

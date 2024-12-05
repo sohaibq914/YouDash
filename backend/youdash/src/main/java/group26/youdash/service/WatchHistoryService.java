@@ -34,6 +34,11 @@ public class WatchHistoryService {
         if (user != null) {
             List<String> retVal = new ArrayList<>();
             List<VideoHistory> vh = user.getHistory();
+            if (vh == null) {
+                user.setHistory(new ArrayList<>());
+                dynamoDBMapper.save(user);
+                vh = new ArrayList<>();
+            }
             for (VideoHistory v : vh) {
                 retVal.add(v.getUrl());
             }
@@ -107,6 +112,8 @@ public class WatchHistoryService {
             List<VideoHistory> watchHistory = user.getHistory();
 
             if (watchHistory == null) {
+                user.setHistory(new ArrayList<>());
+                dynamoDBMapper.save(user);
                 return 0.0f;
             }
             float total = 0.0f;

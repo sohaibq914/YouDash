@@ -24,7 +24,7 @@ public class CategoriesController {
     private BlockedCategoriesService bcs;
     
   
-    @PostMapping(path = "/{userID}/addCategory")
+    @PostMapping(path = "/{userID}/add-category")
     public ResponseEntity<String> addCategory(@PathVariable("userID") int user, @RequestBody Category category) {
         System.out.println("Received category from user: " + user);
         System.out.println("Category Name: " + category.getCategoryName()); 
@@ -36,8 +36,8 @@ public class CategoriesController {
     }
 
 
-    @PostMapping(path = "/{userID}/DeleteCategory")
-    public ResponseEntity<String> deleteCategory(@PathVariable("userID") int user, @RequestBody Category category) {
+    @PostMapping(path = "/{userID}/delete-category")
+    public ResponseEntity<String> DeleteCategory(@PathVariable("userID") int user, @RequestBody Category category) {
         System.out.println("Received category from user: " + user);
         System.out.println("Category Name: " + category.getCategoryName());
 

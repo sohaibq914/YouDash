@@ -65,8 +65,8 @@ public class SecurityConfig {
                     "/analytics/{userId}/watch-time-by-hour-custom",
 
                     // Categories Controller endpoints
-                    "/block-categories/{userID}/addCategory",
-                    "/block-categories/{userID}/DeleteCategory",
+                    "/block-categories/{userID}/add-category",
+                    "/block-categories/{userID}/delete-category",
                     "/block-categories/{userID}/availableCategories",
                     "/block-categories/{userID}/blockedCategories",
                     "/block-categories/{userID}/testGetBlockedCategories",

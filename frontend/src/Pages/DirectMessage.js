@@ -402,11 +402,11 @@ const DirectMessage = () => {
   }
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex h-screen bg-white" style={{marginBottom: "8%"}}>
       {/* Sidebar */}
       <div className="w-[250px] min-w-[250px] border-r border-gray-200 bg-gray-50">
         <div className="p-4 dm">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4" style={{textAlign: "center"}}>
             <h2 className="text-xl font-bold">Conversations</h2>
             <button onClick={() => setStartNewChat(true)} className="p-2 text-blue-500 hover:bg-blue-50 rounded-full" title="Start new conversation">
               <UserPlus size={20} />
@@ -421,7 +421,7 @@ const DirectMessage = () => {
           )}
 
           {startNewChat && (
-            <div className="mb-4">
+            <div className="mb-4" style={{textAlign: "center"}}>
               <input type="text" value={newChatName} onChange={(e) => setNewChatName(e.target.value)} placeholder="Enter user's name" className="w-full p-2 border rounded-lg mb-2" />
               <div className="flex gap-2">
                 <button onClick={startNewConversation} className="flex-1 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">
@@ -508,10 +508,10 @@ const DirectMessage = () => {
               <div className=" mx-auto w-full">
                 {messages.map((msg, index) => (
                   <div key={index} className={`mb-4 flex ${msg.senderId === parseInt(currentUserId) ? "justify-end" : "justify-start"}`}>
-                    <div className={`p-3 rounded-lg ${msg.senderId === parseInt(currentUserId) ? "bg-blue-500 text-white" : "bg-gray-100"}`}>
-                      <div className="text-xs font-medium mb-1">{msg.senderId === parseInt(currentUserId) ? currentUser.name : userCache[msg.senderId]?.name || "Loading..."}</div>
-                      <div className="text-sm">{msg.messageText}</div>
-                      <div className="text-xs mt-1 opacity-75">{new Date(msg.timestamp).toLocaleTimeString()}</div>
+                    <div className={`p-3 rounded-lg ${msg.senderId === parseInt(currentUserId) ? "bg-blue-500 text-white" : "bg-blue-500 text-white"}`}>
+                      <div className="dm text-xs font-medium mb-1">{msg.senderId === parseInt(currentUserId) ? currentUser.name : userCache[msg.senderId]?.name || "Loading..."}</div>
+                      <div className="dm text-sm">{msg.messageText}</div>
+                      <div className="dm text-xs mt-1 opacity-75">{new Date(msg.timestamp).toLocaleTimeString()}</div>
                     </div>
                   </div>
                 ))}
