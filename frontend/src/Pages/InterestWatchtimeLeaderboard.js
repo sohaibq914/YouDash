@@ -149,13 +149,20 @@ function InterestWatchTimeDashboard() {
         <div>
           <h2>Leaderboard</h2>
           {sortedUsers.length > 0 ? (
-            <ul>
-              {sortedUsers.map((user) => (
-                <li key={user.id}>
-                  {user.name} ({user.username}) - {user.watchTime > 0 ? `Watch Time: ${user.watchTime} hours` : "Not enough data"}
-                </li>
-              ))}
-            </ul>
+            <table style={{margin: "auto", width: "60%"}}>
+                        <tbody>
+                          {sortedUsers.map((user) => (
+                            <tr key={user.id} style={{borderBottom: "1pt solid black"}}>
+                            <td key={user.id} style={{width: "40%", textAlign:"right"}}>
+                              {user.name}:
+                            </td>
+                            <td style={{textAlign: "center"}}>
+                            {user.watchTime > 0 ? `${user.watchTime} minutes` : "Not enough data"}
+                            </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                        </table>
           ) : (
             <p>No users found for the selected category.</p>
           )}

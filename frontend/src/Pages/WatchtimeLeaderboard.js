@@ -160,15 +160,15 @@ function WatchTimeDashboard() {
           <h2>Leaderboard</h2>
           {sortedUsers.length > 0 ? (
 
-            <table style={{margin: "auto", width: "80%"}}>
+            <table style={{margin: "auto", width: "60%"}}>
             <tbody>
               {sortedUsers.map((user) => (
-                <tr>
-                <td key={user.id} style={{width: "40%"}}>
-                  {user.name}
+                <tr key={user.id} style={{borderBottom: "1pt solid black"}}>
+                <td key={user.id} style={{width: "40%", textAlign:"right"}}>
+                  {user.name}:
                 </td>
-                <td>
-                ({user.username}) - {user.watchTime > 0 ? `Watch Time: ${user.watchTime} hours` : "Not enough data"}
+                <td style={{textAlign: "center"}}>
+                {user.watchTime > 0 ? `${user.watchTime} minutes` : "Not enough data"}
                 </td>
                 </tr>
               ))}
